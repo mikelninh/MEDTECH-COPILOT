@@ -163,13 +163,16 @@ function ask(index,question,opts={}){
  // Reject obviously out-of-domain prompts before accepting a loose "repair" / "record" match.
  const domain=/(medizin|medtech|device|equipment|geraet|monitor|pump|infusion|spo2|ecg|ekg|beatmung|ventil|alarm|sicher|safety|qualifik|wartung|pruf|pruef|inspection|service|source|dokument|document|manual|sop|sensor|patient|\bstk\b|\bmtk\b|battery|occlusion|clinical|version|revision|instand|bestandsverzeichnis|medizinproduktebuch|quelle|voltage|spann|shock|earth|electric|protokoll|handover)/.test(query);
  if(!domain)return {status:"unknown",heading:opts.language==="de"?"Außerhalb der Demo-Wissensbasis":"Outside the demo knowledge base",explanation:opts.language==="de"?"Dazu enthält der freigegebene Demo-Korpus keine hinreichende Information. Ein loses Stichwort reicht nicht als Beleg; es wird nicht geraten.":"This question is outside the supported medical engineering document corpus. The assistant won't guess based on a loosely matching word.",evidence:[],answer:"",note:syntheticNote};
+ if(/(?:sw\s*2\s*n|softwareversion\s*2|sw\s*1\s*n)/.test(query)&&/(?:vista|draeger|drager)/.test(query)){
+  return {status:"unknown",heading:"Andere Softwareversion",explanation:"Diese kuratierte Herstellerquelle gilt nur für Vista 120/Vista 120S SW 3.n. Für die angefragte Version fehlt hier die passende Unterlage.",evidence:[],answer:"",note:syntheticNote};
+ }
  const hits=search(index,question,opts);
  if(!hits.length)return {status:"unknown",heading:opts.language==="de"?"Keine passende Quelle":"No supported evidence",explanation:opts.language==="de"?"Im aktiven Demo-Korpus wurde keine ausreichend relevante Fundstelle gefunden. Es werden keine Angaben ergänzt oder erfunden.":"No sufficiently relevant passage was found in the active demo corpus. Nothing is inferred or invented.",evidence:[],answer:"",note:syntheticNote};
  const top=hits[0];
  if(top.score<1.25)return {status:"unknown",heading:opts.language==="de"?"Quelle nicht belastbar":"No supported evidence",explanation:opts.language==="de"?"Die beste Fundstelle ist zu ungenau, um eine Antwort zu rechtfertigen.":"The best match is too weak to support an answer.",evidence:[],answer:"",note:syntheticNote};
  return {
   status:"evidence",heading:opts.language==="de"?top.chunk.headingDe:top.chunk.heading,
-  answer:opts.language==="de"?top.chunk.textDe:top.chunk.text,explanation:"Exact extract from the cited active document; no AI-generated paraphrase.",
+  answer:opts.language==="de"?top.chunk.textDe:top.chunk.text,explanation:top.chunk.kind==="Manufacturer manual reference"?"Curated paraphrase with printed manual page; original PDF linked.":"Exact extract from indexed source; no generated answer.",
   evidence:hits.map(hit=>({
    id:hit.chunk.id,documentId:hit.chunk.documentId,
    documentTitle:opts.language==="de"?hit.chunk.titleDe:hit.chunk.title,version:hit.chunk.version,page:hit.chunk.page,
