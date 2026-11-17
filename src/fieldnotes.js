@@ -66,7 +66,7 @@ function renderAsk(result,question){
    card.append(mk("div","citation-meta",(cit.kind==="Manufacturer manual reference"?"Druckseite ":"Abschnitt ")+cit.page+" · Version "+cit.version));
    card.append(mk("p","",cit.excerpt));
    if(cit.url){
-    const a=mk("a","",cit.kind==="Manufacturer manual reference"?"Original-PDF bei Dräger öffnen ↗":"Originalgesetz ansehen ↗");a.href=cit.url;a.target="_blank";a.rel="noopener noreferrer";card.append(a);
+    const a=mk("a","",cit.kind==="Manufacturer manual reference"?"Dräger-Dokumentensuche öffnen ↗":"Originalgesetz ansehen ↗");a.href=cit.url;a.target="_blank";a.rel="noopener noreferrer";card.append(a);
    }
    e.append(card);
   });
@@ -160,7 +160,7 @@ function renderLibrary(){
   left.append(mk("small","",d.id+" / v"+d.version+" / "+d.pageCount+" Abschnitte"));
   if(d.kind==="Public legal summary"||d.kind==="Manufacturer manual reference"){
    const ch=state.index.all.find(c=>c.documentId===d.id);
-   const a=mk("a","doc-link",d.kind==="Manufacturer manual reference"?"Hersteller-PDF ↗":"Gesetz öffnen ↗");a.href=ch.url;a.target="_blank";a.rel="noopener noreferrer";right.append(a);
+   const a=mk("a","doc-link",d.kind==="Manufacturer manual reference"?"Dräger-Dokumentensuche ↗":"Gesetz öffnen ↗");a.href=ch.url;a.target="_blank";a.rel="noopener noreferrer";right.append(a);
   }else{
    const button=mk("button","doc-link",d.status==="RETIRED"?"Nicht in aktiver Suche":"Abschnitte ansehen ↗");
    button.style.background="none";button.style.border="0";button.style.padding="0";
