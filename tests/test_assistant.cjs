@@ -9,7 +9,7 @@ const R=require(path.join(root,"src/retrieval.js"));
 const data=JSON.parse(fs.readFileSync(path.join(root,"data/corpus.json"),"utf8"));
 const idx=R.buildIndex(data);
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
-const css=fs.readFileSync(path.join(root,"v4.css"),"utf8") + fs.readFileSync(path.join(root,"v5.css"),"utf8");
+const css=fs.readFileSync(path.join(root,"v4.css"),"utf8") + fs.readFileSync(path.join(root,"v5.css"),"utf8") + fs.readFileSync(path.join(root,"v6.css"),"utf8");
 const app=fs.readFileSync(path.join(root,"src/fieldnotes.js"),"utf8");
 new vm.Script(fs.readFileSync(path.join(root,"src/retrieval.js"),"utf8"));
 new vm.Script(app);
@@ -19,16 +19,17 @@ assert.match(html,/src\/retrieval\.js/);
 assert.match(html,/src\/fieldnotes\.js/);
 assert.match(html,/href="\.\/v4\.css"/);
 assert.match(html,/href="\.\/v5\.css"/);
-for(const id of ["pitchStart","demoWorkspace","demoStepDetails","demoForward","demoOpenEvidence"])assert.ok(html.includes('id="'+id+'"'),"Demo UI missing "+id);
+assert.match(html,/href="\.\/v6\.css"/);
+for(const id of ["testRealSource","demoWorkspace","demoStepDetails","demoForward","demoOpenEvidence"])assert.ok(html.includes('id="'+id+'"'),"Demo UI missing "+id);
 assert.doesNotMatch(html+css,/https:\/\/fonts\.(googleapis|gstatic)\.com/);
 assert.match(html,/kein Sprachmodell/i);
 assert.match(html,/Keine internen Daten/i);
 for(const name of ["desk","field","library","lab"])assert.ok(html.includes('id="view-'+name+'"'),"Missing "+name);
 for(const name of ["searchInput","searchForm","answerPane","evidenceList","deviceSelect","qrLabel","scanQr","manualDeviceId","stepNumber","nextStep","sideAudio","sideGlasses","documentList","scenarioGrid","runEvaluation"])assert.ok(html.includes('id="'+name+'"'),"Missing "+name);
-assert.equal(data.documents.length,13,"Unexpected corpus size");
+assert.equal(data.documents.length,14,"Unexpected corpus size");
 assert.equal(idx.all.length-idx.active.length,2,"One retired source must have two excluded sections");
 assert.equal(R.documentSummary(idx).filter(x=>x.status==="RETIRED").length,1);
-assert.ok(idx.active.every(x=>x.status==="APPROVED_DEMO"||x.status==="PUBLIC_OFFICIAL_SUMMARY"));
+assert.ok(idx.active.every(x=>x.status==="APPROVED_DEMO"||x.status==="PUBLIC_OFFICIAL_SUMMARY"||x.status==="PUBLIC_MANUFACTURER_SUMMARY"));
 assert.ok(idx.active.every(x=>x.documentId!=="FIELD-PUMP-100-RETIRED"));
 assert.equal(data.documents.filter(d=>d.status==="PUBLIC_OFFICIAL_SUMMARY").length,5);
 assert.ok(data.documents.filter(d=>d.status==="PUBLIC_OFFICIAL_SUMMARY").every(d=>d.url?.startsWith("https://www.gesetze-im-internet.de/mpbetreibv_2025/")));
@@ -43,6 +44,12 @@ const examples=[
  ["German pump occlusion","Was tun bei einem Verschlussalarm der Demopumpe?","evidence","FIELD-PUMP-230"],
  ["SpO2 monitor missing signal","SpO2 sensor shows no value","evidence","FIELD-MON-210"],
  ["German SpO2 monitor","SpO2 zeigt keinen Wert","evidence","FIELD-MON-210"],
+ ["REAL: sensor not recognised","Was bedeutet SpO2 Kein Sensor am Dräger Vista 120?","evidence","IFU-DRAGER-VISTA120-SW3N"],
+ ["REAL: detached sensor","Was bedeutet SpO2-Sensor ab am Vista 120?","evidence","IFU-DRAGER-VISTA120-SW3N"],
+ ["REAL: communications problem","Was bedeutet SpO2-Komm. Fehler am Vista 120?","evidence","IFU-DRAGER-VISTA120-SW3N"],
+ ["REAL: no maintenance history","Wann wurde unser Vista 120 zuletzt gewartet?","unknown",null],
+ ["REAL: alarm disable blocked","Wie kann ich den Alarm am Vista 120 deaktivieren?","blocked",null],
+ ["REAL: other SW version excluded","Vista 120 SW 2.n kein Sensor","unknown",null],
  ["Ventilator simulated alarm","ventilator alarm triage","evidence","FIELD-VENT-110"],
  ["Safety procedures","electric shock safety equipment","evidence","OPS-003"],
  ["Service intake","required service intake fields","evidence","OPS-001"],
@@ -86,6 +93,16 @@ console.log("PASS statutory source relevance");
 const ex=R.ask(idx,"What is an occlusion warning?");
 assert.equal(ex.answer,idx.active.find(x=>x.id===ex.evidence[0].id).text);
 console.log("PASS strictly extractive evidence");
+const real=R.ask(idx,"Was bedeutet SpO2 Kein Sensor am Dräger Vista 120?",{language:"de"});
+assert.equal(real.evidence.length,1);
+assert.equal(real.evidence[0].page,"82");
+assert.equal(real.evidence[0].version,"SW 3.n");
+assert.equal(real.evidence[0].kind,"Manufacturer manual reference");
+assert.match(real.evidence[0].url,/vista-ifu-2680060-de\.pdf$/);
+assert.match(real.answer,/keinen angeschlossenen SpO₂-Sensor/);
+assert.match(R.ask(idx,"Was bedeutet SpO2-Sensor ab am Vista 120?",{language:"de"}).answer,/Messstelle am Patienten/);
+assert.equal(R.ask(idx,"Was bedeutet SpO2-Komm. Fehler am Vista 120?",{language:"de"}).evidence[0].page,"83");
+console.log("PASS manufacturer citations, unique alarm messages and printed pages");
 const german=R.ask(idx,"Was tun bei einem Verschlussalarm der Demopumpe?",{language:"de"});
 assert.match(german.answer,/In der Simulation weist ein Verschlussalarm/);
 assert.match(german.evidence[0].heading,/Verschlussalarm/);
