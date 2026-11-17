@@ -16,29 +16,40 @@
         [
           "1",
           "Purpose and limits",
-          "The ORION M100 is a fictional patient-monitor training device. This training card is not a manufacturer instruction. For a device connected to a patient, clinical assessment and continuity of care take priority over technical troubleshooting."
+          "The ORION M100 is a fictional patient-monitor training device. This training card is not a manufacturer instruction. For a device connected to a patient, clinical assessment and continuity of care take priority over technical troubleshooting.",
+          "Der ORION M100 ist ein fiktiver Patientenmonitor für Schulungen. Diese Lernkarte ist keine Herstelleranweisung. Bei einem Gerät, das mit einem Patienten verbunden ist, haben die klinische Beurteilung und die sichere Versorgung Vorrang vor der technischen Fehlersuche.",
+          "Zweck und Grenzen"
         ],
         [
           "2",
           "No SpO₂ value",
-          "If the simulated SpO₂ channel displays no value, record the precise displayed message, accessory identification, device identifier and time. The clinical team must assess any patient-related concern. Technical investigation requires the approved manual for the exact real model."
+          "If the simulated SpO₂ channel displays no value, record the precise displayed message, accessory identification, device identifier and time. The clinical team must assess any patient-related concern. Technical investigation requires the approved manual for the exact real model.",
+          "Zeigt der simulierte SpO₂-Kanal keinen Wert, werden die exakte Meldung, die Kennzeichnung des Zubehörs, die Geräte-ID und der Zeitpunkt dokumentiert. Medizinische Fragen beurteilt das Behandlungsteam. Für technische Prüfungen ist die freigegebene Herstelleranweisung des konkreten Gerätemodells erforderlich.",
+          "Kein SpO₂-Wert"
         ],
         [
           "3",
           "Noisy ECG trace",
-          "A noisy simulated ECG trace may originate from electrode contact, motion, cable damage or electromagnetic interference. These are categories to investigate, not a diagnosis or permission to change patient connections."
+          "A noisy simulated ECG trace may originate from electrode contact, motion, cable damage or electromagnetic interference. These are categories to investigate, not a diagnosis or permission to change patient connections.",
+          "Ein verrauschtes simuliertes EKG-Signal kann beispielsweise mit Elektrodenkontakt, Bewegung, Kabelproblemen oder elektromagnetischen Störungen zusammenhängen. Das sind mögliche Prüfkategorien, keine Diagnose und keine Erlaubnis, Patientenanschlüsse eigenmächtig zu verändern.",
+          "Verrauschtes EKG"
         ],
         [
           "4",
           "Escalation",
-          "A suspected malfunction of a real medical electrical device must be handled by the authorised team under local procedure. Never return a device to use based on a chatbot response alone."
+          "A suspected malfunction of a real medical electrical device must be handled by the authorised team under local procedure. Never return a device to use based on a chatbot response alone.",
+          "Eine vermutete Fehlfunktion eines realen medizinischen elektrischen Geräts muss durch das befugte Team nach dem hausinternen Verfahren bearbeitet werden. Niemals ein Gerät allein aufgrund einer Chatbot-Antwort wieder zur Benutzung freigeben.",
+          "Eskalation"
         ],
         [
           "5",
           "Evidence and documentation",
-          "Capture the unique asset ID, observed symptom, exact alarms, affected accessory, reporter, timestamp, relevant approved document version and who accepted the handover. Avoid including patient identifiers in this demonstration."
+          "Capture the unique asset ID, observed symptom, exact alarms, affected accessory, reporter, timestamp, relevant approved document version and who accepted the handover. Avoid including patient identifiers in this demonstration.",
+          "Die eindeutige Inventar-ID, die beobachtete Störung, genaue Alarme, betroffenes Zubehör, meldende Person, Zeitpunkt, gültige Dokumentenversion und zuständige Übergabeperson erfassen. Keine Patientendaten in die öffentliche Demo eingeben.",
+          "Nachweise und Dokumentation"
         ]
-      ]
+      ],
+      "titleDe": "ORION M100 – Fiktives Gerätehandbuch"
     },
     {
       "id": "FIELD-PUMP-230",
@@ -53,34 +64,47 @@
         [
           "1",
           "Purpose and limits",
-          "The LUMEN P200 is a completely fictional infusion-pump training device. No infusion management, therapy change, alarm override or equipment release may be based on this demo."
+          "The LUMEN P200 is a completely fictional infusion-pump training device. No infusion management, therapy change, alarm override or equipment release may be based on this demo.",
+          "Die LUMEN P200 ist eine vollständig erfundene Infusionspumpe für Schulungen. Aus dieser Demo dürfen keine Entscheidungen zur Infusionstherapie, Therapieänderung, Alarmumgehung oder Gerätefreigabe abgeleitet werden.",
+          "Zweck und Grenzen"
         ],
         [
           "2",
           "Occlusion warning",
-          "In the simulation, an occlusion warning means the device has flagged a possible flow obstruction. In clinical practice the responsible clinical team assesses the patient and infusion. The technical team records the exact alert and matches the correct model-specific manufacturer documentation."
+          "In the simulation, an occlusion warning means the device has flagged a possible flow obstruction. In clinical practice the responsible clinical team assesses the patient and infusion. The technical team records the exact alert and matches the correct model-specific manufacturer documentation.",
+          "In der Simulation weist ein Verschlussalarm auf eine mögliche Blockierung des Durchflusses hin. Im klinischen Einsatz beurteilt das zuständige Behandlungsteam die Patientensituation und die Infusion. Die Medizintechnik dokumentiert den exakten Alarm und sucht die gültige Herstellerunterlage für das konkrete Modell.",
+          "Verschlussalarm"
         ],
         [
           "3",
           "Battery-related alert",
-          "For the fictional LUMEN P200, the training card distinguishes a displayed battery-related message from a verified battery failure. Capture the alert and operating context before assigning a cause. Do not improvise internal repair steps."
+          "For the fictional LUMEN P200, the training card distinguishes a displayed battery-related message from a verified battery failure. Capture the alert and operating context before assigning a cause. Do not improvise internal repair steps.",
+          "Bei der fiktiven LUMEN P200 wird eine angezeigte Batteriemeldung nicht automatisch mit einem nachgewiesenen Akkudefekt gleichgesetzt. Zuerst werden der genaue Hinweis und die Betriebsumstände erfasst. Keine internen Reparaturschritte improvisieren.",
+          "Batteriemeldung"
         ],
         [
           "4",
           "Source version check",
-          "The currently approved training card is version 2.3. The fictional version 1.0 is retired. Retired versions must never be presented as current service guidance."
+          "The currently approved training card is version 2.3. The fictional version 1.0 is retired. Retired versions must never be presented as current service guidance.",
+          "Die aktuell freigegebene fiktive Lernkarte hat Version 2.3. Die fiktive Version 1.0 ist archiviert. Archivierte Versionen dürfen niemals als aktuelle Serviceanweisungen ausgegeben werden.",
+          "Versionskontrolle"
         ],
         [
           "5",
           "Handover",
-          "A useful service handover includes device identity, observed alarm, relevant accessory, time, containment status, responsible staff and exact source version. The release decision belongs to qualified personnel following applicable procedures."
+          "A useful service handover includes device identity, observed alarm, relevant accessory, time, containment status, responsible staff and exact source version. The release decision belongs to qualified personnel following applicable procedures.",
+          "Eine nachvollziehbare Serviceübergabe enthält Geräteidentität, beobachteten Alarm, betroffenes Zubehör, Zeitpunkt, Status, zuständiges Personal und die exakte Dokumentenversion. Eine Freigabe erfolgt ausschließlich durch qualifizierte Personen gemäß den geltenden Verfahren.",
+          "Übergabe"
         ],
         [
           "6",
           "Voice safety",
-          "Voice playback may read approved learning content, but it does not authorise clinical action. Users must have an easy stop control and must not dictate patient data into public demonstrations."
+          "Voice playback may read approved learning content, but it does not authorise clinical action. Users must have an easy stop control and must not dictate patient data into public demonstrations.",
+          "Sprachausgabe darf freigegebene Lerninhalte vorlesen, berechtigt aber nicht zu klinischen Eingriffen. Eine sofortige Stopp-Funktion muss verfügbar sein. In der öffentlichen Demo dürfen keine Patientendaten diktiert werden.",
+          "Sprachausgabe und Sicherheit"
         ]
-      ]
+      ],
+      "titleDe": "LUMEN P200 – Fiktives Pumpenhandbuch"
     },
     {
       "id": "FIELD-VENT-110",
@@ -95,24 +119,33 @@
         [
           "1",
           "Purpose and limits",
-          "The AERIS V300 is a fictional ventilator training prop. Any ventilation interruption or clinically relevant alarm must immediately follow the hospital's authorised clinical escalation process, not chatbot guidance."
+          "The AERIS V300 is a fictional ventilator training prop. Any ventilation interruption or clinically relevant alarm must immediately follow the hospital's authorised clinical escalation process, not chatbot guidance.",
+          "Die AERIS V300 ist eine erfundene Beatmungsgeräte-Requisite für Schulungen. Jede Unterbrechung der Beatmung oder ein klinisch relevanter Alarm muss dem autorisierten klinischen Eskalationsprozess folgen – nicht einer Chatbot-Anweisung.",
+          "Zweck und Grenzen"
         ],
         [
           "2",
           "Alarm triage",
-          "For this fictional case, distinguish alert documentation from clinical interpretation. Record exact displayed wording, device identification, the time and the responsible contact. Never suppress alarms or modify therapy on the advice of the demo."
+          "For this fictional case, distinguish alert documentation from clinical interpretation. Record exact displayed wording, device identification, the time and the responsible contact. Never suppress alarms or modify therapy on the advice of the demo.",
+          "In diesem Lernfall werden die technische Dokumentation und die klinische Interpretation getrennt. Exakte angezeigte Meldung, Geräteidentität, Zeitpunkt und zuständige Kontaktperson erfassen. Keine Alarme unterdrücken oder Therapieeinstellungen aufgrund der Demo ändern.",
+          "Alarm aufnehmen"
         ],
         [
           "3",
           "Accessory and circuit context",
-          "In real equipment, accessories and breathing circuits must be compatible with a specific model and approved configuration. This demonstration does not contain compatibility tables or safe replacement instructions."
+          "In real equipment, accessories and breathing circuits must be compatible with a specific model and approved configuration. This demonstration does not contain compatibility tables or safe replacement instructions.",
+          "Bei echten Beatmungsgeräten müssen Zubehör und Schlauchsystem zum konkreten Modell und zur freigegebenen Konfiguration passen. Diese Demo enthält keine Kompatibilitätstabelle und keine Anleitung zum sicheren Wechseln.",
+          "Zubehör und Schlauchsystem"
         ],
         [
           "4",
           "Maintenance lifecycle",
-          "Inspections, maintenance, post-service safety checks and final equipment release require personnel, tools and documentation appropriate to the concrete product and its manufacturer instructions."
+          "Inspections, maintenance, post-service safety checks and final equipment release require personnel, tools and documentation appropriate to the concrete product and its manufacturer instructions.",
+          "Inspektionen, Wartung, Sicherheitsprüfungen nach Servicearbeiten und die abschließende Gerätefreigabe erfordern geeignetes Fachpersonal, passende Prüfmittel sowie freigegebene Unterlagen für das konkrete Produkt.",
+          "Instandhaltungsprozess"
         ]
-      ]
+      ],
+      "titleDe": "AERIS V300 – Fiktives Beatmungsgeräte-Handbuch"
     },
     {
       "id": "OPS-001",
@@ -127,24 +160,33 @@
         [
           "1",
           "Safe intake",
-          "First establish if a reported fault could affect patient care. The clinical team owns decisions about ongoing therapy and patient assessment. Technical personnel coordinate through local authorisation and escalation."
+          "First establish if a reported fault could affect patient care. The clinical team owns decisions about ongoing therapy and patient assessment. Technical personnel coordinate through local authorisation and escalation.",
+          "Zunächst feststellen, ob eine gemeldete Störung die Patientenversorgung betreffen könnte. Das klinische Team verantwortet die Entscheidungen zu Behandlung und Patientenbeurteilung. Die Medizintechnik koordiniert gemäß örtlichem Zuständigkeits- und Eskalationsverfahren.",
+          "Sichere Annahme"
         ],
         [
           "2",
           "Required service intake fields",
-          "Record asset identifier, model, location code without patient identity, exact fault observation, date and time, reporter role, urgency and available manual revision. A service request is not a repair authorisation."
+          "Record asset identifier, model, location code without patient identity, exact fault observation, date and time, reporter role, urgency and available manual revision. A service request is not a repair authorisation.",
+          "Geräte-ID, Modell, Standortcode ohne Patientendaten, genaue Beobachtung, Datum und Uhrzeit, meldende Funktion, Dringlichkeit und verfügbare Handbuchversion dokumentieren. Eine Störungsmeldung ist keine Reparaturfreigabe.",
+          "Felder für den Serviceauftrag"
         ],
         [
           "3",
           "Safe handover",
-          "Log who accepted the issue, what was reported, whether the device was placed under the authorised local process and what follow-up is required. Never mark a device safe for reuse solely on a generated answer."
+          "Log who accepted the issue, what was reported, whether the device was placed under the authorised local process and what follow-up is required. Never mark a device safe for reuse solely on a generated answer.",
+          "Festhalten, wer die Meldung übernommen hat, was berichtet wurde, welcher hausinterne Prozess greift und welche Nachverfolgung nötig ist. Niemals ein Gerät allein auf Grundlage einer KI-Antwort als einsatzbereit markieren.",
+          "Sichere Übergabe"
         ],
         [
           "4",
           "Scope of assistant",
-          "The public MEDTECH COPILOT demo can locate relevant fictional text and link publicly available statutes. It cannot perform electrical tests, operate devices, submit service tickets or release equipment."
+          "The public MEDTECH COPILOT demo can locate relevant fictional text and link publicly available statutes. It cannot perform electrical tests, operate devices, submit service tickets or release equipment.",
+          "Die öffentliche MEDTECH-COPILOT-Demo kann fiktive Textstellen finden und auf amtliche Vorschriften verlinken. Sie kann keine elektrischen Prüfungen durchführen, Geräte bedienen, Tickets in echten Systemen anlegen oder Geräte freigeben.",
+          "Grenzen des Assistenten"
         ]
-      ]
+      ],
+      "titleDe": "Demo-SOP – Störungsmeldung und Eskalation"
     },
     {
       "id": "OPS-002",
@@ -159,29 +201,40 @@
         [
           "1",
           "Document approval",
-          "Only documents with approved status, an accountable owner, version identifier, review date and sufficient access rights can be returned as operational guidance. This public demo uses fictional material exclusively."
+          "Only documents with approved status, an accountable owner, version identifier, review date and sufficient access rights can be returned as operational guidance. This public demo uses fictional material exclusively.",
+          "Nur Dokumente mit Freigabestatus, verantwortlicher Person, Version, Prüftermin und ausreichenden Zugriffsrechten dürfen als verbindliche Arbeitsgrundlage dienen. Die öffentliche Demo verwendet ausschließlich erfundene Trainingsunterlagen.",
+          "Dokumente freigeben"
         ],
         [
           "2",
           "Source precedence",
-          "The exact device model and document revision matter. When multiple sources conflict, the assistant must not silently choose an obsolete instruction. Refer the question to the responsible document owner."
+          "The exact device model and document revision matter. When multiple sources conflict, the assistant must not silently choose an obsolete instruction. Refer the question to the responsible document owner.",
+          "Gerätemodell und Dokumentenrevision müssen exakt passen. Widersprechen sich Quellen, darf der Assistent nicht stillschweigend eine veraltete Anweisung auswählen. Die verantwortliche Dokumentenstelle ist einzubeziehen.",
+          "Vorrang von Quellen"
         ],
         [
           "3",
           "Citation granularity",
-          "Each retrieved answer must identify document title, section or page, current version, approval state and the excerpt that supports the answer. A generic reference without a matching passage is insufficient."
+          "Each retrieved answer must identify document title, section or page, current version, approval state and the excerpt that supports the answer. A generic reference without a matching passage is insufficient.",
+          "Jede gefundene Textstelle soll Dokumenttitel, Abschnitt oder Seite, Version, Freigabestatus und den belegenden Auszug enthalten. Ein allgemeiner Quellenlink ohne passende Passage reicht nicht aus.",
+          "Genaue Quellenangaben"
         ],
         [
           "4",
           "Revocation",
-          "On document withdrawal, access revocation or updated approval, the previous version should be excluded from search, cache and any generated responses. This public prototype models document status but does not implement live synchronisation."
+          "On document withdrawal, access revocation or updated approval, the previous version should be excluded from search, cache and any generated responses. This public prototype models document status but does not implement live synchronisation.",
+          "Wird ein Dokument zurückgezogen, eine Berechtigung entzogen oder eine Freigabe geändert, muss die alte Fassung aus Suche, Zwischenspeicher und Antworten entfernt werden. Diese öffentliche Demo bildet Freigabestatus ab, synchronisiert aber keine realen Systeme.",
+          "Widerruf"
         ],
         [
           "5",
           "Auditability",
-          "An internal pilot should log access events and source versions without storing more personal information than necessary, subject to the hospital's approved retention policy."
+          "An internal pilot should log access events and source versions without storing more personal information than necessary, subject to the hospital's approved retention policy.",
+          "Ein interner Pilot sollte Zugriffe und verwendete Dokumentenversionen protokollieren, ohne mehr personenbezogene Daten als nötig zu speichern. Grundlage sind genehmigte Aufbewahrungs- und Datenschutzverfahren des Krankenhauses.",
+          "Nachvollziehbarkeit"
         ]
-      ]
+      ],
+      "titleDe": "Demo-SOP – Dokumentenfreigabe und Quellen"
     },
     {
       "id": "OPS-003",
@@ -196,19 +249,26 @@
         [
           "1",
           "Electric shock risk",
-          "Medical electrical equipment can pose shock and functional hazards. Never defeat protective earth, open enclosures, bypass interlocks or carry out powered electrical testing based on a chatbot response."
+          "Medical electrical equipment can pose shock and functional hazards. Never defeat protective earth, open enclosures, bypass interlocks or carry out powered electrical testing based on a chatbot response.",
+          "Medizinische elektrische Geräte können Stromschlag- und Funktionsrisiken verursachen. Niemals Schutzleiter entfernen, Gehäuse öffnen, Verriegelungen umgehen oder Prüfungen unter Spannung allein aufgrund einer Chatbot-Antwort durchführen.",
+          "Gefahr durch elektrischen Strom"
         ],
         [
           "2",
           "Testing responsibility",
-          "Only suitably qualified authorised personnel may conduct required tests using appropriate calibrated equipment and device-specific approved procedures. This public demo cannot substitute for STK, MTK or other legally required activities."
+          "Only suitably qualified authorised personnel may conduct required tests using appropriate calibrated equipment and device-specific approved procedures. This public demo cannot substitute for STK, MTK or other legally required activities.",
+          "Erforderliche Kontrollen dürfen nur durch entsprechend qualifiziertes und befugtes Personal mit geeigneten kalibrierten Prüfmitteln und gerätespezifischen freigegebenen Verfahren erfolgen. Diese Demo ersetzt keine STK, MTK oder andere vorgeschriebene Prüfung.",
+          "Zuständigkeit bei Prüfungen"
         ],
         [
           "3",
           "After work",
-          "After maintenance or repair, the necessary safety and functional checks and documented release are part of the approved local workflow. No AI tool should autonomously certify a device."
+          "After maintenance or repair, the necessary safety and functional checks and documented release are part of the approved local workflow. No AI tool should autonomously certify a device.",
+          "Nach Wartung oder Reparatur gehören die erforderlichen Sicherheits- und Funktionskontrollen und die dokumentierte Freigabe zum genehmigten Ablauf. Eine KI darf ein Gerät nicht eigenständig als sicher zertifizieren.",
+          "Nach Abschluss der Arbeiten"
         ]
-      ]
+      ],
+      "titleDe": "Demo-SOP – Elektrische Sicherheitsgrenzen"
     },
     {
       "id": "OPS-004",
@@ -223,24 +283,33 @@
         [
           "1",
           "Push-to-talk",
-          "Spoken interaction should start through an explicit button press, visibly show microphone state, allow immediate cancellation and provide a keyboard alternative."
+          "Spoken interaction should start through an explicit button press, visibly show microphone state, allow immediate cancellation and provide a keyboard alternative.",
+          "Sprachinteraktion soll mit einem bewussten Tastendruck starten, den Mikrofonstatus deutlich anzeigen, sofortiges Abbrechen ermöglichen und immer eine Tastatur-Alternative bieten.",
+          "Push-to-Talk"
         ],
         [
           "2",
           "Speech privacy",
-          "Browser speech recognition may route audio to an external service, depending on browser and device. Never speak patient or internal hospital information into this public demonstration."
+          "Browser speech recognition may route audio to an external service, depending on browser and device. Never speak patient or internal hospital information into this public demonstration.",
+          "Je nach Browser und Gerät kann die Spracherkennung Audio an einen externen Dienst übertragen. In der öffentlichen Demo dürfen niemals Patienteninformationen oder interne Krankenhausdaten gesprochen werden.",
+          "Datenschutz bei Spracheingabe"
         ],
         [
           "3",
           "Audio output",
-          "Read short source-backed summaries rather than lengthy procedures. Provide stop and repeat controls and always maintain visible text and citations."
+          "Read short source-backed summaries rather than lengthy procedures. Provide stop and repeat controls and always maintain visible text and citations.",
+          "Kurze, quellenbelegte Hinweise vorlesen statt langer Arbeitsanweisungen. Stoppen und Wiederholen ermöglichen; Text und Quellenangaben müssen stets auch sichtbar bleiben.",
+          "Audioausgabe"
         ],
         [
           "4",
           "Smart glasses boundary",
-          "Smart glasses are conceptual only in this version. No ambient recording, camera capture of patients, or operational AR overlays are authorised by this demo."
+          "Smart glasses are conceptual only in this version. No ambient recording, camera capture of patients, or operational AR overlays are authorised by this demo.",
+          "Smart Glasses sind in dieser Version nur ein Konzept. Die Demo erlaubt weder unbemerkte Aufnahmen noch Kameraaufnahmen von Patienten oder operative AR-Einblendungen.",
+          "Grenzen von Smart Glasses"
         ]
-      ]
+      ],
+      "titleDe": "Demo-SOP – Sprache und Datenschutz"
     },
     {
       "id": "FIELD-PUMP-100-RETIRED",
@@ -255,14 +324,19 @@
         [
           "1",
           "Historical training draft",
-          "This is an intentionally retired fictional knowledge card used only to demonstrate version filtering. Its contents must not appear in normal retrieval results."
+          "This is an intentionally retired fictional knowledge card used only to demonstrate version filtering. Its contents must not appear in normal retrieval results.",
+          "Dies ist eine absichtlich archivierte fiktive Lernkarte. Sie dient ausschließlich dem Test der Versionsfilterung und darf nicht in normalen Suchergebnissen erscheinen.",
+          "Archivierte Trainingsfassung"
         ],
         [
           "2",
           "Historical escalation route",
-          "The fictitious escalation inbox formerly used the legacy demo channel. This obsolete detail exists only to demonstrate that archive contents are excluded from active retrieval."
+          "The fictitious escalation inbox formerly used the legacy demo channel. This obsolete detail exists only to demonstrate that archive contents are excluded from active retrieval.",
+          "Der fiktive Meldeweg verlief früher über einen alten Demo-Kanal. Die veraltete Information dient nur dazu zu zeigen, dass Archivmaterial aus aktiver Suche ausgeschlossen wird.",
+          "Historischer Meldeweg"
         ]
-      ]
+      ],
+      "titleDe": "LUMEN P200 – Archivierte Lernkarte"
     },
     {
       "id": "LAW-7",
