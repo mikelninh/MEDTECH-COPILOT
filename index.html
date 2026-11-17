@@ -77,11 +77,40 @@ const docs=[
 const stop=new Set(["was","ist","eine","einer","einem","der","die","das","und","wie","bei","im","in","den","dem","fur","für","mir","man","kann","ich","soll","tun","bitte","erklare","erkläre","zu","zum","von","mit","ein","es","sind","darf","darfst","wer","wo","welche","welcher","welches","eines","auf","nach","vor","wenn","wird","werden","gibt"]);
 const normalize=s=>s.toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
 const terms=s=>normalize(s).split(" ").filter(w=>w.length>2&&!stop.has(w));
-const unsafe=/(selbst.{0,30}(reparier|ueberbrueck|uberbruck|oeffnen|offnen)|schutzleiter.{0,20}(abklemm|entfern)|alarm.{0,20}(deaktivier|ausschalt|umgeh)|patient.{0,25}(dosis|therapie|diagnos)|ueberbrueck.{0,20}alarm)/i;
-function retrieve(query){let q=terms(query),raw=normalize(query);return docs.map(d=>{let head=normalize(d.title+" "+d.tags+" "+d.section),body=normalize(d.summary+" "+d.answer),score=0;for(const w of q){if(head.split(" ").includes(w))score+=5;else if(head.includes(w))score+=3;else if(body.includes(w))score+=1}if(raw.includes("stk")&&d.id==="REG-012")score+=18;if(raw.includes("mtk")&&d.id==="REG-015")score+=18;if(raw.includes("spo2")&&d.id==="SIM-101")score+=18;if(raw.includes("infusionspumpe")&&d.id==="SIM-102")score+=18;if(raw.includes("ekg")&&d.id==="SIM-104")score+=18;return {d,score}}).filter(x=>x.score>=4).sort((a,b)=>b.score-a.score).slice(0,3)}
-function answer(q){if(unsafe.test(normalize(q))||/dosis|dosierung|therapieentscheidung|patientendaten|passwort|sicherheitspruefung umgehen/.test(normalize(q)))return {text:"Für eine konkrete Reparaturumgehung, Therapieentscheidung oder sensible Datenverarbeitung kann diese Demo keine Anleitung liefern. Bitte die zuständige Fachperson und die freigegebenen Prozesse einbeziehen.",refs:[],kind:"caution"};
-let hits=retrieve(q);if(!hits.length)return {text:"Dazu habe ich in den verfügbaren, freigegebenen Demoquellen keine ausreichend passende Fundstelle. Ich möchte keine Arbeitsschritte oder Fakten erfinden. Bitte die konkrete Herstelleranweisung oder die verantwortliche Fachperson heranziehen.",refs:[],kind:"unknown"};
-return {text:hits[0].d.answer,refs:hits.map(x=>x.d),kind:"sourced"}}
+const unsafe=/(?:alarm|schutzleiter|sicherheitsfunktion|schutzschaltung|verriegelung).{0,85}(?:umgeh|deaktiv|ausschalt|abschalt|entfern|ueberbrueck|manipulier)|(?:umgeh|deaktiv|ausschalt|abschalt|entfern|ueberbrueck|manipulier).{0,85}(?:alarm|schutzleiter|sicherheitsfunktion|schutzschaltung|verriegelung)|ohne.{0,35}(?:pruefung|kontrolle).{0,35}(?:freigeb|inbetriebnehm|frei\b)/i;
+const recordQuestion=/(?:unser|unsere|unserer|bei uns|zuletzt|softwarestand|inventarnummer|seriennummer|unserem bestand|unserer abteilung|historie|bestand|aktuellen wartung)/;
+const numericSpec=/(?:wie viele|wie viel|wieviel|welche).{0,35}(?:volt|ampere|spannung|joule|dosis|milligramm|grenzwert)/;
+function retrieve(query){
+ const n=normalize(query);
+ // Curated demo corpus; do not claim broad coverage from keyword matching.
+ const routes=[
+  {pattern:/(?:\bstk\b|sicherheitstechnisch)/,id:"REG-012"},
+  {pattern:/(?:\bmtk\b|messtechnisch|kalibrierung)/,id:"REG-015"},
+  {pattern:/(?:\beinweis|bedienberechtig|geraeteeinweis)/,id:"REG-011"},
+  {pattern:/(?:servicefall|serviceauftrag|servicebericht|dokumentier|inventar|wartungsbericht)/,id:"SIM-103"},
+  {pattern:/(?:sp[o0]2|sauerstoffsaettigung)/,id:"SIM-101",requiresFault:true},
+  {pattern:/(?:infusionspumpe|versch(l)?ussalarm|okklusion)/,id:"SIM-102",requiresFault:true},
+  {pattern:/(?:\bekg\b|elektrokardiogramm)/,id:"SIM-104",requiresFault:true},
+  {pattern:/(?:qualifik|befaehig|fachkenntnis|wer darf|berechtigt)/,id:"REG-005"},
+  {pattern:/(?:instandhalt|instandsetz|wartung|inspektion|reparier)/,id:"REG-007"}
+ ];
+ const fault=/(?:alarm|fehler|stoerung|problem|kein|keine|unplausibel|artefakt|signal|zeigt|ausfall)/.test(n);
+ const match=routes.find(r=>r.pattern.test(n)&&(!r.requiresFault||fault));
+ if(!match)return [];
+ const d=docs.find(d=>d.id===match.id);
+ return d?[{d,score:100}]:[];
+}
+function answer(q){
+ const n=normalize(q);
+ if(unsafe.test(n)||/(?:\bdosis\b|dosierung|therapieentscheidung|sicherheitspruefung umgehen|patientendaten|passwort)/.test(n))
+  return {text:"Zu einer Alarmumgehung, gefährlichen Manipulation, Therapieentscheidung oder sensiblen Daten kann diese Demo keine Handlungsanweisung liefern. Bitte die zuständige Fachperson und die freigegebenen Verfahren einbeziehen.",refs:[],kind:"caution"};
+ if(recordQuestion.test(n)||numericSpec.test(n))
+  return {text:"Dafür liegen keine aktuellen Bestands-, Verlaufs- oder gerätespezifischen Daten in dieser öffentlichen Demo vor. Bitte das zuständige System oder die freigegebene Herstellerunterlage einsehen.",refs:[],kind:"unknown"};
+ const hits=retrieve(q);
+ if(!hits.length)
+  return {text:"Dazu finde ich keine ausreichend passende, freigegebene Fundstelle im Demo-Wissensbestand. Ich möchte keine technischen Fakten oder Handlungsschritte erfinden. Bitte die konkrete Herstelleranweisung oder verantwortliche Fachperson heranziehen.",refs:[],kind:"unknown"};
+ return {text:hits[0].d.answer,refs:hits.map(x=>x.d),kind:"sourced"};
+}
 window.MedtechCore={docs,terms,retrieve,answer};
 const el=id=>document.getElementById(id);
 function node(tag,cls,txt){let x=document.createElement(tag);if(cls)x.className=cls;if(txt!==undefined)x.textContent=txt;return x}
