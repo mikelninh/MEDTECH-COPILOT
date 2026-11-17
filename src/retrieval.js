@@ -82,14 +82,14 @@ function flatten(corpus){
   if(!doc.id||!doc.title||!doc.version||!doc.status||!Array.isArray(doc.sections))throw new Error("Bad document metadata");
   for(const entry of doc.sections){
    if(!Array.isArray(entry)||entry.length<3||!String(entry[2]).trim())throw new Error("Invalid section "+doc.id);
-   const [page,heading,text]=entry;
+   const [page,heading,text,textDe,headingDe]=entry;
    result.push({
     id:doc.id+"#"+page,
-    documentId:doc.id,title:doc.title,kind:doc.kind,
+    documentId:doc.id,title:doc.title,titleDe:doc.titleDe||doc.title,kind:doc.kind,
     deviceId:doc.deviceId||null,owner:doc.owner||"",
     version:doc.version,status:doc.status,
     updated:doc.updated||"",url:doc.url||null,
-    page:String(page),heading:String(heading),text:String(text),
+    page:String(page),heading:String(heading),text:String(text),textDe:textDe?String(textDe):String(text),headingDe:headingDe?String(headingDe):String(heading),
     language:doc.language||"en"
    });
   }
@@ -103,8 +103,8 @@ const syntheticNote="Fictional training source. Not a manufacturer instruction o
 function buildIndex(corpus){
  const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY");
  const scoredDocs=active.map(ch=>{
-  const titleTokens=tokens(ch.title+" "+ch.heading+" "+ch.deviceId);
-  const textTokens=tokens(ch.text);
+  const titleTokens=tokens(ch.title+" "+ch.titleDe+" "+ch.heading+" "+ch.headingDe+" "+ch.deviceId);
+  const textTokens=tokens(ch.text+" "+ch.textDe);
   const freq=new Map();
   for(const tok of textTokens)freq.set(tok,(freq.get(tok)||0)+1);
   for(const tok of titleTokens)freq.set(tok,(freq.get(tok)||0)+3);
@@ -130,7 +130,7 @@ function search(index,question,opts={}){
    score+=idf*(frequency*2.2)/(frequency+1.2*(.25+.75*ch.length/index.avg));
   }
   if(!score)continue;
-  const title=normalize(ch.title+" "+ch.heading);
+  const title=normalize(ch.title+" "+ch.titleDe+" "+ch.heading+" "+ch.headingDe);
   const phrase=normalize(question);
   if(phrase.length>9&&title.includes(phrase))score+=2;
   if(context&&ch.deviceId===context)score*=1.36;
@@ -160,12 +160,12 @@ function ask(index,question,opts={}){
  const top=hits[0];
  if(top.score<1.25)return {status:"unknown",heading:"No supported evidence",explanation:"The best match is too weak to support an answer.",evidence:[],answer:"",note:syntheticNote};
  return {
-  status:"evidence",heading:top.chunk.heading,
-  answer:top.chunk.text,explanation:"Exact extract from the cited active document; no AI-generated paraphrase.",
+  status:"evidence",heading:opts.language==="de"?top.chunk.headingDe:top.chunk.heading,
+  answer:opts.language==="de"?top.chunk.textDe:top.chunk.text,explanation:"Exact extract from the cited active document; no AI-generated paraphrase.",
   evidence:hits.map(hit=>({
    id:hit.chunk.id,documentId:hit.chunk.documentId,
-   documentTitle:hit.chunk.title,version:hit.chunk.version,page:hit.chunk.page,
-   heading:hit.chunk.heading,excerpt:hit.chunk.text,score:Number(hit.score.toFixed(3)),
+   documentTitle:opts.language==="de"?hit.chunk.titleDe:hit.chunk.title,version:hit.chunk.version,page:hit.chunk.page,
+   heading:opts.language==="de"?hit.chunk.headingDe:hit.chunk.heading,excerpt:opts.language==="de"?hit.chunk.textDe:hit.chunk.text,score:Number(hit.score.toFixed(3)),
    updated:hit.chunk.updated,deviceId:hit.chunk.deviceId,status:hit.chunk.status,
    kind:hit.chunk.kind,url:hit.chunk.url
   })),
@@ -175,7 +175,7 @@ function ask(index,question,opts={}){
 function documentSummary(index){
  const seen=new Map();
  for(const ch of index.all){
-  if(!seen.has(ch.documentId))seen.set(ch.documentId,{id:ch.documentId,title:ch.title,kind:ch.kind,deviceId:ch.deviceId,version:ch.version,status:ch.status,updated:ch.updated,pageCount:0,owner:ch.owner});
+  if(!seen.has(ch.documentId))seen.set(ch.documentId,{id:ch.documentId,title:ch.titleDe,kind:ch.kind,deviceId:ch.deviceId,version:ch.version,status:ch.status,updated:ch.updated,pageCount:0,owner:ch.owner});
   seen.get(ch.documentId).pageCount++;
  }
  return [...seen.values()];
