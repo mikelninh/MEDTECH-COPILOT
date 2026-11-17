@@ -190,6 +190,8 @@ function showRegressions(){
 }
 function setup(){
  const params=new URLSearchParams(location.search),initial=params.get("view");
+ const deepDevice=params.get("device");
+ if(K.devices.some(d=>d.id===deepDevice))state.deviceId=deepDevice;
  if(screens.includes(initial))navigate(initial,{scroll:false});
  document.querySelectorAll("button[data-screen]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.screen,{glass:b.dataset.previewGlass==="true"})));
  byId("askForm").addEventListener("submit",e=>{e.preventDefault();sendQuestion(byId("askInput").value)});
@@ -198,6 +200,12 @@ function setup(){
  byId("fieldDevice").addEventListener("change",e=>{state.deviceId=e.target.value;state.step=0;renderDevices()});
  byId("fieldNext").addEventListener("click",()=>{const n=K.workflows[state.deviceId].length;state.step=(state.step+1)%n;renderStep()});
  byId("fieldPrev").addEventListener("click",()=>{state.step=Math.max(0,state.step-1);renderStep()});
+ byId("copyDeviceLink").addEventListener("click",async()=>{
+  const u=new URL(location.href);u.searchParams.set("view","field");u.searchParams.set("device",state.deviceId);
+  const text=u.toString();
+  try{if(!navigator.clipboard)throw new Error("Clipboard not available");await navigator.clipboard.writeText(text);byId("copyLinkStatus").textContent="Demo-Link kopiert: direkt zum ausgewählten Übungsgerät."}
+  catch(_){byId("copyLinkStatus").textContent="Link: "+text;}
+ });
  byId("askAboutDevice").addEventListener("click",()=>{const q=state.deviceId==="DEMO-PUMP-02"?"Infusionspumpe meldet Alarm":state.deviceId==="DEMO-MON-01"?"SpO2 Sensor zeigt kein Signal":"Wie dokumentiere ich einen Servicefall?";sendQuestion(q)});
  byId("glassSpeak").addEventListener("click",()=>readText(byId("glassesTitle").textContent+". "+byId("glassesText").textContent));
  byId("libraryFilter").addEventListener("input",renderLibrary);
