@@ -8,6 +8,7 @@
 <title>Medtech Copilot · Fieldnotes</title>
 <link rel="stylesheet" href="./v4.css">
 <link rel="stylesheet" href="./v5.css">
+<link rel="stylesheet" href="./v6.css">
 <script defer src="./src/retrieval.js"></script>
 <script defer src="./src/fieldnotes.js"></script>
 </head>
@@ -68,7 +69,7 @@
             <h3>Eine gute Frage ist der Anfang.</h3>
             <p>Suche nach einer Regelung, einer Gerätemeldung oder einem Serviceprozess. Wir zeigen dir den passenden Abschnitt — oder sagen ausdrücklich, dass uns die Evidenz fehlt.</p>
           </div>
-          <div class="pane-actions"><button class="text-action" id="speakAnswer" disabled type="button">◖ &nbsp; Vorlesen</button><button class="text-action" id="stopSpeech" type="button">■ &nbsp; Stoppen</button><span id="answerFoot">Nur Demo-Dokumente</span></div>
+          <div class="pane-actions"><button class="text-action" id="speakAnswer" disabled type="button">◖ &nbsp; Vorlesen</button><button class="text-action" id="stopSpeech" type="button">■ &nbsp; Stoppen</button><span id="answerFoot">Fiktive Fälle + geprüfte öffentliche Quellen</span></div>
         </article>
         <aside class="evidence-pane" id="evidencePane">
           <div class="evidence-top"><span class="evidence-symbol">↗</span><div><strong>Quellen</strong><small>Herkunft vor Behauptung.</small></div></div>
@@ -175,7 +176,7 @@
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
-<dialog id="aboutDialog" class="about-dialog"><div class="dialog-top"><h2>Wichtig zu wissen</h2><form method="dialog"><button aria-label="Schließen" type="submit">×</button></form></div><p>MEDTECH COPILOT ist ein unabhängiger öffentlicher Demonstrator. Er wurde nicht vom UKB geprüft oder freigegeben. Es gibt keine Verbindung zu Krankenhaus-IT, Patientenakten, Hersteller-Serviceportalen oder echten Gerätebeständen.</p><p>Die Suche nutzt einen lokalen Dokumentenindex und gibt zitierbare Textstellen zurück. Sie verwendet derzeit kein generatives Sprachmodell, keine Embeddings und keine echte Krankenhaus-RAG-Infrastruktur.</p><p>Spracheingabe kann browserabhängig auf externe Dienste zugreifen. Keine sensiblen Daten eintippen oder diktieren. Die QR-Scan-Funktion verarbeitet Kamerabilder im Browser, sofern die notwendige Plattformfunktion vorhanden ist; die Kamera wird nach dem Scan geschlossen.</p><p>Die drei Übungsgeräte und ihre Lernkarten sind fiktiv; zusätzlich wird eine öffentliche Dräger-Gebrauchsanweisung mit kurzen, eigenen Zusammenfassungen und Druckseiten referenziert. Keine klinischen Entscheidungen, Reparaturen, Sicherheitsprüfungen oder Gerätefreigaben auf Basis dieser Anwendung.</p><form method="dialog"><button type="submit" class="dark-button">Verstanden</button></form></dialog>
+<dialog id="aboutDialog" class="about-dialog"><div class="dialog-top"><h2>Wichtig zu wissen</h2><form method="dialog"><button aria-label="Schließen" type="submit">×</button></form></div><p>MEDTECH COPILOT ist ein unabhängiger öffentlicher Demonstrator. Er wurde nicht vom UKB geprüft oder freigegeben. Es gibt keine Verbindung zu Krankenhaus-IT, Patientenakten, Hersteller-Serviceportalen oder echten Gerätebeständen.</p><p>Die Suche nutzt einen lokalen Dokumentenindex. Für eine echte Dräger-Unterlage enthält er kurze, selbst formulierte Zusammenfassungen mit Druckseiten und Original-Link; fiktive Lernkarten werden separat gekennzeichnet. Sie verwendet derzeit kein generatives Sprachmodell, keine Embeddings und keine echte Krankenhaus-RAG-Infrastruktur.</p><p>Spracheingabe kann browserabhängig auf externe Dienste zugreifen. Keine sensiblen Daten eintippen oder diktieren. Die QR-Scan-Funktion verarbeitet Kamerabilder im Browser, sofern die notwendige Plattformfunktion vorhanden ist; die Kamera wird nach dem Scan geschlossen.</p><p>Die drei Übungsgeräte und ihre Lernkarten sind fiktiv; zusätzlich wird eine öffentliche Dräger-Gebrauchsanweisung mit kurzen, eigenen Zusammenfassungen und Druckseiten referenziert. Keine klinischen Entscheidungen, Reparaturen, Sicherheitsprüfungen oder Gerätefreigaben auf Basis dieser Anwendung.</p><form method="dialog"><button type="submit" class="dark-button">Verstanden</button></form></dialog>
 <dialog id="cameraDialog" class="camera-dialog"><div class="dialog-top"><h2>Geräteetikett scannen</h2><button type="button" id="closeCamera" aria-label="Kamera schließen">×</button></div><video id="cameraFeed" autoplay playsinline muted aria-label="Kameraansicht für QR-Code"></video><p id="cameraStatus">Kamera wird nur für diese Aktion verwendet. Bitte ein fiktives Demo-Etikett scannen.</p><button class="light-button" id="cameraCancel" type="button">Abbrechen</button></dialog>
 </body>
 </html>
