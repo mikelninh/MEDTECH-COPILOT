@@ -1,73 +1,83 @@
 #!/usr/bin/env node
-/* MEDTECH COPILOT v0.2 contract checks — demo behavior, NOT clinical validation. */
+/* FIELDNOTES v0.4: deterministic evidence engine regression and UI contract.
+ * Unit tests do not confer medical readiness.
+ */
 "use strict";
 const fs=require("node:fs"),vm=require("node:vm"),path=require("node:path"),assert=require("node:assert/strict");
-const root=path.resolve(__dirname,"..");
+const root=path.join(__dirname,"..");
+const R=require(path.join(root,"src/retrieval.js"));
+const data=JSON.parse(fs.readFileSync(path.join(root,"data/corpus.json"),"utf8"));
+const idx=R.buildIndex(data);
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
-const css=fs.readFileSync(path.join(root,"styles.css"),"utf8");
-const app=fs.readFileSync(path.join(root,"src","app.js"),"utf8");
-const polish=fs.readFileSync(path.join(root,"src","polish.js"),"utf8");
-const premium=fs.readFileSync(path.join(root,"premium.css"),"utf8");
-const source=fs.readFileSync(path.join(root,"src","knowledge.js"),"utf8");
-const K=require(path.join(root,"src","knowledge.js"));
+const css=fs.readFileSync(path.join(root,"v4.css"),"utf8");
+const app=fs.readFileSync(path.join(root,"src/fieldnotes.js"),"utf8");
+new vm.Script(fs.readFileSync(path.join(root,"src/retrieval.js"),"utf8"));
+new vm.Script(app);
 assert.match(html,/<!doctype html>/i);
 assert.match(html,/<html lang="de">/);
-assert.match(html,/<meta name="viewport"/);
-assert.match(html,/<script defer src="\.\/src\/knowledge\.js"><\/script>/);
-assert.match(html,/<script defer src="\.\/src\/app\.js"><\/script>/);
-assert.match(html,/Keine UKB-Anbindung/i);
-assert.match(html,/Keine Patientendaten/i);
-assert.match(html,/Glasses Preview/);
-assert.match(html,/id="privacyDialog"/);
-assert.doesNotMatch(css,/@import url\(/i,"Third-party font request found");
-for(const id of ["home","ask","field","library","lab"])assert.ok(html.includes('id="screen-'+id+'"'),"Screen missing: "+id);
-for(const id of ["askForm","fieldDevice","messages","sourceInspector","libraryList","demoList","runChecks","glassSpeak"])
- assert.ok(html.includes('id="'+id+'"'),"UI element missing: "+id);
-new vm.Script(app,{filename:"src/app.js"});
-new vm.Script(polish,{filename:"src/polish.js"});
-assert.match(html, /premium\.css/);
-assert.match(html, /src\/polish\.js/);
-assert.match(html, /id="spotlightTrigger"/);
-assert.match(premium, /\.spotlight-trigger/);
-new vm.Script(source,{filename:"src/knowledge.js"});
-const cases=[
- ["STK §12","Was ist eine STK?","LAW-12"],
- ["MTK §15","Was bedeutet MTK?","LAW-15"],
- ["Instandhaltung §7","Wie läuft eine Wartung ab?","LAW-07"],
- ["Qualifikation §5","Wer darf reparieren?","LAW-05"],
- ["Einweisung §11","Ist eine Einweisung erforderlich?","LAW-11"],
- ["Medizinproduktebuch §13","Was steht im Medizinproduktebuch?","LAW-13"],
- ["Bestandsverzeichnis §14","Was bedeutet Bestandsverzeichnis?","LAW-14"],
- ["Monitor-Simulation","SpO2 Sensor zeigt kein Signal","SIM-MON"],
- ["Pumpen-Simulation","Infusionspumpe meldet Alarm","SIM-PUMP"],
- ["Service-Dokumentation","Wie dokumentiere ich einen Servicefall?","SIM-SERVICE"],
- ["Nur aktive Version","Zeige die gültige Demo-Anweisung bei Pumpenalarm","SIM-PUMP"],
- ["Keine Wartungshistorie","Wann wurde unser Monitor zuletzt gewartet?","unknown"],
- ["Keine Softwarestände","Was ist der aktuelle Softwarestand?","unknown"],
- ["Keine erfundene Norm","Was steht in IEC 909090?","unknown"],
- ["Kein Alarmcode","Was bedeutet Alarmcode Z999?","unknown"],
- ["Keine Gerätespannung","Welche Spannung hat ein Defibrillator?","unknown"],
- ["Alarmumgehung verweigert","Wie kann ich den Pumpenalarm umgehen?","blocked"],
- ["Alarm abschalten verweigert","Kann ich den Alarm ausschalten?","blocked"],
- ["Schutzleiter entfernen verweigert","Kann ich den Schutzleiter entfernen?","blocked"],
- ["Freigabe umgehen verweigert","Wie kann ich das Gerät ohne Prüfung freigeben?","blocked"],
- ["Dosierung verweigert","Welche Dosierung bekommt der Patient?","blocked"],
- ["Unbekannte Fragen","Können medizinische Geräte Gedanken lesen?","unknown"]
+assert.match(html,/src\/retrieval\.js/);
+assert.match(html,/src\/fieldnotes\.js/);
+assert.match(html,/href="\.\/v4\.css"/);
+assert.doesNotMatch(html+css,/https:\/\/fonts\.(googleapis|gstatic)\.com/);
+assert.match(html,/kein Sprachmodell/i);
+assert.match(html,/Keine internen Daten/i);
+for(const name of ["desk","field","library","lab"])assert.ok(html.includes('id="view-'+name+'"'),"Missing "+name);
+for(const name of ["searchInput","searchForm","answerPane","evidenceList","deviceSelect","qrLabel","scanQr","manualDeviceId","stepNumber","nextStep","sideAudio","sideGlasses","documentList","scenarioGrid","runEvaluation"])assert.ok(html.includes('id="'+name+'"'),"Missing "+name);
+assert.equal(data.documents.length,13,"Unexpected corpus size");
+assert.equal(idx.all.length-idx.active.length,2,"One retired source must have two excluded sections");
+assert.equal(R.documentSummary(idx).filter(x=>x.status==="RETIRED").length,1);
+assert.ok(idx.active.every(x=>x.status==="APPROVED_DEMO"||x.status==="PUBLIC_OFFICIAL_SUMMARY"));
+assert.ok(idx.active.every(x=>x.documentId!=="FIELD-PUMP-100-RETIRED"));
+assert.equal(data.documents.filter(d=>d.status==="PUBLIC_OFFICIAL_SUMMARY").length,5);
+assert.ok(data.documents.filter(d=>d.status==="PUBLIC_OFFICIAL_SUMMARY").every(d=>d.url?.startsWith("https://www.gesetze-im-internet.de/mpbetreibv_2025/")));
+assert.ok(data.documents.filter(d=>d.kind==="Fictional device manual").every(d=>d.id.startsWith("FIELD-")));
+
+const examples=[
+ ["German STK legal source","Was ist eine STK?","evidence","LAW-12"],
+ ["German MTK legal source","Was ist eine MTK?","evidence","LAW-15"],
+ ["German medical products book","Was ist ein Medizinproduktebuch?","evidence","LAW-13"],
+ ["German device inventory list","Was ist ein Bestandsverzeichnis?","evidence","LAW-14"],
+ ["English pump occlusion","What is an occlusion warning?","evidence","FIELD-PUMP-230"],
+ ["German pump occlusion","Was tun bei einem Verschlussalarm der Demopumpe?","evidence","FIELD-PUMP-230"],
+ ["SpO2 monitor missing signal","SpO2 sensor shows no value","evidence","FIELD-MON-210"],
+ ["German SpO2 monitor","SpO2 zeigt keinen Wert","evidence","FIELD-MON-210"],
+ ["Ventilator simulated alarm","ventilator alarm triage","evidence","FIELD-VENT-110"],
+ ["Safety procedures","electric shock safety equipment","evidence","OPS-003"],
+ ["Service intake","required service intake fields","evidence","OPS-001"],
+ ["Version information","LUMEN P200 training card version","evidence","FIELD-PUMP-230"],
+ ["No real maintenance history","Wann wurde unser Monitor zuletzt gewartet?","unknown",null],
+ ["No real device history","When was our pump last serviced?","unknown",null],
+ ["No serial number","What is our device serial number?","unknown",null],
+ ["No fabricated alarm code","What does alarm code ZX999 mean?","unknown",null],
+ ["No fabricated German alarm code","Was bedeutet Alarmcode Z38?","unknown",null],
+ ["No imaginary device specs","Welche Spannung hat das Gerät?","unknown",null],
+ ["No made up unknown topic","How to repair a banana spacecraft?","unknown",null],
+ ["English alarm override","How can I bypass the pump alarm?","blocked",null],
+ ["German alarm bypass","Wie kann ich den Pumpenalarm umgehen?","blocked",null],
+ ["German alarm disable","Wie kann ich einen Gerätealarm deaktivieren?","blocked",null],
+ ["Protective earth interference","How can I remove the protective earth?","blocked",null],
+ ["Unsafe no-test release","How can I release the device without safety check?","blocked",null],
+ ["Clinical dosing withheld","Welche Dosierung bekommt der Patient?","blocked",null],
+ ["Private data withheld","What is the patient's password?","blocked",null]
 ];
-let n=0;
-for(const [label,q,expected] of cases){
- const a=K.answer(q,"DEMO-PUMP-02");
- const actual=a.kind==="sourced"?a.sources[0]?.id:a.kind;
- assert.equal(actual,expected,label+" expected "+expected+" got "+actual);
- if(a.kind==="sourced")assert.ok(a.sources.length&&a.sources.every(s=>s.state!=="RETIRED"),label+" source invalid");
- else assert.equal(a.sources.length,0,label+" has misleading citation");
- console.log("PASS",label);n++;
+for(const [label,question,status,doc] of examples){
+ const a=R.ask(idx,question);
+ assert.equal(a.status,status,label+" status");
+ if(doc){assert.ok(a.evidence.some(x=>x.documentId===doc),label+" source mismatch");
+  assert.ok(a.evidence.every(x=>x.documentTitle&&x.version&&x.page&&x.excerpt&&x.status!=="RETIRED"),label+" source metadata");
+ }else assert.equal(a.evidence.length,0,label+" invented evidence");
+ console.log("PASS",label);
 }
-assert.equal(K.sources.filter(s=>s.state==="RETIRED").length,1);
-assert.equal(K.availableSources().length,K.sources.length-1);
-assert.equal(K.devices.length,3);
-assert.equal(K.scenarios.length,4);
-for(const d of K.devices){assert.ok(K.workflows[d.id]&&K.workflows[d.id].length>=3,"Workflow missing");assert.ok(d.id.startsWith("DEMO-"))}
-for(const s of K.sources.filter(x=>x.type==="law"))assert.ok(s.url.startsWith("https://www.gesetze-im-internet.de/mpbetreibv_2025/"));
-for(const s of K.sources.filter(x=>x.type==="simulation"))assert.equal(s.url,null);
-console.log("PASS "+n+" QA cases + structural, archive, provenance and compile checks");
+// Context filtering is intentionally strict: a pump-specific query must not retrieve a monitor-only document.
+const filtered=R.search(idx,"SpO2 signal", {deviceId:"DEMO-PUMP-02"});
+assert.ok(!filtered.some(x=>x.chunk.documentId==="FIELD-MON-210"));
+console.log("PASS device-level relevance filter");
+// No retired materials despite query containing retired keywords
+const archive=R.ask(idx,"obsolete historical escalation route");
+assert.ok(!archive.evidence.some(x=>x.documentId==="FIELD-PUMP-100-RETIRED"));
+console.log("PASS archived document revocation");
+// Evidence is directly extractive: the output must be exactly one passage from source.
+const ex=R.ask(idx,"What is an occlusion warning?");
+assert.equal(ex.answer,idx.active.find(x=>x.id===ex.evidence[0].id).text);
+console.log("PASS strictly extractive evidence");
+console.log("PASS: "+examples.length+" regression prompts plus corpus/compile/source/version/device checks");
