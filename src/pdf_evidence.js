@@ -29,6 +29,8 @@ function find(data,question){
  if(!q||q.length>450)return result("unknown","Frage fehlt","Bitte eine konkrete Frage zum Philips-Addendum stellen.");
  if(unsafe.test(q))return result("blocked","Sicherheitsgrenze","Keine Anleitung zur Alarmumgehung, Änderung klinischer Einstellungen oder Offenlegung geschützter Informationen.");
  if(excluded.test(q))return result("unknown","Falsche Quelle","Diese PDF-Referenz betrifft ein Philips-Addendum, keine anderen Hersteller oder internen Geräte-/Servicebestände.");
+ if(/\b(?:mein|meine|patient|patienten)\b/.test(q)&&/\b(?:temperatur|sattigung|saettigung|sauerstoff|blutdruck|puls)\b/.test(q))
+  return result("unknown","Keine Patientendaten","Dieser öffentliche Dokumentenindex hat keine aktuellen Patientenmesswerte. Klinische Einschätzungen gehören zum zuständigen Behandlungsteam.");
  const terms=q.split(" ").filter(t=>t.length>=3&&!generic.has(t));
  if(!terms.length)return result("unknown","Zu wenig Kontext","Bitte ein konkretes Thema nennen, beispielsweise Batterie, Umgebungstemperatur oder Alarmgrenzen.");
  const score=e=>{
@@ -38,7 +40,7 @@ function find(data,question){
    const hit=[...words].some(x=>x===t||(t.length>=5&&x.startsWith(t))||(x.length>=5&&t.startsWith(x)));
    if(hit){matched.push(t);n+=1}
   }
-  const topic=new Set(["batterie","akku","battery","discharge","ladung","aufladen","temperature","temperatur","heat","hitze","ambient","alarmgrenzen","grenzwerte","limits","alarm","nanopod","capnography","kapnographie","co2","microstream","gase","gas","genauigkeit"]);
+  const topic=new Set(["batterie","akku","battery","discharge","ladung","aufladen","temperature","temperatur","umgebungstemperatur","heat","hitze","ambient","alarmgrenzen","grenzwerte","limits","alarm","nanopod","capnography","kapnographie","co2","microstream","gase","gas","genauigkeit"]);
   if(!matched.some(w=>topic.has(w)||[...topic].some(t=>w.startsWith(t)&&w.length>=4)))return 0;
   return n;
  };
