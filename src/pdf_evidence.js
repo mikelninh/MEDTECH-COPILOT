@@ -9,7 +9,7 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(){
 "use strict";
 const normalize=x=>String(x||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/ß/g,"ss").replace(/[^a-z0-9]+/g," ").trim();
-const unsafe=/(?:alarm|alarme|warnsignal|beatmung|ventilation|therapie|dosier|bypass|interlock|schutzleiter).{0,100}(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|suppress|silence|dosier|dosis|verander|veranderung|einstell|adjust|change|bypass|abschalt)|(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|suppress|silence|bypass).{0,100}(?:alarm|warnsignal|schutzleiter|interlock)|(?:patientendaten|patientenakte|passwort|password|patient record)/;
+const unsafe=/(?:alarm|alarme|warnsignal|beatmung|ventilation|therapie|dosier|bypass|interlock|schutzleiter).{0,100}(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|suppress|silence|dosier|dosis|verander|andern|aender|veranderung|einstell|adjust|change|bypass|abschalt)|(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|suppress|silence|bypass).{0,100}(?:alarm|warnsignal|schutzleiter|interlock)|(?:patientendaten|patientenakte|passwort|password|patient record)/;
 const excluded=/\b(?:drager|draeger|vista|n-600|masimo|mindray|ukb|inventar|seriennummer|last serviced|wartungshistorie)\b/;
 const generic=new Set("was ist eine einen ein wo wann wie und oder der die das dem den bei auf fur zu mit von uber in am zum zur it is are was what how where please can you explain philips intellivue monitor gerat geraet device addendum handbuch manual".split(/\s+/));
 function inspectIndex(data){
