@@ -17,7 +17,7 @@ concurrency:
 jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push' }}
-    name: Publish fictional fieldnotes demo
+    name: Publish verified public fieldnotes demo
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -35,10 +35,19 @@ jobs:
       - name: Assemble public-only files
         run: |
           mkdir -p dist/src dist/data
-          cp index.html v4.css v5.css v6.css v7.css dist/
-          cp src/retrieval.js src/scenarios.js src/fieldnotes.js dist/src/
+          cp index.html v4.css v5.css v6.css v7.css v8.css dist/
+          cp src/retrieval.js src/scenarios.js src/fieldnotes.js src/pdf_evidence.js src/pdf_demo.js dist/src/
           cp data/corpus.json dist/data/
           touch dist/.nojekyll
+      - name: Download the PDF index from the successfully tested run
+        uses: actions/download-artifact@v4
+        with:
+          name: medtech-verified-pdf-index
+          path: dist/data/
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check the required source index exists
+        run: test -s dist/data/pdf_pages.json
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
