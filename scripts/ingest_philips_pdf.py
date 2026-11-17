@@ -22,6 +22,7 @@ URL = ("https://www.documents.philips.com/assets/Addendum/20250422/"
        "0be5036d5af74ece8a8fb2c70090cd18.pdf?feed=ifu_docs_feed")
 DOC_ID = "PHILIPS-IFU-ADDENDUM-453665155181-2025-02"
 PART_NO = "453665155181"
+PINNED_SHA256 = "a32a620f8374c6709961e95f8b3d6099a1fb2c5574db71fcd9f4b41cab3e656e"
 MAX_BYTES = 8 * 1024 * 1024
 
 # Page anchors, manually checked against the public four-page source.
@@ -103,6 +104,9 @@ def excerpt_near(page_text: str, anchor: str, n_words: int = 17) -> str:
 def build(pdf_bytes: bytes):
     import fitz  # PyMuPDF
 
+    sha = hashlib.sha256(pdf_bytes).hexdigest()
+    if sha != PINNED_SHA256:
+        raise RuntimeError("Manufacturer PDF differs from the tested source fingerprint; RELEASE BLOCKED. Expected " + PINNED_SHA256 + ", found " + sha)
     doc = fitz.open(stream=pdf_bytes, filetype="pdf")
     if len(doc) != 4:
         raise RuntimeError(f"Unexpected PDF length {len(doc)} (expected 4): RELEASE BLOCKED")
