@@ -92,18 +92,18 @@ function renderAsk(result,question){
  $("answerStatus").className="result-status "+(result.status==="evidence"?"":result.status);
  $("resultCounter").textContent=result.status==="evidence"?result.evidence.length+" relevante Fundstellen":result.status==="blocked"?"Anfrage bewusst abgelehnt":"Keine belastbare Quelle";
  if(result.status==="evidence"){
-  b.append(mk("span","answer-label","EXAKTER AUSZUG AUS DEM DOKUMENT"));
+  b.append(mk("span","answer-label",result.evidence[0]?.kind==="Manufacturer manual reference"?"BELEGTE KURZZUSAMMENFASSUNG":"EXAKTER AUSZUG AUS DEM INDEX"));
   b.append(mk("h3","",result.heading));
   const quote=mk("blockquote","",result.answer);b.append(quote);
-  const note=mk("p","","Kein KI-generierter Text. Der Auszug stammt direkt aus der sichtbaren Quelle.");b.append(note);
+  const note=mk("p","",result.evidence[0]?.kind==="Manufacturer manual reference"?"Eigene Kurzfassung der Herstellerangaben. Der Wortlaut steht im verlinkten Original-PDF. Keine Anleitung zur Reparatur oder Patientenversorgung.":"Kein KI-generierter Text. Der Auszug stammt aus dem kuratierten lokalen Index.");b.append(note);
   result.evidence.forEach((cit,i)=>{
    const card=mk("article","evidence-card");
-   card.append(mk("span","evidence-kind",cit.kind==="Public legal summary"?"AMTLICHE QUELLE – ZUSAMMENFASSUNG":"FIKTIVE DEMOQUELLE"));
+   card.append(mk("span","evidence-kind",cit.kind==="Public legal summary"?"AMTLICHE QUELLE – ZUSAMMENFASSUNG":cit.kind==="Manufacturer manual reference"?"ECHTES HERSTELLERHANDBUCH – KURZFASSUNG":"FIKTIVE DEMOQUELLE"));
    card.append(mk("strong","",cit.documentTitle));
-   card.append(mk("div","citation-meta","Abschnitt "+cit.page+" · Version "+cit.version));
+   card.append(mk("div","citation-meta",(cit.kind==="Manufacturer manual reference"?"Druckseite ":"Abschnitt ")+cit.page+" · Version "+cit.version));
    card.append(mk("p","",cit.excerpt));
    if(cit.url){
-    const a=mk("a","","Originalgesetz ansehen ↗");a.href=cit.url;a.target="_blank";a.rel="noopener noreferrer";card.append(a);
+    const a=mk("a","",cit.kind==="Manufacturer manual reference"?"Original-PDF bei Dräger öffnen ↗":"Originalgesetz ansehen ↗");a.href=cit.url;a.target="_blank";a.rel="noopener noreferrer";card.append(a);
    }
    e.append(card);
   });
@@ -192,12 +192,12 @@ function renderLibrary(){
  docs.forEach(d=>{
   const row=mk("article","document-row"+(d.status==="RETIRED"?" retired":""));
   const left=mk("div",""),right=mk("div","");
-  left.append(mk("span","doc-state"+(d.status==="RETIRED"?" retired":""),d.status==="RETIRED"?"ARCHIVIERT":d.kind==="Public legal summary"?"OFFIZIELLER LINK":"FIKTIVES DEMODOKUMENT"));
+  left.append(mk("span","doc-state"+(d.status==="RETIRED"?" retired":""),d.status==="RETIRED"?"ARCHIVIERT":d.kind==="Public legal summary"?"OFFIZIELLER LINK":d.kind==="Manufacturer manual reference"?"HERSTELLERQUELLE":"FIKTIVES DEMODOKUMENT"));
   left.append(mk("h3","",d.title),mk("p","",d.kind+" · "+(d.deviceId||"Allgemein")));
   left.append(mk("small","",d.id+" / v"+d.version+" / "+d.pageCount+" Abschnitte"));
-  if(d.kind==="Public legal summary"){
+  if(d.kind==="Public legal summary"||d.kind==="Manufacturer manual reference"){
    const ch=state.index.all.find(c=>c.documentId===d.id);
-   const a=mk("a","doc-link","Gesetz öffnen ↗");a.href=ch.url;a.target="_blank";a.rel="noopener noreferrer";right.append(a);
+   const a=mk("a","doc-link",d.kind==="Manufacturer manual reference"?"Hersteller-PDF ↗":"Gesetz öffnen ↗");a.href=ch.url;a.target="_blank";a.rel="noopener noreferrer";right.append(a);
   }else{
    const button=mk("button","doc-link",d.status==="RETIRED"?"Nicht in aktiver Suche":"Abschnitte ansehen ↗");
    button.style.background="none";button.style.border="0";button.style.padding="0";
@@ -380,6 +380,16 @@ function bind(){
  document.querySelectorAll("button[data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
  $("searchForm").addEventListener("submit",e=>{e.preventDefault();search($("searchInput").value)});
  document.querySelectorAll("[data-query]").forEach(b=>b.addEventListener("click",()=>search(b.dataset.query)));
+ const realQuestions={
+  supported:"Was bedeutet SpO2 Kein Sensor am Dräger Vista 120?",
+  unknown:"Wann wurde unser Vista 120 zuletzt gewartet?",
+  unsafe:"Wie kann ich den Alarm am Vista 120 deaktivieren?"
+ };
+ document.querySelectorAll("[data-real-test]").forEach(b=>b.addEventListener("click",()=>{
+  const key=b.dataset.realTest;
+  if(realQuestions[key])search(realQuestions[key]);
+ }));
+
  document.querySelectorAll("[data-demo-start]").forEach(b=>b.addEventListener("click",()=>setDemo(b.dataset.demoStart)));
  document.querySelectorAll("[data-demo-step]").forEach(b=>b.addEventListener("click",()=>{demoState.stage=Number(b.dataset.demoStep);renderDemo()}));
  $("demoBack").addEventListener("click",()=>{demoState.stage=Math.max(0,demoState.stage-1);renderDemo()});
