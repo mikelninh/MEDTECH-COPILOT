@@ -1,4 +1,4 @@
-# MEDTECH COPILOT — FIELDNOTES v0.6
+# MEDTECH COPILOT — FIELDNOTES v0.7
 
 **One real source. One question. One verifiable page.**
 
@@ -9,7 +9,7 @@ Independent, public prototype for hospital-medical-engineering knowledge workflo
 https://mikelninh.github.io/MEDTECH-COPILOT/
 
 ## What actually works
-- **Real manufacturer reference:** Public [Dräger Vista 120 / Vista 120S SW 3.n instructions](https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf), printed pages **82–83**. Five **independently paraphrased** fault-message summaries, each with exact printed page and original document URL. The full copyrighted PDF is **not** republished here. Always verify instructions/revisions and applicable supplements against the real device.
+- **Real manufacturer reference:** Seven independently paraphrased references to Dräger Vista 120 / Vista 120S SW 3.n, printed pages **82–83**. The previously indexed direct German PDF URL was unavailable (404) on live verification, so the app links to the official [Dräger documentation portal](https://www.draeger.com/ifu). Recheck model, software and original document there. The full copyrighted PDF is **not** republished here. Always verify instructions/revisions and applicable supplements against the real device.
 - **Three public acceptance questions:** documented alarm meaning → source page; unknown local service history → abstain; alarm bypass → refuse. Three one-click buttons on the simplified home screen.
 - **Passage retrieval (BM25):** browser-side index over `data/corpus.json`. Searches versioned text sections, produces exact extracts with document title, version and section; excludes retired documents. German/English query expansion for common medtech terms.
 - **Three fictional device contexts:** ORION M100 monitor, LUMEN P200 pump, AERIS V300 ventilator. The device selection limits document search to applicable fictional manuals and general SOPs.
@@ -17,9 +17,10 @@ https://mikelninh.github.io/MEDTECH-COPILOT/
 - **Field guidance:** a deliberately high-level, safety-first four-step learning flow with source provenance; never a repair procedure.
 - **Voice:** browser push-to-talk and text-to-speech with stop. Browser speech recognition may use external providers; do not dictate protected information.
 - **Source library:** live/retired status, source provenance and links to official German law sources.
-- **Evaluation:** automated retrieval/abstention/safety cases plus browser end-to-end smoke on desktop/mobile in GitHub Actions. They are demonstration tests, not a medical validation.
+- **Seventeen interactive case demos:** seven manufacturer-reference cases, seven fictional service workflows and three failure-boundary cases, grouped to avoid information overload.
+- **Strict evaluation:** 142/142 reproducible fixture checks (source integrity, wrong models/revisions, privacy, safety, revocation) and successful desktop/mobile Chromium journeys. See [strict audit report](docs/STRICT_AUDIT.md). This is **not** medical validation.
 
-**Critical disclosure:** The prototype uses *real passage retrieval and extractive answers*, but **NOT an LLM, embeddings, production RAG service or live hospital DMS**. The corpus contains fictional training cards, brief non-authoritative summaries of the MPBetreibV, and **five paraphrased entries anchored to the real Dräger manual**. For the real manufacturer source, displayed text is a **curated summary, not a verbatim quote or full-PDF ingestion**. The assistant has no generative model and does not check current manufacturer revisions automatically.
+**Critical disclosure:** The prototype uses *real passage retrieval and extractive answers*, but **NOT an LLM, embeddings, production RAG service or live hospital DMS**. The corpus contains fictional training cards, brief non-authoritative summaries of the MPBetreibV, and **seven paraphrased entries anchored to the indexed Dräger SW 3.n manual**. For the real manufacturer source, displayed text is a **curated summary, not a verbatim quote or full-PDF ingestion**. The assistant has no generative model and does not check current manufacturer revisions automatically.
 
 ## Run locally
 
