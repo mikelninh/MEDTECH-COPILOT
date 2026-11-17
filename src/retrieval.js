@@ -81,8 +81,21 @@ function expand(x){
 }
 function flatten(corpus){
  if(!corpus||!Array.isArray(corpus.documents))throw new Error("Corpus missing documents");
- const result=[];
+ const result=[],seenDocuments=new Set();
+ const allowedStatus=new Set(["APPROVED_DEMO","RETIRED","PUBLIC_OFFICIAL_SUMMARY","PUBLIC_MANUFACTURER_SUMMARY"]);
  for(const doc of corpus.documents){
+  if(seenDocuments.has(doc.id))throw new Error("Duplicate document ID: "+doc.id);
+  seenDocuments.add(doc.id);
+  if(!allowedStatus.has(doc.status))throw new Error("Unrecognised approval state: "+doc.id);
+  if(doc.status==="PUBLIC_MANUFACTURER_SUMMARY"&&doc.kind!=="Manufacturer manual reference")throw new Error("Manufacturer metadata mismatch");
+  if(doc.status==="PUBLIC_OFFICIAL_SUMMARY"&&doc.kind!=="Public legal summary")throw new Error("Legal metadata mismatch");
+  if(doc.url){
+   const found=/^https:\/\/([^\/?#:@]+)(?::443)?(?:[\/?#]|$)/i.exec(doc.url);
+   const host=found?.[1]?.toLowerCase();
+   const allowed=doc.status==="PUBLIC_MANUFACTURER_SUMMARY"?["www.draeger.com"]:doc.status==="PUBLIC_OFFICIAL_SUMMARY"?["www.gesetze-im-internet.de"]:[];
+   if(!host||!allowed.includes(host))throw new Error("Untrusted link: "+doc.id);
+  }else if(doc.status==="PUBLIC_MANUFACTURER_SUMMARY"||doc.status==="PUBLIC_OFFICIAL_SUMMARY")throw new Error("Public source link missing: "+doc.id);
+
   if(!doc.id||!doc.title||!doc.version||!doc.status||!Array.isArray(doc.sections))throw new Error("Bad document metadata");
   for(const [sectionIndex,entry] of doc.sections.entries()){
    if(!Array.isArray(entry)||entry.length<3||!String(entry[2]).trim())throw new Error("Invalid section "+doc.id);
@@ -92,7 +105,7 @@ function flatten(corpus){
     documentId:doc.id,title:doc.title,titleDe:doc.titleDe||doc.title,kind:doc.kind,
     deviceId:doc.deviceId||null,owner:doc.owner||"",
     version:doc.version,status:doc.status,
-    updated:doc.updated||"",url:doc.url||null,
+    updated:doc.updated||"",url:doc.url||null,referenceStatus:doc.referenceStatus||null,linkLabel:doc.linkLabel||null,
     page:String(page),heading:String(heading),text:String(text),textDe:textDe?String(textDe):String(text),headingDe:headingDe?String(headingDe):String(heading),
     language:doc.language||"en"
    });
@@ -211,7 +224,7 @@ function ask(index,question,opts={}){
    documentTitle:opts.language==="de"?hit.chunk.titleDe:hit.chunk.title,version:hit.chunk.version,page:hit.chunk.page,
    heading:opts.language==="de"?hit.chunk.headingDe:hit.chunk.heading,excerpt:opts.language==="de"?hit.chunk.textDe:hit.chunk.text,score:Number(hit.score.toFixed(3)),
    updated:hit.chunk.updated,deviceId:hit.chunk.deviceId,status:hit.chunk.status,
-   kind:hit.chunk.kind,url:hit.chunk.url
+   kind:hit.chunk.kind,url:hit.chunk.url,referenceStatus:hit.chunk.referenceStatus,linkLabel:hit.chunk.linkLabel
   })),
   note:syntheticNote
  };
