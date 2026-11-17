@@ -26,3 +26,9 @@
 #view-desk .section-title{margin-top:0}
 @media(max-width:950px){.real-source-hero{grid-template-columns:minmax(0,1fr) minmax(210px,.6fr)}.real-source-copy{padding:35px 27px}.real-source-copy h1{font-size:clamp(38px,5vw,55px)}.real-source-preview{margin-right:22px}}
 @media(max-width:690px){.real-source-hero{grid-template-columns:1fr;border-radius:19px}.real-source-copy{padding:30px 23px 19px}.real-source-copy h1{font-size:clamp(35px,10vw,51px)}.real-source-preview{margin:3px 23px 25px;max-width:none;width:calc(100% - 46px);transform:none}.real-source-docbody{padding:17px;gap:8px}.real-source-docbody strong{font-size:20px}.real-source-dochead{padding:12px}.real-source-docfoot{padding:11px 15px}.real-source-cta{width:100%}.real-test-options{margin:17px 0 33px;gap:8px}.real-test-options>span{width:100%}.real-test-options button{flex:1;justify-content:center;min-width:0;padding:11px 5px;white-space:nowrap;font-size:10px;gap:6px}.real-test-options button strong{font-size:9px}}
+
+.real-source-search{height:56px;min-height:56px;width:min(100%,725px);max-width:725px;margin:-18px 0 0;border:1px solid #dee9de;box-shadow:none;border-radius:12px;background:#fff}
+.real-source-search input{font-size:13px}
+.real-source-search .search-lens{font-size:24px;line-height:1;padding-left:15px}
+.real-search-note{font-size:10px;color:#92a190;margin:8px 0 34px}
+@media(max-width:690px){.real-source-search{margin:0;width:100%;height:52px;min-height:52px}.real-source-search .search-lens{padding-left:6px}.real-source-search .mic-button{height:40px;width:39px}.real-source-search .submit-search{height:40px;width:40px}.real-search-note{margin:7px 0 29px}}
