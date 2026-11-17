@@ -32,52 +32,52 @@
     <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Geräte und Dokumente. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
 
     <section id="view-desk" class="view">
-      <div class="hero" aria-label="Recherche">
-        <div class="hero-content">
-          <div class="eyebrow on-dark"><span class="fine-line"></span> 01 / KNOWLEDGE STATION</div>
-          <h1>Wissen. <em>Im<br>richtigen Moment.</em></h1>
-          <p>Die relevante Passage finden. Die Quelle prüfen. Nur dann entscheiden, was als Nächstes geklärt werden muss.</p>
+      <div class="pitch-hero" aria-label="MEDTECH COPILOT Produktdemo">
+        <div class="pitch-copy">
+          <div class="eyebrow on-dark"><span class="fine-line"></span> SIMULIERTER ARBEITSALLTAG / MEDIZINTECHNIK</div>
+          <h1>Ein Gerätealarm.<br><em>Und jetzt?</em></h1>
+          <p class="pitch-lead">Jemand meldet eine Störung. Das passende Handbuch liegt irgendwo. MEDTECH COPILOT zeigt die relevante Fundstelle — mit Version, Zuständigkeit und klaren Grenzen.</p>
+          <div class="pitch-actions">
+            <button type="button" id="pitchStart" class="pitch-primary" data-demo-start="pump"><span aria-hidden="true">▶</span> Interaktive Demo starten <span aria-hidden="true">↗</span></button>
+            <span class="pitch-time">4 Schritte · selbst ausprobieren · keine Anmeldung</span>
+          </div>
           <form id="searchForm" class="hero-search" autocomplete="off">
-            <label class="visually-hidden" for="searchInput">Frage stellen</label>
+            <label class="visually-hidden" for="searchInput">Wissensbasis durchsuchen</label>
             <span class="search-lens" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.4" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.8 4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <input id="searchInput" type="search" placeholder="Was möchtest du wissen?" maxlength="420">
+            <input id="searchInput" type="search" placeholder="Oder direkt eine Fachfrage stellen" maxlength="420">
             <button type="button" id="dictate" class="mic-button" aria-label="Spracheingabe starten" title="Spracheingabe, Browserfunktion" disabled><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
             <button type="submit" class="submit-search" aria-label="Suchen"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           </form>
-          <div class="hero-foot"><span id="micInfo">Lokale Suche aus freigegebenen Demo-Passagen.</span><span class="key-hint">⌘ / Ctrl + K</span></div>
+          <div class="hero-foot"><span id="micInfo">Lokale Suche in Demo-Unterlagen.</span><span class="key-hint">⌘ / Ctrl + K</span></div>
         </div>
-        <div class="hero-visual" aria-hidden="true">
-          <div class="hero-tech-kicker">FIELD / INTELLIGENCE</div>
-          <svg class="device-figure" viewBox="0 0 430 430" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs><linearGradient id="panelMetal" x1="115" y1="20" x2="306" y2="397" gradientUnits="userSpaceOnUse"><stop stop-color="#eef6f2"/><stop offset=".39" stop-color="#d5e2df"/><stop offset=".72" stop-color="#98aaa7"/><stop offset="1" stop-color="#526d6a"/></linearGradient><linearGradient id="panelScreen" x1="0" x2="1"><stop stop-color="#112c2b"/><stop offset="1" stop-color="#254f4b"/></linearGradient><radialGradient id="light"><stop stop-color="#a9e1cb" stop-opacity=".36"/><stop offset="1" stop-color="#86b4a9" stop-opacity="0"/></radialGradient></defs>
-            <circle cx="215" cy="204" r="188" fill="url(#light)"/><circle cx="215" cy="204" r="151" stroke="#628e84" stroke-opacity=".25"/><circle cx="215" cy="204" r="185" stroke="#628e84" stroke-opacity=".18" stroke-dasharray="3 9"/>
-            <g transform="translate(80,38) rotate(-8 135 177)" filter="drop-shadow(12px 25px 22px rgba(0,0,0,.31))">
-              <rect x="73" y="20" width="194" height="334" rx="33" fill="url(#panelMetal)" stroke="#edfdf3" stroke-opacity=".45" stroke-width="2"/>
-              <rect x="82" y="31" width="176" height="314" rx="26" stroke="#8da9a4" stroke-opacity=".6"/>
-              <rect x="100" y="65" width="140" height="157" rx="13" fill="url(#panelScreen)" stroke="#73918d"/>
-              <rect x="113" y="79" width="111" height="16" rx="3" fill="#0b3d36"/><text x="120" y="90" fill="#75cbb8" font-size="8" font-family="sans-serif" letter-spacing="2">FIELD DEMO</text>
-              <path d="M112 143h17l9-30 14 59 10-29 7 0 7-11 8 11h40" stroke="#72edc4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M112 184h113" stroke="#5e8b83" stroke-opacity=".6" stroke-width="1"/>
-              <circle cx="128" cy="205" r="5" fill="#61d8ae"/><text x="143" y="207" fill="#7ea69b" font-size="8" font-family="sans-serif">SOURCE LINKED</text>
-              <rect x="100" y="246" width="140" height="46" rx="12" fill="#e8f1ed" stroke="#abc5be"/>
-              <rect x="115" y="261" width="49" height="17" rx="4" fill="#c6d9d2"/><rect x="174" y="261" width="50" height="17" rx="4" fill="#c6d9d2"/>
-              <circle cx="169" cy="315" r="13" fill="#c2d6ce" stroke="#829d96"/><circle cx="169" cy="315" r="5" fill="#4f8275"/>
-              <rect x="139" y="12" width="61" height="15" rx="6" fill="#a2c1b8"/>
-            </g>
-            <path d="M40 72h80M40 72v42M328 326h68M396 326v42" stroke="#7db49f" stroke-opacity=".7" stroke-width="1"/>
-            <circle cx="40" cy="72" r="3" fill="#b9e4d3"/><circle cx="396" cy="326" r="3" fill="#b9e4d3"/>
-            <text x="36" y="61" fill="#91bbae" font-size="10" font-family="monospace" letter-spacing="2">FIG. 001</text>
-            <text x="312" y="386" fill="#91bbae" font-size="10" font-family="monospace" letter-spacing="2">TRAINING ASSET</text>
-          </svg>
-          <div class="hero-visual-caption"><span class="tiny-dot"></span> SOURCE-LED · NEVER GUESSED</div>
+        <div class="pitch-visual">
+          <div class="ticket-preview">
+            <div class="ticket-top"><span><span class="ticket-led"></span> EINGEHENDE MELDUNG</span><span>FIKTIVER FALL · 08:17</span></div>
+            <div class="ticket-main">
+              <div class="ticket-id"><span class="ticket-small">SERVICEMELDUNG</span><span class="ticket-number">#SIM-204</span></div>
+              <h2>„Die Pumpe zeigt wieder einen Verschlussalarm.“</h2>
+              <p>Die Station fragt nach dem nächsten Schritt und der richtigen Anweisung.</p>
+              <div class="ticket-row"><span>Gerät</span><strong>LUMEN P200 <small>FIKTIV</small></strong></div>
+              <div class="ticket-row"><span>Geräte-ID</span><strong>DEMO-PUMP-02</strong></div>
+              <div class="ticket-row"><span>Dokument</span><strong>Version 2.3 <span class="current-dot">● AKTIV</span></strong></div>
+            </div>
+            <div class="ticket-bottom"><span>Was jetzt zählt</span><strong>Kontext → Quelle → Zuständigkeit</strong></div>
+          </div>
+          <p class="pitch-visual-caption">Kein echtes Ticket oder UKB-Gerät. Ein nachvollziehbarer Lernfall.</p>
         </div>
       </div>
 
-      <div class="sample-questions" aria-label="Beispielanfragen">
-        <span class="sample-label">VERSUCH ES MIT</span>
-        <button type="button" data-query="Was ist eine STK?">STK verstehen <span>↗</span></button>
-        <button type="button" data-query="Was tun bei einem Verschlussalarm der Demopumpe?">Pumpenalarm <span>↗</span></button>
-        <button type="button" data-query="Wann wurde unser Monitor zuletzt gewartet?">Unbekannte Bestandsdaten <span>↗</span></button>
+      <div class="cases-headline"><div><span class="eyebrow">DREI REALISTISCHE ÜBUNGSFÄLLE</span><h2>Nicht nur Fragen stellen. Probleme durchspielen.</h2></div><span>Fiktiv, aber an typischen Medizintechnik-Abläufen orientiert</span></div>
+      <div class="home-cases">
+        <button type="button" class="home-case" data-demo-start="pump"><span class="home-case-type"><span class="case-symbol">01</span> STÖRUNGSMELDUNG</span><strong>Wiederholter Pumpenalarm</strong><small>Das gültige Dokument finden – ohne Therapieratschläge.</small><span class="case-link">Fall erleben ↗</span></button>
+        <button type="button" class="home-case" data-demo-start="monitor"><span class="home-case-type"><span class="case-symbol">02</span> PATIENTENMONITOR</span><strong>SpO₂-Signal fehlt</strong><small>Beobachtung dokumentieren, Ursache nicht vorschnell behaupten.</small><span class="case-link">Fall erleben ↗</span></button>
+        <button type="button" class="home-case" data-demo-start="handover"><span class="home-case-type"><span class="case-symbol">03</span> SERVICEÜBERGABE</span><strong>Nach Reparatur zurück?</strong><small>Prüf- und Freigabestatus klären, bevor ein Gerät genutzt wird.</small><span class="case-link">Fall erleben ↗</span></button>
+      </div>
+      <div class="sample-questions" aria-label="Weitere Beispielfragen">
+        <span class="sample-label">ODER DIREKT FRAGEN</span>
+        <button type="button" data-query="Was ist eine STK?">Was ist eine STK? <span>↗</span></button>
+        <button type="button" data-query="Wie werden Servicefälle dokumentiert?">Was gehört ins Service-Ticket? <span>↗</span></button>
+        <button type="button" data-query="Wann wurde unser Monitor zuletzt gewartet?">Was weiß die Demo nicht? <span>↗</span></button>
       </div>
 
       <div class="section-title"><div><span class="eyebrow">02 / EVIDENCE VIEW</span><h2>Antworten, die du nachprüfen kannst.</h2></div><span id="resultCounter" class="subtle-meta">Noch keine Suche</span></div>
@@ -155,11 +155,44 @@
     </section>
 
     <section id="view-lab" class="view hidden">
-      <div class="sub-page-header"><div><div class="eyebrow">05 / PROOF, NOT PROMISES</div><h1>Erlebe den<br><em>Unterschied.</em></h1><p>Vier Demos, die zeigen, worauf es ankommt: Finden, Nachweisen, Grenzen erkennen und Versionen kontrollieren.</p></div><div class="page-accent">05<span>/</span>05</div></div>
-      <div class="scenario-grid" id="scenarioGrid"></div>
+      <div class="demo-page-title">
+        <div class="eyebrow">LIVE WALKTHROUGH / SIMULIERTE EINSÄTZE</div>
+        <h1>Du bekommst eine Meldung.<br><em>Was machst du als Nächstes?</em></h1>
+        <p>Wähle einen Fall. Die Demo zeigt nicht nur eine Antwort, sondern den gesamten Informationsweg: <strong>Meldung → Gerät → belegte Fundstelle → Zuständigkeit.</strong></p>
+      </div>
+      <div class="scenario-grid" id="scenarioGrid" role="group" aria-label="Fall auswählen"></div>
+      <div class="demo-workspace" id="demoWorkspace">
+        <div class="demo-flow-head">
+          <div><span class="eyebrow">LIVE DEMO · SYNTHETISCHER FALL</span><h2 id="demoCaseTitle">Pumpenalarm – wo ist die richtige Anweisung?</h2><p id="demoCaseContext">Fiktives Beispiel ohne Patienten- oder UKB-Daten.</p></div>
+          <div class="demo-flow-num"><strong id="demoCaseNumber">01</strong><small>ÜBUNGSFALL</small></div>
+        </div>
+        <div class="demo-progress" id="demoProgress" role="group" aria-label="Demo-Fortschritt">
+          <button type="button" data-demo-step="0" class="active" aria-current="step"><span>01</span> Meldung</button>
+          <button type="button" data-demo-step="1"><span>02</span> Gerät</button>
+          <button type="button" data-demo-step="2"><span>03</span> Fundstelle</button>
+          <button type="button" data-demo-step="3"><span>04</span> Nächster Schritt</button>
+        </div>
+        <div class="demo-workspace-main">
+          <div class="demo-story">
+            <div class="demo-story-head"><span id="demoStepEyebrow">01 / EINGEHENDE MELDUNG</span><span class="fake-tag">FIKTIV</span></div>
+            <h3 id="demoStepTitle">Was wurde gemeldet?</h3>
+            <p id="demoStepDescription">Ein simulierter Servicefall.</p>
+            <div id="demoStepDetails" class="demo-step-details"></div>
+            <div class="demo-actions"><button type="button" class="demo-back" id="demoBack">← Zurück</button><button type="button" class="demo-forward" id="demoForward">Nächsten Schritt ansehen →</button></div>
+          </div>
+          <aside class="demo-context">
+            <span class="eyebrow">WAS DER COPILOT DABEI TUT</span>
+            <div class="demo-context-device"><span class="mini-device-illustration" aria-hidden="true">▥</span><div><small>ÜBUNGSGERÄT / PROZESS</small><strong id="demoContextDevice">LUMEN P200</strong><span id="demoContextAsset">DEMO-PUMP-02</span></div></div>
+            <div class="demo-context-block"><small>GEFUNDENE QUELLE</small><strong id="demoContextSource">Noch nicht ausgewählt</strong><span id="demoContextVersion">Nur aktive, passende Dokumente</span></div>
+            <div class="demo-context-block"><small>WARUM DAS WICHTIG IST</small><p id="demoContextBenefit">Erst das Problem verstehen, dann die richtige Fundstelle auswählen.</p></div>
+            <div class="demo-context-bottom"><span class="tiny-ok">✓</span> Keine echten Geräte-, Klinik- oder Patientendaten</div>
+          </aside>
+        </div>
+        <div class="demo-footer-bar"><span id="demoStepCount">Schritt 1 von 4</span><button type="button" id="demoOpenEvidence">Im Assistenten prüfen ↗</button></div>
+      </div>
       <div class="eval-board"><div><span class="eyebrow">QUALITY LAB</span><h2>Does it actually work?</h2><p>Automatisierte Fälle prüfen die Quellenwahl, den Umgang mit unbekannten Informationen und das Ausblenden alter Versionen. Kein medizinischer Abnahmetest.</p><button type="button" class="dark-button" id="runEvaluation">Tests ausführen <span>↗</span></button></div><div id="evaluationResult" class="eval-results"><span class="eval-idle">Awaiting evaluation<br><strong>— / —</strong></span></div></div>
     </section>
-    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.4</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
+    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.5</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
