@@ -1,9 +1,9 @@
 name: Publish public prototype
 
 on:
-  push:
-    branches: [main]
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Demo quality gates"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -16,6 +16,7 @@ concurrency:
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'push' }}
     name: Publish fictional fieldnotes demo
     environment:
       name: github-pages
@@ -23,8 +24,10 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
-      - name: Checkout
+      - name: Checkout exactly the tested commit
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Build QR demo labels
         run: |
           python3 -m pip install --quiet qrcode
