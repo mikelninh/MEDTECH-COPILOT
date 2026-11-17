@@ -1,6 +1,6 @@
-# MEDTECH COPILOT — FIELDNOTES v0.4
+# MEDTECH COPILOT — FIELDNOTES v0.6
 
-**Find the right passage. Identify the right device. Know when not to answer.**
+**One real source. One question. One verifiable page.**
 
 Independent, public prototype for hospital-medical-engineering knowledge workflows. **Not affiliated with, connected to, or approved by UKB**. Not suitable for clinical decisions, device servicing or release.
 
@@ -9,15 +9,17 @@ Independent, public prototype for hospital-medical-engineering knowledge workflo
 https://mikelninh.github.io/MEDTECH-COPILOT/
 
 ## What actually works
+- **Real manufacturer reference:** Public [Dräger Vista 120 / Vista 120S SW 3.n instructions](https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf), printed pages **82–83**. Five **independently paraphrased** fault-message summaries, each with exact printed page and original document URL. The full copyrighted PDF is **not** republished here. Always verify instructions/revisions and applicable supplements against the real device.
+- **Three public acceptance questions:** documented alarm meaning → source page; unknown local service history → abstain; alarm bypass → refuse. Three one-click buttons on the simplified home screen.
 - **Passage retrieval (BM25):** browser-side index over `data/corpus.json`. Searches versioned text sections, produces exact extracts with document title, version and section; excludes retired documents. German/English query expansion for common medtech terms.
 - **Three fictional device contexts:** ORION M100 monitor, LUMEN P200 pump, AERIS V300 ventilator. The device selection limits document search to applicable fictional manuals and general SOPs.
 - **QR code hand-off:** QR labels generated at build time encode public deep links to fictional device profiles. Scan with a regular phone camera; in supported browsers, the demo also supports BarcodeDetector via explicit camera permission. Manual asset-ID entry always works.
 - **Field guidance:** a deliberately high-level, safety-first four-step learning flow with source provenance; never a repair procedure.
 - **Voice:** browser push-to-talk and text-to-speech with stop. Browser speech recognition may use external providers; do not dictate protected information.
 - **Source library:** live/retired status, source provenance and links to official German law sources.
-- **Evaluation:** 26 scripted retrieval/abstention/safety cases plus browser end-to-end smoke on desktop/mobile in GitHub Actions.
+- **Evaluation:** automated retrieval/abstention/safety cases plus browser end-to-end smoke on desktop/mobile in GitHub Actions. They are demonstration tests, not a medical validation.
 
-**Critical disclosure:** The prototype uses *real passage retrieval and extractive answers*, but **NOT an LLM, embeddings, production RAG service or live hospital DMS**. The documents are fictional training cards, with separate brief non-authoritative summaries of the MPBetreibV linked to the official law. The quote shown is text copied from the indexed document; it is not a generative answer.
+**Critical disclosure:** The prototype uses *real passage retrieval and extractive answers*, but **NOT an LLM, embeddings, production RAG service or live hospital DMS**. The corpus contains fictional training cards, brief non-authoritative summaries of the MPBetreibV, and **five paraphrased entries anchored to the real Dräger manual**. For the real manufacturer source, displayed text is a **curated summary, not a verbatim quote or full-PDF ingestion**. The assistant has no generative model and does not check current manufacturer revisions automatically.
 
 ## Run locally
 
