@@ -84,11 +84,11 @@ function flatten(corpus){
  const result=[];
  for(const doc of corpus.documents){
   if(!doc.id||!doc.title||!doc.version||!doc.status||!Array.isArray(doc.sections))throw new Error("Bad document metadata");
-  for(const entry of doc.sections){
+  for(const [sectionIndex,entry] of doc.sections.entries()){
    if(!Array.isArray(entry)||entry.length<3||!String(entry[2]).trim())throw new Error("Invalid section "+doc.id);
    const [page,heading,text,textDe,headingDe]=entry;
    result.push({
-    id:doc.id+"#"+page,
+    id:doc.id+"#"+page+"-"+sectionIndex,
     documentId:doc.id,title:doc.title,titleDe:doc.titleDe||doc.title,kind:doc.kind,
     deviceId:doc.deviceId||null,owner:doc.owner||"",
     version:doc.version,status:doc.status,
@@ -105,7 +105,7 @@ const inventory=/(?:\b(?:unser|unsere|unserem|unserer|our)\b.{0,90}(?:geraet|pum
 const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|spannung|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
 const syntheticNote="Fictional training source. Not a manufacturer instruction or permission to work on equipment.";
 function buildIndex(corpus){
- const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY");
+ const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY"||c.status==="PUBLIC_MANUFACTURER_SUMMARY");
  const scoredDocs=active.map(ch=>{
   const titleTokens=tokens(ch.title+" "+ch.titleDe+" "+ch.heading+" "+ch.headingDe+" "+ch.deviceId);
   const textTokens=tokens(ch.text+" "+ch.textDe);
@@ -123,7 +123,8 @@ function buildIndex(corpus){
 function search(index,question,opts={}){
  const query=expand(question),context=opts.deviceId||null;
  if(!query.length)return [];
- const candidates=index.active.filter(ch=>!context||!ch.deviceId||ch.deviceId===context);
+ const isDrager=/(?:draeger|drager|vista\s*120)/.test(normalize(question));
+ const candidates=index.active.filter(ch=>(!context||!ch.deviceId||ch.deviceId===context)&&(!isDrager||ch.documentId==="IFU-DRAGER-VISTA120-SW3N"));
  const results=[];
  for(const ch of candidates){
   let score=0,matched=0;
