@@ -118,6 +118,12 @@ const inventory=/(?:\b(?:unser|unsere|unserem|unserer|our)\b.{0,90}(?:geraet|pum
 const specificNumbers=/(?:welche|wieviel|wie viel|wie hoch|how high|how much|how many|what is the).{0,40}(?:volt|voltage|spannung|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
 const syntheticNote="Fictional training source. Not a manufacturer instruction or permission to work on equipment.";
 
+// New cold-start phrasing discovered in role-based simulations (17 Nov 2026).
+const clinicalDecisionIntent=/(?:\b(?:ki|copilot|ai|bot|assistant)\b.{0,85}\b(?:patient|patienten)\b.{0,85}\b(?:beurteil|bewert|diagnostiz|therapier)\w*|\b(?:patient|patienten)\b.{0,85}\b(?:beurteil|diagnostiz|therapier)\w*.{0,90}\b(?:ki|copilot|ai|bot)\b)/;
+const muteOrAlarmLimits=/(?:\b(?:alarm|alarmton|alarme|alarmgrenze|alarmgrenzen|warnsignal|signalton)\b.{0,90}\b(?:leise|stumm|mute|silence|verschieb|verstell|anpass|einstell)\w*|\b(?:leise|stumm|mute|silence|verschieb|verstell|anpass|einstell)\w*.{0,80}\b(?:alarm|alarme|alarmgrenze|alarmgrenzen|warnsignal|signalton)\b)/;
+const individualRelease=/(?:\b(?:darf|kann|soll)\s+ich\b.{0,80}\b(?:nach\s+reparatur|nach\s+wartung|gerat|geraet|device)\b.{0,80}\b(?:freigeb|inbetrieb|einsetz|benutz)\w*|\b(?:darf|kann|soll)\s+ich\b.{0,90}\b(?:freigeb|wieder\s+einsetz|inbetrieb)\w*|\b(?:gerat|geraet|device)\b.{0,80}\b(?:nach\s+reparatur|nach\s+wartung)\b.{0,80}\b(?:freigeb|einsetz)\w*)/;
+
+
 const restrictedActions=/(?:\b(?:alarm|warnsignal|signalton|alarmton|pumpenwarnsignal|warning|safety)\b.{0,100}\b(?:stumm|mute|silence|disable|deaktiv|ausschalt|abschalt|unterdruck|unterdrueck|suppress|override|bypass)\w*|\b(?:turn\s+off|switch\s+off|mute|silence|suppress)\b.{0,85}\b(?:alarm|warning|signal)\b|\b(?:beatmung|ventilation|therapie|patientenbeatmung)\b.{0,65}\b(?:einstell|verander|aender|adjust|change|set)\w*|\b(?:einstell|verander|aender|adjust|change)\w*.{0,65}\b(?:beatmung|ventilation|therapie)\b)/;
 const unsupportedOperational=/(?:\b(?:pruffrist|prueffrist|stk\s*frist|mtk\s*frist)\b.{0,70}\b(?:unser|unsere|gerat|geraet|device)\b|\b(?:fristen|frist)\b.{0,70}\b(?:unser|unsere|gerat|geraet|device)\b|\b(?:unser|unsere|gerat|geraet|device)\b.{0,70}\b(?:pruffrist|prueffrist|frist|stk\b).{0,25}(?:bestatig|bestaetig|freigeb)?|\b(?:stk|mtk)\b.{0,45}\b(?:bestatig|bestaetig|freigeb|zertifizier)\w*|\b(?:erfinde|erfind|fabricate|invent)\w*.{0,80}\b(?:quelle|source|citation)\b)/;
 
@@ -194,10 +200,10 @@ function search(index,question,opts={}){
 function ask(index,question,opts={}){
  const query=normalize(question);
  if(/\b(?:what is|explain|define)\b.{0,60}\b(?:medical record|patient record)\b/.test(query))return {status:"unknown",heading:"Not covered by this corpus",explanation:"This demo does not provide a definition of medical records and does not access any patient data.",evidence:[],answer:"",note:syntheticNote};
- if(unsafe.test(query)||extraUnsafe.test(query)||restrictedActions.test(query)){
+ if(unsafe.test(query)||extraUnsafe.test(query)||restrictedActions.test(query)||clinicalDecisionIntent.test(query)||muteOrAlarmLimits.test(query)){
   return {status:"blocked",heading:opts.language==="de"?"Sicherheitsgrenze":"Safety boundary",explanation:opts.language==="de"?"Diese öffentliche Demo gibt keine Anleitung zur Umgehung von Schutzfunktionen, zur Gerätefreigabe ohne Prüfung, zu Medikamentendosierungen oder zu vertraulichen Daten. Zuständiges Klinikteam bzw. befugte Fachpersonen einbeziehen.":"This public demo cannot advise on bypassing safety systems, device release without checks, clinical dosing or confidential records. Contact the responsible clinical or qualified technical team.",evidence:[],answer:"",note:syntheticNote};
  }
- if(inventory.test(query)||specificNumbers.test(query)||extraUnknown.test(query)||unsupportedOperational.test(query)){
+ if(inventory.test(query)||specificNumbers.test(query)||extraUnknown.test(query)||unsupportedOperational.test(query)||individualRelease.test(query)){
   return {status:"unknown",heading:opts.language==="de"?"Keine verifizierten Bestandsdaten":"No verified live asset data",explanation:opts.language==="de"?"Diese Demo hat keinen Zugriff auf echte Inventare, Servicehistorien, gerätespezifische Messwerte oder Softwarestände. Bitte das autorisierte System und die gültige Herstellerunterlage verwenden.":"This demo cannot access real hospital inventory, maintenance history, model specifications or software versions. Use your authorised source system and current manufacturer documentation.",evidence:[],answer:"",note:syntheticNote};
  }
  // Reject obviously out-of-domain prompts before accepting a loose "repair" / "record" match.
@@ -210,7 +216,7 @@ function ask(index,question,opts={}){
  if(/\bstk\b/.test(query)&&/\bmtk\b/.test(query))return {status:"unknown",heading:"Zwei Quellen erforderlich",explanation:"Ein belastbarer Vergleich von STK und MTK braucht beide einschlägigen Rechtsstellen. Die aktuelle Kurzsuche liefert dafür keine vollständige Gegenüberstellung.",evidence:[],answer:"",note:syntheticNote};
  if(/\borion\s*m100\b/.test(query)&&(/\bspo2\s*sensor\s+ab\b/.test(query)||(/\bekg\s*alarm\b/.test(query)&&!/\b(?:rausch|rauschen|noise)\b/.test(query))))return {status:"unknown",heading:"Meldung nicht ausreichend belegt",explanation:"Die fiktive ORION-Lernkarte enthält diese konkrete Alarmbezeichnung nicht. Eine andere Meldung darf nicht als Beleg dienen.",evidence:[],answer:"",note:syntheticNote};
  const synthetic=syntheticModels.find(m=>m.rx.test(query));
- const exact=vistaModel.test(query)?realAlarmIntents.find(x=>x.pattern.test(query)):null;
+ const exact=vistaModel.test(query)?(realAlarmIntents.find(x=>x.pattern.test(query))||(/\bspo2\b/.test(query)&&/\bkein\s+sensor\b/.test(query)?realAlarmIntents[0]:null)):null;
  if(vistaModel.test(query)&&!exact)return {status:"unknown",heading:"Konkrete Meldung nicht im geprüften Auszug",explanation:"Es liegen derzeit nur sieben geprüfte SpO₂-Meldungen für Vista 120/Vista 120S SW 3.n vor. Bitte den genauen Alarmwortlaut prüfen.",evidence:[],answer:"",note:syntheticNote};
  let hits=search(index,question,opts);
  if(exact){
