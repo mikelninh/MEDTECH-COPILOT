@@ -11,9 +11,9 @@ permissions:
 
 jobs:
   quality:
-    name: Python and knowledge regression
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    name: Retrieval and source-regression tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,15 +21,15 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Document ingestion unit tests
+      - name: Document ingestion sample tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
-      - name: Knowledge, safety, source and UI-contract tests
+      - name: Retrieval, safety and version-control contract
         run: node tests/test_assistant.cjs
 
   browser:
-    name: Chromium UI smoke (desktop & mobile)
+    name: Chromium E2E desktop/mobile
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -37,19 +37,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Playwright and Chromium
+      - name: Install Chromium and QR build requirements
         run: |
           npm install --no-save playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Test actual browser journeys
+          python3 -m pip install --quiet qrcode
+          python3 scripts/make_labels.py qr
+      - name: Run full browser journeys
         run: |
           python3 -m http.server 4173 >/tmp/medtech-server.log 2>&1 &
           sleep 2
           node tests/browser_smoke.cjs
-      - name: Upload screenshots
+      - name: Upload actual UI screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: medtech-ui-screenshots
+          name: medtech-fieldnotes-v04
           path: artifacts/
           if-no-files-found: ignore
