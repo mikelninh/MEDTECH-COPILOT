@@ -266,7 +266,7 @@ main{max-width:1460px;padding:0 clamp(20px,4.3vw,70px) 35px;margin:auto}
  .hero{border-radius:21px;min-height:450px;display:block}
  .hero-content{padding:37px 26px 28px;min-height:450px}
  .hero .eyebrow{font-size:9px}
- .hero h1{font-size:clamp(46px,11vw,62px);line-height:1.03;margin:33px 0 20px}
+ .hero h1{font-size:clamp(40px,10.3vw,57px);line-height:1.045;margin:33px 0 20px;white-space:normal;overflow-wrap:normal}
  .hero-content>p{font-size:13px;max-width:440px}
  .hero-visual{display:none}
  .hero-search{margin-top:auto;height:60px;gap:6px;padding:6px}
