@@ -1,156 +1,142 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>MEDTECH COPILOT — Evidence First</title>
-<meta name="description" content="Sicherer Medizintechnik-Wissensassistent: öffentliche Quellen, nachvollziehbare Antworten und fiktive Lernfälle."/>
-<style>
-:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#e9eef4;background:#090f19;font-synthesis:none}
-*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}a{color:#66e7ca}button:focus-visible,input:focus-visible{outline:2px solid #59dfc4;outline-offset:3px}
-.shell{display:grid;grid-template-columns:246px 1fr;min-height:100vh}.side{border-right:1px solid #263345;background:#0b121e;padding:28px 18px;display:flex;flex-direction:column;gap:24px}
-.brand{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:800;letter-spacing:.07em}.logo{display:grid;place-items:center;width:36px;height:36px;border-radius:11px;background:#133a3a;color:#80f8d9;font-size:20px}
-.sub{color:#8798ab;font-size:12px;margin-top:3px}.nav{display:grid;gap:6px}.nav button{width:100%;display:flex;align-items:center;gap:11px;text-align:left;border:1px solid transparent;background:transparent;color:#9aafc1;padding:12px 13px;border-radius:12px}
-.nav button.active{background:#18312f;color:#d9fff4;border-color:#26574e}.nav button:hover{background:#1b2838}.railnote{margin-top:auto;border:1px solid #2a3b49;border-radius:15px;padding:13px;color:#a8bdcc;font-size:12px;line-height:1.6}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#64ddae;margin-right:7px}
-main{padding:24px clamp(20px,5vw,72px) 60px;max-width:1450px;width:100%;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:22px;border-bottom:1px solid #213140}
-header .meta{font-size:12px;color:#a4b7c9}header .meta b{color:#78e6c7}header .right{display:flex;gap:9px;align-items:center}
-.pill{border:1px solid #36554e;color:#9ee7d2;background:#17362e;border-radius:100px;padding:6px 10px;font-size:11px;font-weight:700}
-h1{font-size:clamp(32px,4vw,53px);letter-spacing:-.045em;line-height:1.08;margin:18px 0 12px}h2{font-size:22px;letter-spacing:-.025em}p{line-height:1.6;color:#b1c1d1}.eyebrow{font-size:11px;font-weight:800;letter-spacing:.19em;color:#71dcc3;text-transform:uppercase}
-.hero{padding:30px 0 20px;display:flex;justify-content:space-between;gap:30px}.hero p{max-width:680px;font-size:15px}
-.illustration{border:1px solid #254339;border-radius:22px;background:radial-gradient(circle at 50% 50%,#1e5144,#122526 68%,#0d151f);width:230px;min-height:150px;display:flex;align-items:center;justify-content:center;font-size:66px;box-shadow:0 0 80px #1c63441e}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:20px}.stat{border:1px solid #273949;border-radius:14px;background:#111d2b;padding:16px}.stat strong{display:block;font-size:22px}.stat small{color:#98adbc}
-.layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:20px}.panel{border:1px solid #263847;border-radius:18px;background:#111a27;overflow:hidden}.panelhead{padding:17px 20px;border-bottom:1px solid #273847;display:flex;justify-content:space-between;align-items:center}
-.panelhead strong{font-size:14px}.panelbody{padding:20px}.note{color:#92a8b8;font-size:12px}
-.qa{min-height:195px;max-height:440px;overflow:auto;padding:17px 20px;display:grid;align-content:start;gap:15px}.msg{padding:14px 16px;border:1px solid #294050;background:#182433;border-radius:14px;line-height:1.65;font-size:14px;color:#e0e9f0;white-space:pre-wrap}
-.msg.user{margin-left:18%;background:#17453e;border-color:#2a6d59}.msg.agent{margin-right:7%}.label{color:#73e8ca;font-size:10px;font-weight:800;letter-spacing:.09em;margin-bottom:7px}.cites{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.cites a,.cites button{background:#253949;border:1px solid #345367;padding:7px 9px;border-radius:9px;color:#bfe9e2;text-decoration:none;font-size:11px}.cites a:hover{background:#375160}
-.composer{display:flex;gap:9px;padding:15px;border-top:1px solid #2b3b4b}input{background:#101c2a;border:1px solid #33495c;border-radius:12px;color:#f2f8fb;padding:13px 14px;width:100%;min-width:0}input::placeholder{color:#7792a4}
-.primary{border:0;border-radius:11px;color:#062522;background:#63e2be;padding:11px 16px;font-weight:800}.primary:hover{background:#8af2d5}.ghost{border:1px solid #344d5a;color:#d0e5ef;border-radius:11px;background:#1b2a39;padding:10px 12px}.ghost:hover{background:#293c4c}.ghost:disabled{opacity:.45;cursor:not-allowed}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin:0 16px 15px}.chip{border:1px solid #31475a;background:#142331;color:#a8c9d5;border-radius:100px;padding:8px 12px;font-size:11px}.chip:hover{border-color:#71dfc6;color:white}
-.sidepanel{padding:18px}.sidepanel h3{font-size:14px;margin:0 0 12px}.sidepanel p{font-size:12px;margin:0 0 10px}.alert{background:#352a25;border:1px solid #725440;color:#f3c7aa;border-radius:12px;padding:12px;font-size:12px;line-height:1.55;margin:12px 0}.ok{color:#8cf1d2}.divider{height:1px;background:#2b3c4a;margin:15px 0}
-.resource{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #263847;padding:13px 0}.resource b{display:block;font-size:13px}.resource small{color:#8fa5b7}.resource a{font-size:11px}
-.hide{display:none!important}.docrow{padding:16px;border:1px solid #2b3f50;border-radius:13px;background:#142231;margin-bottom:10px;display:grid;gap:7px}.docrow .title{display:flex;justify-content:space-between;gap:12px;align-items:center}.docrow h3{font-size:15px;margin:0}.docrow p{font-size:13px;margin:0}.tag{font-size:10px;border:1px solid #3c5561;background:#1b3440;color:#a9d4dc;border-radius:100px;padding:5px 8px;white-space:nowrap}.tag.sim{color:#edceaa;background:#392c22;border-color:#74533e}
-.list{display:grid;gap:12px}.step{border:1px solid #2b4150;padding:18px;background:#132232;border-radius:15px}.step strong{font-size:15px}.step p{font-size:13px;margin:8px 0 0}.stepindex{display:inline-flex;align-items:center;justify-content:center;border-radius:8px;background:#23473f;color:#9beacb;height:28px;width:28px;margin-right:9px;font-weight:800}
-.tests{display:grid;gap:7px;margin-top:15px}.testline{font-size:12px;padding:10px 13px;border-radius:9px;background:#152535;color:#e0eef4;display:flex;justify-content:space-between;gap:12px}.pass{color:#7de6bb}.fail{color:#ffab98}
-footer{margin-top:30px;font-size:11px;color:#819aac;line-height:1.7}footer a{color:#9acbbf}
-@media(max-width:1100px){.layout{grid-template-columns:1fr}.illustration{width:150px}}
-@media(max-width:750px){.shell{display:block}.side{padding:12px 15px;border-right:none;border-bottom:1px solid #263345;gap:12px}.brand{font-size:12px}.sub,.railnote{display:none}.nav{display:flex;overflow:auto}.nav button{font-size:12px;white-space:nowrap;padding:10px}main{padding:13px 16px 40px}header{padding:12px 0}.illustration{display:none}.hero{padding:20px 0 10px}.stats{gap:7px}.stat{padding:11px}.stat strong{font-size:18px}.msg.user{margin-left:5%}.msg.agent{margin-right:0}.composer{flex-wrap:wrap}.composer input{flex-basis:100%}h1{font-size:32px}}
-</style></head><body>
-<div class="shell"><aside class="side">
-<div><div class="brand"><span class="logo">✳</span><div>MEDTECH<br/>COPILOT<div class="sub">EVIDENCE FIRST</div></div></div></div>
-<nav class="nav" aria-label="Bereiche">
-<button data-tab="assist" class="active">✧ &nbsp; Assistent</button>
-<button data-tab="library">▤ &nbsp; Dokumente</button>
-<button data-tab="guide">↪ &nbsp; Geführter Fall</button>
-<button data-tab="test">✓ &nbsp; Qualitätstest</button>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f2637">
+  <meta name="description" content="MEDTECH COPILOT v0.2 – unabhängiger, evidenzorientierter Demonstrator für Krankenhaus-Medizintechnik. Keine klinische Anwendung.">
+  <title>MEDTECH COPILOT — Evidence at the point of work</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script defer src="./src/knowledge.js"></script>
+  <script defer src="./src/app.js"></script>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar" aria-label="Hauptmenü">
+    <a class="brand" href="#home" aria-label="MEDTECH COPILOT Start">
+      <span class="brand-icon" aria-hidden="true">✳</span>
+      <span class="brand-name">MEDTECH<br><strong>COPILOT</strong><small>FIELD INTELLIGENCE LAB</small></span>
+    </a>
+    <p class="nav-label">ARBEITSBEREICH</p>
+    <nav class="nav" aria-label="Navigation">
+      <button class="nav-item active" data-screen="home"><span class="nav-icon">◫</span> Übersicht</button>
+      <button class="nav-item" data-screen="ask"><span class="nav-icon">⌕</span> Fragen & Quellen</button>
+      <button class="nav-item" data-screen="field"><span class="nav-icon">▤</span> Am Gerät</button>
+      <button class="nav-item" data-screen="library"><span class="nav-icon">≡</span> Wissensbasis</button>
+      <button class="nav-item" data-screen="lab"><span class="nav-icon">◇</span> Demo Lab & Tests</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-health"><span class="pulse-dot"></span> <span>Demo-Quellen lokal geladen</span></div>
+      <p>Keine UKB-Anbindung.<br>Keine Patientendaten.<br>Keine Gerätefreigabe.</p>
+      <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Repository ansehen ↗</a>
+    </div>
+  </aside>
+
+  <div class="main-column">
+    <header class="topbar">
+      <div class="breadcrumbs"><span>FIELD INTELLIGENCE</span><span class="slash">/</span><strong id="currentScreen">Übersicht</strong></div>
+      <div class="top-controls">
+        <span class="chip-outline"><span class="pulse-dot"></span> v0.2 · Public Demo</span>
+        <button class="btn btn-subtle top-help" id="privacyButton" type="button">Datenschutz & Grenzen</button>
+      </div>
+    </header>
+    <main id="main-content">
+      <div class="banner" role="note"><span class="banner-icon">!</span><span><strong>Unabhängige Konzeptdemo.</strong> Nur öffentliche Rechtsquellen und ausdrücklich fiktive Gerätefälle. Nicht zugelassen für Klinikbetrieb, Reparaturen oder Gerätesicherheit.</span></div>
+
+      <section id="screen-home" class="screen">
+        <div class="home-heading">
+          <div><div class="kicker">EVIDENCE, WHERE IT MATTERS</div>
+            <h1>Weniger suchen.<br><em>Mehr verstehen.</em></h1>
+            <p class="lead">Stell dir vor, das technische Wissen deines Teams wäre genau dort verfügbar, wo du es brauchst: am Arbeitsplatz, am Gerät oder über eine kurze Sprachfrage.</p>
+            <div class="hero-actions"><button class="btn btn-primary" data-screen="lab" type="button">Vier Demos erleben <span>↗</span></button><button class="btn btn-light" data-screen="ask" type="button">Frage stellen →</button></div>
+          </div>
+          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div><div class="hero-core"><span>✳</span></div><div class="hero-glint one"></div><div class="hero-glint two"></div><div class="hero-caption">GROUNDED<br>NOT GUESSED</div></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric-card"><span>WISSEN</span><strong id="metricSources">9</strong><small>aktive Demo-Fundstellen</small></div>
+          <div class="metric-card"><span>ARBEITSMODI</span><strong>03</strong><small>Desktop · Mobile · Glass Preview</small></div>
+          <div class="metric-card"><span>DATENZUGRIFF</span><strong>0</strong><small>interne UKB-Systeme</small></div>
+        </div>
+        <div class="section-heading"><div><div class="kicker">DIE PRODUKTIDEE</div><h2>Ein Assistent. Drei Situationen.</h2></div><span class="muted small">Designed around real tasks, not chat bubbles.</span></div>
+        <div class="mode-grid">
+          <button class="mode-card" data-screen="ask"><div class="mode-top"><span class="mode-symbol">⌕</span><span class="mode-no">01 / DESK</span></div><h3>Recherche am Schreibtisch</h3><p>Fragen stellen, Originalquelle aufrufen und nachvollziehen, woher eine Antwort kommt.</p><span class="mode-action">Zur Wissenssuche ↗</span></button>
+          <button class="mode-card" data-screen="field"><div class="mode-top"><span class="mode-symbol">▤</span><span class="mode-no">02 / MOBILE</span></div><h3>Kontext direkt am Gerät</h3><p>Fiktives Gerät wählen, sicheren Lernablauf durchgehen, Versionen unterscheiden.</p><span class="mode-action">Zum Gerätemodus ↗</span></button>
+          <button class="mode-card" data-screen="field" data-preview-glass="true"><div class="mode-top"><span class="mode-symbol">◎</span><span class="mode-no">03 / GLASS</span></div><h3>Wissen im Blickfeld</h3><p>Minimalistische Smart-Glasses-Vorschau – bewusst ohne echte Kamera- oder Hardwareverbindung.</p><span class="mode-action">Glasses-Konzept ↗</span></button>
+        </div>
+      </section>
+
+      <section id="screen-ask" class="screen hidden" aria-label="Fragen und Quellen">
+        <div class="pagehead"><div><div class="kicker">KNOWLEDGE CONSOLE</div><h1>Frag. Prüfe. Verstehe.</h1><p>Kurze Antwort, überprüfbare Fundstelle, klare Grenze bei fehlendem Wissen.</p></div><span class="pagehead-mark">⌕</span></div>
+        <div class="ask-layout">
+          <div class="panel chat-panel">
+            <div class="panel-head"><span><span class="mini-indicator"></span> Assistent</span><span class="muted small">Kuratiertes Antwortsystem · kein LLM</span></div>
+            <div id="messages" class="messages" role="log" aria-live="polite">
+              <div class="chat-msg assistant"><span class="msg-person">MEDTECH COPILOT</span><h3>Was möchtest du wissen?</h3><p>Ich kann im Demo-Wissensbestand nach gesetzlichen Grundlagen und sicheren Lernfällen suchen. Bei fehlenden Quellen sage ich das ausdrücklich.</p></div>
+            </div>
+            <div class="prompt-chips" aria-label="Beispielfragen"><button data-question="Was ist eine STK?">STK verstehen</button><button data-question="Wann wurde unser Monitor zuletzt gewartet?">Fehlende Daten</button><button data-question="Wie kann ich den Pumpenalarm umgehen?">Sicherheitsgrenze</button></div>
+            <form id="askForm" class="ask-form">
+              <label for="askInput" class="sr-only">Deine Frage</label>
+              <input id="askInput" type="text" maxlength="500" autocomplete="off" placeholder="z. B. Was ist eine STK?" required>
+              <button class="btn btn-voice" id="voiceAsk" type="button" aria-label="Spracheingabe starten" title="Spracheingabe – browserabhängig" disabled>◉</button>
+              <button class="btn btn-primary send" type="submit" aria-label="Frage senden">↗</button>
+            </form>
+            <div class="chat-foot"><span id="voiceStatus">Spracheingabe nur nach Klick und Browserfreigabe. Keine sensiblen Inhalte diktieren.</span><button id="readLast" type="button" class="text-button" disabled>◖ Antwort vorlesen</button></div>
+          </div>
+          <aside class="panel inspector" id="sourceInspector" aria-live="polite"><div class="panel-head"><span>◧ &nbsp; Evidence Inspector</span></div><div id="evidenceContent" class="inspector-body"><span class="inspector-empty">Eine Antwort auswählen, um Quellen, Gültigkeit und Grenzen zu sehen.</span></div></aside>
+        </div>
+      </section>
+
+      <section id="screen-field" class="screen hidden">
+        <div class="pagehead"><div><div class="kicker">AT THE POINT OF WORK</div><h1>Der richtige Kontext.</h1><p>Ein Gerät auswählen und einen sicheren, fiktiven Serviceablauf erkunden.</p></div><span class="pagehead-mark">▤</span></div>
+        <div class="field-grid">
+          <div class="panel field-main">
+            <div class="panel-head"><span>Übungsgerät</span><span class="tag tag-demo">SIMULIERT</span></div>
+            <div class="device-intro"><span class="device-icon">▣</span><div><span class="kicker">DEMO INVENTORY</span><h2 id="deviceTitle">Patientenmonitor</h2><p id="deviceSubtitle">Fiktiv · kein reales Inventarsystem</p></div></div>
+            <label class="form-label" for="fieldDevice">Gerät auswählen</label>
+            <select id="fieldDevice" aria-label="Fiktives Gerät auswählen"></select>
+            <div class="device-data"><div><small>Geräte-ID</small><strong id="deviceId">DEMO-MON-01</strong></div><div><small>Modell</small><strong id="deviceModel">EX-MON 100</strong></div><div><small>Freigabe</small><strong>NUR LERNFALL</strong></div></div>
+            <div class="workflow-head"><div><div class="kicker">GUIDED FLOW</div><h3>Sicheres Vorgehen</h3></div><span class="step-counter" id="stepCount">01 / 04</span></div>
+            <div class="progress"><span id="stepProgress"></span></div>
+            <article class="step-card"><div class="step-heading"><span id="stepNumber">01</span><h3 id="stepTitle">Patientensituation klären</h3></div><p id="stepText"></p><div class="step-owner"><strong>Zuständigkeit:</strong> <span id="stepOwner"></span></div></article>
+            <div class="step-actions"><button class="btn btn-light" id="fieldPrev" type="button">← Zurück</button><button class="btn btn-primary" id="fieldNext" type="button">Nächster Schritt →</button></div>
+            <div class="field-disclaimer">Kein gerätespezifischer Wartungsleitfaden. Keine Arbeit an realen Medizinprodukten allein anhand dieser Demo.</div>
+          </div>
+          <aside class="field-right">
+            <div class="panel device-help"><div class="panel-head">◉ &nbsp; Kontext-Frage</div><div class="panel-pad"><p>Eine Frage zur ausgewählten Geräteart stellen. Der Kontext ist fiktiv; keine realen technischen Spezifikationen.</p><button class="btn btn-light full" id="askAboutDevice" type="button">Zum Assistenten →</button></div></div>
+            <div class="panel glasses-panel"><div class="panel-head"><span>◎ &nbsp; Glasses Preview</span><span class="tag tag-demo">KONZEPT</span></div><div class="panel-pad">
+              <p>Eine einzige Information im Blickfeld. Keine Kamera, keine Personenaufnahmen, keine reale Brillensteuerung.</p>
+              <div class="glasses-frame"><div class="glasses-content"><span class="glasses-kicker">MEDTECH · DEMO</span><strong id="glassesTitle">Sicherheit zuerst</strong><span id="glassesText">Patientenversorgung und Zuständigkeit klären.</span><small id="glassesSource">Fiktiver Lernfall</small></div></div>
+              <button type="button" id="glassSpeak" class="btn btn-light full">◖ Kurzhinweis vorlesen</button>
+            </div></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="screen-library" class="screen hidden">
+        <div class="pagehead"><div><div class="kicker">TRUSTED KNOWLEDGE</div><h1>Jede Antwort hat Herkunft.</h1><p>Aktive Rechtsgrundlagen und markierte Übungsdaten. Versionen sichtbar, archivierte Inhalte ausgeschlossen.</p></div><span class="pagehead-mark">≡</span></div>
+        <div class="panel library-panel"><div class="library-toolbar"><label class="sr-only" for="libraryFilter">Quelle suchen</label><input id="libraryFilter" placeholder="Titel, Paragraph oder Gerät suchen …" type="search"><label class="toggle-label"><input id="showArchived" type="checkbox"> Archiv anzeigen</label></div><div class="library-summary" id="librarySummary"></div><div id="libraryList" class="library-list"></div></div>
+      </section>
+
+      <section id="screen-lab" class="screen hidden">
+        <div class="pagehead"><div><div class="kicker">DEMO LAB</div><h1>Vier Momente, die zählen.</h1><p>Die Produktidee lässt sich besser erleben als erklären. Starte eine Szene und prüfe das Ergebnis selbst.</p></div><span class="pagehead-mark">◇</span></div>
+        <div class="demo-grid" id="demoList"></div>
+        <div class="panel lab-tests"><div class="panel-head"><span>◈ &nbsp; Quality & Safety Lab</span><span class="tag">LOKALER CHECK</span></div><div class="panel-pad"><p>Die Tests prüfen ausgewählte Regeln der Demo-Engine – keine Freigabe für Krankenhausbetrieb und kein Nachweis für klinische Sicherheit.</p><button class="btn btn-primary" id="runChecks" type="button">Regressionstests starten →</button><div id="checksOutput" aria-live="polite"></div></div></div>
+      </section>
+
+      <footer class="footer"><span>MEDTECH COPILOT · Prototype v0.2 · Independent exploration</span><span>Keine Krankenhausfreigabe. <a href="https://www.datenschutzkonferenz-online.de/media/oh/DSK_OH_RAG.pdf" target="_blank" rel="noopener noreferrer">RAG-Datenschutzgrundlagen ↗</a></span></footer>
+    </main>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Mobile Navigation">
+  <button data-screen="home" class="active"><span>◫</span>Start</button>
+  <button data-screen="ask"><span>⌕</span>Fragen</button>
+  <button data-screen="field"><span>▤</span>Gerät</button>
+  <button data-screen="library"><span>≡</span>Quellen</button>
+  <button data-screen="lab"><span>◇</span>Demo</button>
 </nav>
-<div class="railnote"><span class="dot"></span>PUBLIC DEMO · Keine Anmeldung<br/>Nur öffentliche Rechtsquellen und fiktive Fälle. Keine Patienten- oder internen Krankenhausdaten eingeben.</div>
-</aside><main>
-<header><div class="meta"><b>●</b> &nbsp; Quellenbasierte Wissenssuche <span style="color:#547082"> / </span> PROTOTYP V0.1</div><div class="right"><span class="pill">● Demo-Modus</span></div></header>
-<section class="hero"><div><div class="eyebrow">Ein Wissen. Ein Zugang. Viele bessere Entscheidungen.</div><h1>Wissen finden.<br/><span style="color:#7ae9cd">Sicher handeln.</span></h1><p>Ein Assistenzkonzept für die Krankenhaus-Medizintechnik: nachvollziehbare Antworten, konkrete Quellen und sichere Lernfälle. Entwickelt als unabhängige Arbeitsprobe – nicht vom UKB freigegeben.</p></div><div class="illustration" aria-hidden="true">✳</div></section>
-<div class="stats"><div class="stat"><strong id="doccount">9</strong><small>kuratierte Wissenseinträge</small></div><div class="stat"><strong>100 %</strong><small>lokale Demo-Suche</small></div><div class="stat"><strong>0</strong><small>interne Dokumente</small></div></div>
-<section id="assist" class="tab">
-<div class="layout"><div class="panel"><div class="panelhead"><strong>✧ &nbsp; Wissensassistent</strong><span class="note">Quellenbasierte Suche · kein LLM</span></div>
-<div id="chat" class="qa" role="log" aria-live="polite"><div class="msg agent"><div class="label">MEDTECH COPILOT</div>Hallo! 👋 Ich finde relevante Passagen aus öffentlichen Vorschriften und gekennzeichneten Lernfällen. Jede fachliche Antwort verweist auf ihre Quelle.<br/><br/>Frag zum Beispiel: „Was ist eine STK?“ oder „Wie läuft eine sichere Fehlersuche ab?“</div></div>
-<form id="chatForm" class="composer"><input id="question" autocomplete="off" maxlength="600" aria-label="Deine Frage" placeholder="Frag etwas über STK, MTK, Wartung ..."/><button id="voice" type="button" class="ghost" title="Spracheingabe">◉ Voice</button><button type="submit" class="primary">Fragen →</button></form>
-<div class="chips"><button class="chip" data-q="Was ist eine STK?">Was ist eine STK?</button><button class="chip" data-q="Wer darf Medizinprodukte instand halten?">Wer darf reparieren?</button><button class="chip" data-q="Was bedeutet MTK?">MTK erklärt</button><button class="chip" data-q="SpO2-Sensor zeigt keinen Wert">SpO₂-Fehler</button></div></div>
-<div class="panel sidepanel"><h3>🛡️ Sicherheitsprinzipien</h3><p>Dieser Prototyp durchsucht einen lokalen, kuratierten Wissensbestand. Die Dokumentensuche läuft lokal und ohne eigene Cloud-Anfrage. Spracheingabe kann abhängig vom Browser extern verarbeitet werden – bitte keine vertraulichen Informationen diktieren.</p><div class="alert">⚠️ Nicht zur klinischen Verwendung, Gerätereparatur, Messwertfreigabe oder Patientenversorgung geeignet.</div>
-<div class="divider"></div><h3>Was zeichnet gute Antworten aus?</h3><p><span class="ok">✓</span> Konkrete Fundstelle</p><p><span class="ok">✓</span> Aktuelle Quellen prüfen</p><p><span class="ok">✓</span> Wissen und Simulation trennen</p><p><span class="ok">✓</span> Bei fehlenden Belegen nicht raten</p>
-<div class="divider"></div><button id="speak" class="ghost">♫ Letzte Antwort vorlesen</button></div></div></section>
-<section id="library" class="tab hide"><div class="panel"><div class="panelhead"><strong>Dokumentenbibliothek</strong><span class="note">Öffentliche Normquellen & fiktive Lernmaterialien</span></div><div class="panelbody"><input id="docfilter" placeholder="Suche nach Gerät, Modell, Vorschrift, Stichwort ..." aria-label="Dokumente filtern"/><div id="docs" style="margin-top:16px"></div></div></div></section>
-<section id="guide" class="tab hide"><div class="panel"><div class="panelhead"><strong>Geführter Lernfall · Infusionspumpen-Alarm</strong><span class="tag sim">FIKTIV</span></div>
-<div class="panelbody"><p>Simulierter Servicefall. Hier werden bewusst keine gerätespezifischen Bedien- oder Reparaturschritte vermittelt. Ein echter Vorgang muss sich auf die gültige Herstelleranweisung und den lokalen klinischen Prozess stützen.</p><div id="steps" class="list"></div><div style="display:flex;gap:9px;margin-top:18px"><button id="prev" class="ghost">← Zurück</button><button id="next" class="primary">Nächster Schritt →</button></div></div></div></section>
-<section id="test" class="tab hide"><div class="panel"><div class="panelhead"><strong>Qualität & Release-Gates</strong><span class="note">Automatisierte lokale Tests</span></div><div class="panelbody"><p>Prüft, ob Fragen die erwarteten Quellen finden, unsichere Anweisungen abgefangen werden und unbekannte Fakten nicht erfunden werden. Kein Ersatz für eine fachliche Evaluation.</p><button class="primary" id="testBtn">12 Prüfungen ausführen →</button><div class="tests" id="testResults"></div></div></div></section>
-<footer>Unabhängiger Prototyp · Keine Verbindung zu oder Freigabe durch das UKB · Quellenhinweise sind keine medizinischen Anweisungen.<br/><a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">GitHub / MEDTECH-COPILOT</a> · <a href="https://www.datenschutzkonferenz-online.de/media/oh/DSK_OH_RAG.pdf" target="_blank" rel="noopener noreferrer">DSK RAG-Orientierung</a> · © 2026 Demo</footer>
-</main></div>
-<script>
-"use strict";
-const base="https://www.gesetze-im-internet.de/mpbetreibv_2025/";
-const docs=[
-{id:"REG-005",title:"§ 5 MPBetreibV – Besondere Anforderungen",type:"recht",tags:"Qualifikation Befähigung Kenntnisse Messgeräte Prüfmittel Prüfer Wartung STK MTK Ausbildung",url:base+"__5.html",section:"§ 5",summary:"Besondere Tätigkeiten erfordern aktuelle Kenntnisse aufgrund geeigneter Ausbildung und einschlägiger beruflicher Tätigkeit, fachliche Unabhängigkeit und geeignete Mittel. Die persönliche Berechtigung richtet sich nach der konkreten Tätigkeit.",answer:"§ 5 MPBetreibV nennt Qualifikations- und Ausstattungsvoraussetzungen für Tätigkeiten, die besondere Anforderungen voraussetzen. Für bestimmte Kontrollen und die Instandhaltung verweist die Verordnung ausdrücklich darauf."},
-{id:"REG-007",title:"§ 7 MPBetreibV – Instandhaltung",type:"recht",tags:"Wartung Instandsetzung Inspektion reparieren Fehler Geräte Hersteller Sicherheitsprüfung Softwareupdate",url:base+"__7.html",section:"§ 7 Abs. 2–4",summary:"Der Betreiber muss Medizinprodukte instand halten. Die Instandhaltung umfasst insbesondere Wartung, Inspektion und Instandsetzung unter Beachtung von Herstellerangaben. Nach Arbeiten sind möglicherweise betroffene wesentliche Sicherheits- und Funktionsmerkmale zu prüfen.",answer:"Wartung erhält die Funktion; Inspektion bewertet den Zustand; Instandsetzung stellt die Funktion wieder her. § 7 MPBetreibV regelt die Instandhaltung und fordert nach entsprechenden Arbeiten erforderliche Prüfungen sicherheits- und funktionsrelevanter Merkmale."},
-{id:"REG-011",title:"§ 11 MPBetreibV – Einweisung",type:"recht",tags:"Einweisung Schulung Benutzer Anwendung Bedienung Krankenhaus",url:base+"__11.html",section:"§ 11",summary:"Für bestimmte Produkte nach Anlage 1 gelten besondere Anforderungen an Einweisung und Betrieb; Einweisungen orientieren sich an den jeweiligen Herstellerangaben und den Vorgaben der Verordnung.",answer:"Für Medizinprodukte nach Anlage 1 gelten besondere Regeln zur Einweisung. Ein Chatbot oder eine Lernsimulation ersetzt keine gesetzlich erforderliche gerätespezifische Einweisung."},
-{id:"REG-012",title:"§ 12 MPBetreibV – STK",type:"recht",tags:"STK sicherheitstechnische Kontrolle Prüfung Prüfintervall Defibrillator Anlage 1 2 Jahre Protokoll Prüfsiegel",url:base+"__12.html",section:"§ 12 Abs. 1, 3, 4",summary:"Für Produkte nach Anlage 1 sind sicherheitstechnische Kontrollen grundsätzlich spätestens alle zwei Jahre durchzuführen, bei bestimmten Bedingungen früher. § 12 enthält Sonderregeln u.a. für geeignete AED. Prüfung und Kennzeichnung müssen nachvollziehbar dokumentiert sein.",answer:"STK bedeutet sicherheitstechnische Kontrolle. § 12 MPBetreibV regelt STK für Produkte nach Anlage 1: grundsätzlich spätestens alle zwei Jahre, bei erhöhtem Risiko früher. Es bestehen besondere Ausnahmen etwa für bestimmte AED; maßgeblich ist der konkrete Anwendungsfall."},
-{id:"REG-015",title:"§ 15 MPBetreibV – MTK",type:"recht",tags:"MTK messtechnische Kontrolle Blutdruck Messgenauigkeit Messabweichung Fehlergrenzen Anlage 2 Kalibrierung Frist Messtechnik Prüfprotokoll",url:base+"__15.html",section:"§ 15 Abs. 1–7",summary:"MTK prüft bei Produkten der Anlage 2, ob zulässige Messabweichungen eingehalten sind. Die Prüffristen folgen Anlage 2; die Prüfung setzt qualifiziertes Personal und geeignete rückgeführte Normale voraus.",answer:"MTK bedeutet messtechnische Kontrolle. Sie bewertet Messabweichungen der Produkte nach Anlage 2 anhand vorgegebener Fehlergrenzen; Fristen stehen in Anlage 2. Eine STK ist nicht automatisch eine MTK."},
-{id:"SIM-101",title:"Lernfall – SpO₂ liefert keinen plausiblen Wert",type:"demo",tags:"SpO2 Sauerstoffsättigung Patientenmonitor Sensor Finger Kabel Fehlersuche Artefakt",section:"Fiktiver Fall A",summary:"Simulierter Monitorfall: Patientensicherheit klären, klinisches Personal einbeziehen, Gerät und Sensor erfassen, Ursachen strukturiert analysieren. Keine Therapie- oder Gerätefreigabe.",answer:"Bei unplausiblen SpO₂-Werten ist zuerst die klinische Situation durch das zuständige Behandlungsteam zu prüfen. Für einen technischen Servicefall werden Fehlersymptom, Gerät, Sensor und Zubehör erfasst. Prüf- und Freigabeschritte sind ausschließlich nach autorisierten Vorgaben zulässig."},
-{id:"SIM-102",title:"Lernfall – Infusionspumpe meldet Verschlussalarm",type:"demo",tags:"Infusionspumpe Okklusion Verschlussalarm Pumpe Alarm Schlauch Medikament Fehler",section:"Fiktiver Fall B",summary:"Simulierter Pumpenalarm: Versorgung und Zuständigkeit klären, das klinische Team einbeziehen, Gerätetyp und dokumentierte Meldung erfassen, keine eigenmächtigen Eingriffe am laufenden Therapiesystem.",answer:"Bei einem Alarm einer patientennahen Infusionspumpe hat das klinische Behandlungsteam Vorrang. Technischer Service erfolgt nur nach Sicherung der Versorgung, Erfassung von Gerät und Fehlermeldung und unter Einhaltung der gültigen Hersteller- und Hausvorgaben. Diese Demo enthält keine Bedienanweisung."},
-{id:"SIM-103",title:"Lernfall – Serviceauftrag & Dokumentation",type:"demo",tags:"Ticket Wartungsbericht Prüfprotokoll Geräte-ID Seriennummer Inventar Dokumentation Freigabe Übergabe",section:"Fiktiver Fall C",summary:"Fiktiver Ablauf: Eingangsmeldung, Patientenbezug, Gerätedaten, Bearbeiter, Befund, Maßnahme, Prüfungen, Dokumentation und autorisierte Freigabe.",answer:"Ein sauberer Serviceauftrag hält mindestens Geräteidentität, Meldung, Befund, durchgeführte Maßnahmen, relevante Prüfungen, Bearbeiter und Freigabestatus nachvollziehbar fest. Welche Felder tatsächlich Pflicht sind, bestimmt der reale UKB-Prozess."},
-{id:"SIM-104",title:"Lernfall – EKG-Artefakte am Monitor",type:"demo",tags:"EKG Elektrode Artefakt Signal Rauschen Bewegung Störungen Filter Monitoring",section:"Fiktiver Fall D",summary:"Fiktives technisches Problem: Ein EKG-Signal ist verrauscht; mögliche Einflussfaktoren sind Ableitung, Elektrodenkontakt, Bewegungen, elektromagnetische Störungen oder die Gerätekette. Keine klinische Interpretation.",answer:"Bei einem gestörten EKG-Signal unterscheiden wir zuerst klinische Risiken von rein technischer Signalqualität. Elektroden, Kabel und Störquellen sind mögliche Faktoren; Ursachenbewertung und technische Maßnahmen erfolgen im freigegebenen Prozess und ersetzen keine medizinische Beurteilung."}
-];
-const stop=new Set(["was","ist","eine","einer","einem","der","die","das","und","wie","bei","im","in","den","dem","fur","für","mir","man","kann","ich","soll","tun","bitte","erklare","erkläre","zu","zum","von","mit","ein","es","sind","darf","darfst","wer","wo","welche","welcher","welches","eines","auf","nach","vor","wenn","wird","werden","gibt"]);
-const normalize=s=>s.toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/ß/g,"ss").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
-const terms=s=>normalize(s).split(" ").filter(w=>w.length>2&&!stop.has(w));
-const unsafe=/(?:alarm|schutzleiter|sicherheitsfunktion|schutzschaltung|verriegelung).{0,85}(?:umgeh|deaktiv|ausschalt|abschalt|entfern|ueberbrueck|manipulier)|(?:umgeh|deaktiv|ausschalt|abschalt|entfern|ueberbrueck|manipulier).{0,85}(?:alarm|schutzleiter|sicherheitsfunktion|schutzschaltung|verriegelung)|ohne.{0,35}(?:pruefung|kontrolle).{0,35}(?:freigeb|inbetriebnehm|frei\b)/i;
-const recordQuestion=/(?:unser|unsere|unserer|bei uns|zuletzt|softwarestand|inventarnummer|seriennummer|unserem bestand|unserer abteilung|historie|bestand|aktuellen wartung)/;
-const numericSpec=/(?:wie viele|wie viel|wieviel|welche).{0,35}(?:volt|ampere|spannung|joule|dosis|milligramm|grenzwert)/;
-function retrieve(query){
- const n=normalize(query);
- // Curated demo corpus; do not claim broad coverage from keyword matching.
- const routes=[
-  {pattern:/(?:\bstk\b|sicherheitstechnisch)/,id:"REG-012"},
-  {pattern:/(?:\bmtk\b|messtechnisch|kalibrierung)/,id:"REG-015"},
-  {pattern:/(?:\beinweis|bedienberechtig|geraeteeinweis)/,id:"REG-011"},
-  {pattern:/(?:servicefall|serviceauftrag|servicebericht|dokumentier|inventar|wartungsbericht)/,id:"SIM-103"},
-  {pattern:/(?:sp[o0]2|sauerstoffsaettigung)/,id:"SIM-101",requiresFault:true},
-  {pattern:/(?:infusionspumpe|versch(l)?ussalarm|okklusion)/,id:"SIM-102",requiresFault:true},
-  {pattern:/(?:\bekg\b|elektrokardiogramm)/,id:"SIM-104",requiresFault:true},
-  {pattern:/(?:qualifik|befaehig|fachkenntnis|wer darf|berechtigt)/,id:"REG-005"},
-  {pattern:/(?:instandhalt|instandsetz|wartung|inspektion|reparier)/,id:"REG-007"}
- ];
- const fault=/(?:alarm|fehler|stoerung|problem|kein|keine|unplausibel|artefakt|signal|zeigt|ausfall)/.test(n);
- const match=routes.find(r=>r.pattern.test(n)&&(!r.requiresFault||fault));
- if(!match)return [];
- const d=docs.find(d=>d.id===match.id);
- return d?[{d,score:100}]:[];
-}
-function answer(q){
- const n=normalize(q);
- if(unsafe.test(n)||/(?:\bdosis\b|dosierung|therapieentscheidung|sicherheitspruefung umgehen|patientendaten|passwort)/.test(n))
-  return {text:"Zu einer Alarmumgehung, gefährlichen Manipulation, Therapieentscheidung oder sensiblen Daten kann diese Demo keine Handlungsanweisung liefern. Bitte die zuständige Fachperson und die freigegebenen Verfahren einbeziehen.",refs:[],kind:"caution"};
- if(recordQuestion.test(n)||numericSpec.test(n))
-  return {text:"Dafür liegen keine aktuellen Bestands-, Verlaufs- oder gerätespezifischen Daten in dieser öffentlichen Demo vor. Bitte das zuständige System oder die freigegebene Herstellerunterlage einsehen.",refs:[],kind:"unknown"};
- const hits=retrieve(q);
- if(!hits.length)
-  return {text:"Dazu finde ich keine ausreichend passende, freigegebene Fundstelle im Demo-Wissensbestand. Ich möchte keine technischen Fakten oder Handlungsschritte erfinden. Bitte die konkrete Herstelleranweisung oder verantwortliche Fachperson heranziehen.",refs:[],kind:"unknown"};
- return {text:hits[0].d.answer,refs:hits.map(x=>x.d),kind:"sourced"};
-}
-window.MedtechCore={docs,terms,retrieve,answer};
-const el=id=>document.getElementById(id);
-function node(tag,cls,txt){let x=document.createElement(tag);if(cls)x.className=cls;if(txt!==undefined)x.textContent=txt;return x}
-let lastAnswer="";
-function post(kind,q,r){let m=node("div","msg "+kind),l=node("div","label",kind==="user"?"DEINE FRAGE":"MEDTECH COPILOT");m.append(l,node("span","",kind==="user"?q:r.text));if(kind==="agent"&&r.refs.length){let links=node("div","cites");r.refs.forEach(d=>{let a=node(d.url?"a":"button","",d.id+" · "+d.section);if(d.url){a.href=d.url;a.target="_blank";a.rel="noopener noreferrer"}else{a.type="button";a.addEventListener("click",()=>{switchTab("library");el("docfilter").value=d.id;renderDocs()})}links.append(a)});m.append(links)}el("chat").append(m);el("chat").scrollTop=el("chat").scrollHeight}
-function ask(q){q=q.trim();if(!q)return;post("user",q);let a=answer(q);post("agent",q,a);lastAnswer=a.text;el("question").value=""}
-el("chatForm").addEventListener("submit",e=>{e.preventDefault();ask(el("question").value)});
-document.querySelectorAll("[data-q]").forEach(b=>b.addEventListener("click",()=>ask(b.dataset.q)));
-function switchTab(k){document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("hide",t.id!==k));document.querySelectorAll("[data-tab]").forEach(t=>t.classList.toggle("active",t.dataset.tab===k))}
-document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>switchTab(b.dataset.tab)));
-function renderDocs(){let term=normalize(el("docfilter").value),items=docs.filter(d=>normalize(d.id+" "+d.title+" "+d.tags+" "+d.summary).includes(term)),dest=el("docs");dest.textContent="";items.forEach(d=>{let box=node("article","docrow"),top=node("div","title"),heading=node("h3","",d.title),badge=node("span","tag "+(d.type==="demo"?"sim":""),d.type==="demo"?"Fiktiver Lernfall":"Offizielle Quelle");top.append(heading,badge);box.append(top,node("p","",d.summary),node("small","note",d.id+" · "+d.section));if(d.url){let a=node("a","","Originalquelle öffnen ↗");a.href=d.url;a.target="_blank";a.rel="noopener noreferrer";box.append(a)}dest.append(box)});if(!items.length)dest.append(node("p","note","Keine Dokumente gefunden."))}
-el("docfilter").addEventListener("input",renderDocs);renderDocs();el("doccount").textContent=docs.length;
-const steps=[
-["Patientenversorgung priorisieren","Die klinisch verantwortliche Person informieren. Ist ein Patient betroffen? Nur das Behandlungsteam entscheidet über die Fortführung oder sichere Alternative."],
-["Gerät eindeutig identifizieren","Hersteller, Modell, Inventarnummer, Softwarestand und exakte Alarmmeldung aufnehmen; keine personenbezogenen Angaben in die Demo eingeben."],
-["Quelle und Zuständigkeit bestimmen","Freigegebene Herstellerunterlagen und lokale SOP für genau dieses Modell suchen. Fehlende oder widersprüchliche Unterlagen: Fachperson einbeziehen."],
-["Freigegebenen Service koordinieren","Arbeiten nur durch befugtes, qualifiziertes Personal nach konkreter Herstelleranweisung. Keine Manipulation an einem aktiven Therapiesystem."],
-["Nachprüfung und Dokumentation","Erforderliche Sicherheits- und Funktionsprüfungen durch befugte Personen dokumentieren; Freigabe nach lokalem Prozess. Keine automatische Freigabe durch KI."]
-];let step=0;
-function renderStep(){let s=steps[step],t=el("steps");t.textContent="";let c=node("div","step"),h=node("div","");h.append(node("span","stepindex",String(step+1)),node("strong","",s[0]));c.append(h,node("p","",s[1]));t.append(c,node("small","note","Schritt "+(step+1)+" von "+steps.length+" · Beispiel, keine Herstelleranweisung"));el("prev").disabled=step===0;el("next").textContent=step===steps.length-1?"Neu starten ↺":"Nächster Schritt →"}
-el("prev").addEventListener("click",()=>{step=Math.max(0,step-1);renderStep()});
-el("next").addEventListener("click",()=>{step=step===steps.length-1?0:step+1;renderStep()});renderStep();
-el("voice").disabled=true;let Rec=window.SpeechRecognition||window.webkitSpeechRecognition;
-if(Rec){el("voice").disabled=false;el("voice").addEventListener("click",()=>{let rec=new Rec();rec.lang="de-DE";rec.interimResults=false;rec.onresult=e=>{el("question").value=e.results[0][0].transcript};rec.onerror=()=>{el("voice").textContent="◉ Voice"};rec.onend=()=>el("voice").textContent="◉ Voice";el("voice").textContent="◉ Höre …";try{rec.start()}catch(_){el("voice").textContent="◉ Voice"}})}
-if(!window.speechSynthesis)el("speak").disabled=true;
-el("speak").addEventListener("click",()=>{if(!lastAnswer||!window.speechSynthesis)return;window.speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(lastAnswer);u.lang="de-DE";u.rate=.95;window.speechSynthesis.speak(u)});
-const checks=[
-["STK führt zu § 12",()=>answer("Was ist STK?").refs[0]?.id==="REG-012"],
-["MTK führt zu § 15",()=>answer("Was bedeutet MTK?").refs[0]?.id==="REG-015"],
-["Wartung führt zu § 7",()=>answer("Wie funktioniert Wartung Instandsetzung?").refs.some(x=>x.id==="REG-007")],
-["Qualifikation führt zu § 5",()=>answer("Qualifikation Ausbildung Fachkenntnisse").refs.some(x=>x.id==="REG-005")],
-["SpO₂ verweist auf Simulation",()=>answer("SpO2-Sensor zeigt keine Werte").refs[0]?.id==="SIM-101"],
-["Pumpenalarm verweist auf Simulation",()=>answer("Infusionspumpe Verschlussalarm").refs[0]?.id==="SIM-102"],
-["Servicebericht wird gefunden",()=>answer("Serviceauftrag Dokumentation Inventar").refs.some(x=>x.id==="SIM-103")],
-["Unbekanntes: keine erfundene Antwort",()=>answer("Quantenmagnetische Mondfliese").kind==="unknown"],
-["Gefährliche Reparaturfrage wird abgelehnt",()=>answer("Wie kann ich den Alarm deaktivieren?").kind==="caution"],
-["Therapiedosierung wird abgelehnt",()=>answer("Welche Dosierung bei Patient?").kind==="caution"],
-["Offizielle Quellen mit URL",()=>docs.filter(x=>x.type==="recht").every(x=>x.url.startsWith("https://www.gesetze-im-internet.de/"))],
-["Fiktive Quellen korrekt deklariert",()=>docs.filter(x=>x.type==="demo").every(x=>!x.url&&x.id.startsWith("SIM-"))]
-];
-el("testBtn").addEventListener("click",()=>{let root=el("testResults");root.textContent="";let passed=0;for(let [name,fn] of checks){let ok=false;try{ok=!!fn()}catch(_){}if(ok)passed++;let item=node("div","testline");item.append(node("span","",name),node("strong",ok?"pass":"fail",ok?"BESTANDEN":"FEHLER"));root.append(item)}let sum=node("div","testline");sum.append(node("strong","",passed+" / "+checks.length+" Tests bestanden"),node("strong",passed===checks.length?"pass":"fail",passed===checks.length?"PASS":"REVIEW"));root.prepend(sum)});
-</script>
+<dialog id="privacyDialog" class="privacy-dialog"><div class="modal-header"><h2>Datenschutz & Systemgrenzen</h2><form method="dialog"><button class="btn btn-light" aria-label="Schließen">×</button></form></div>
+<p>MEDTECH COPILOT ist ein unabhängiger, statischer Demonstrator. Die Wissensabfrage erfolgt lokal im Browser, ohne RAG-Server oder Sprachmodell. Es gibt weder Authentifizierung noch eine sichere interne Dokumentenablage.</p>
+<p>Spracheingabe nutzt – wenn verfügbar – die Browser-Spracherkennung. Je nach Browser können Audiodaten durch externe Anbieter verarbeitet werden. Keine Patienten-, Personen- oder Krankenhausdaten eingeben oder diktieren.</p>
+<p>Die Glasses-Ansicht ist ein UI-Konzept ohne Hardware, Kamera oder Tracking. Keine klinischen Entscheidungen, Wartung, Freigaben oder Gerätearbeiten auf Grundlage der Demo.</p>
+<form method="dialog"><button class="btn btn-primary full">Verstanden</button></form></dialog>
 </body></html>
