@@ -25,6 +25,17 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Retrieval, safety and version-control contract
         run: node tests/test_assistant.cjs
+      - name: Strict adversarial and provenance audit
+        run: node tests/strict_audit.cjs
+      - name: Publish inspectable audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: medtech-strict-audit
+          path: |
+            artifacts/strict_audit.json
+            artifacts/strict_audit.md
+          if-no-files-found: warn
 
   browser:
     name: Chromium E2E desktop/mobile
@@ -52,6 +63,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: medtech-fieldnotes-v04
+          name: medtech-fieldnotes-v07
           path: artifacts/
           if-no-files-found: ignore
