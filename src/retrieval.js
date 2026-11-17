@@ -104,6 +104,28 @@ const unsafe=/(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|di
 const inventory=/(?:\b(?:unser|unsere|unserem|unserer|our)\b.{0,90}(?:geraet|pumpe|monitor|device|equipment|inventar|bestand|service|wartung|software|last|serial|history)|\b(?:wann zuletzt|zuletzt gewartet|last serviced|actual inventory|current software|real device|seriennummer|serial number|asset history|current service record)\b)/;
 const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|spannung|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
 const syntheticNote="Fictional training source. Not a manufacturer instruction or permission to work on equipment.";
+
+// Safety-specific preflight. These are conservative demo guardrails,
+// NOT comprehensive clinical NLP, and do not qualify a medical-device system.
+const extraUnsafe=/(?:\b(?:alarm|warnung|schutzleiter|interlock|sicherung)\b.{0,90}\b(?:unterdruck|unterdrueck|abkleb|abklemm|stumm|mute|silence|quittier|uberbruck|brucken|abschalt|ausschalt|deaktiv|bypass|override)\w*|\b(?:unterdruck|unterdrueck|abkleb|abklemm|stumm|mute|silence|quittier|uberbruck|brucken|abschalt|ausschalt|deaktiv|bypass|override)\w*.{0,90}\b(?:alarm|warnung|schutzleiter|interlock|sicherung)\b|(?:ohne|without).{0,70}\b(?:prufung|pruefung|safety|inspection|check)\b.{0,75}(?:freigeb|inbetrieb|release|operate)|(?:freigeb|inbetrieb|release|operate).{0,75}(?:ohne|without).{0,70}\b(?:prufung|pruefung|safety|inspection|check)\b|(?:sensor).{0,55}(?:vom patienten entfernen|from the patient remove)|(?:patientenakte|patientenanschrift|patientenpasswort|patient record|patient chart|patient identity|passwort|password|login|zugangsdaten))/;
+const extraUnknown=/(?:wann.{0,60}(?:gewartet|kalibriert|repariert|gepruft|pruefung)|(?:welche|wieviel|wie viel|how much|how many|what is).{0,50}(?:spann|volt|joule|ampere|grenzwert|alarmcode|serial|seriennummer)|(?:unser|unsere|our).{0,80}(?:firmware|softwarestand|firmwareversion|seriennummer|wartung|kalibrierung|kalibriert|letzte|zuletzt)|(?:wie sicher|ist das geraet sicher|ist es sicher|kann ich.{0,60}(?:freigeb|in betrieb nehmen)))/;
+const vistaModel=/(?:vista\s*120s?(?!\s*sc\b)|drager\s+vista\s*120s?)/;
+const wrongVista=/(?:vista\s*(?:120\s*sc|300|200|500|120\s*cms)|(?:sw|softwareversion|version)\s*(?:1|2|4|5)\s*\.?\s*n)/;
+const realAlarmIntents=[
+ {pattern:/\bspo2\s*kein\s+sensor\b/,heading:"SpO2 Kein Sensor"},
+ {pattern:/\bspo2\s*(?:sensor\s+ab|sensor\s*abgeloest)\b/,heading:"SpO2-Sensor ab"},
+ {pattern:/\bspo2\s*(?:sensorfehler|sensor\s+fehler)\b/,heading:"SpO2-Sensorfehler"},
+ {pattern:/\bspo2\s*(?:niedr\w*\s+perfus\w*|niedrige?\s+perfusion)\b/,heading:"SpO2 niedrige Perfusion"},
+ {pattern:/\bspo2\s*(?:komm\w*\s+fehler|kommunikationsfehler)\b/,heading:"SpO2 Kommunikationsfehler"},
+ {pattern:/\bspo2\s*(?:rauschen|signalrauschen)\b/,heading:"SpO2 Rauschen"},
+ {pattern:/\bspo2\s*(?:storender\s+lichteinfall|stoerender\s+lichteinfall|lichtinterferenz|beleuchtungsinterferenz)\b/,heading:"SpO2 Störender Lichteinfall"}
+];
+const syntheticModels=[
+ {rx:/\blumen\s*p200\b/,doc:"FIELD-PUMP-230"},
+ {rx:/\borion\s*m100\b/,doc:"FIELD-MON-210"},
+ {rx:/\baeris\s*v300\b/,doc:"FIELD-VENT-110"}
+];
+
 function buildIndex(corpus){
  const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY"||c.status==="PUBLIC_MANUFACTURER_SUMMARY");
  const scoredDocs=active.map(ch=>{
@@ -154,29 +176,27 @@ function search(index,question,opts={}){
 }
 function ask(index,question,opts={}){
  const query=normalize(question);
- if(unsafe.test(query)){
+ if(unsafe.test(query)||extraUnsafe.test(query)){
   return {status:"blocked",heading:opts.language==="de"?"Sicherheitsgrenze":"Safety boundary",explanation:opts.language==="de"?"Diese öffentliche Demo gibt keine Anleitung zur Umgehung von Schutzfunktionen, zur Gerätefreigabe ohne Prüfung, zu Medikamentendosierungen oder zu vertraulichen Daten. Zuständiges Klinikteam bzw. befugte Fachpersonen einbeziehen.":"This public demo cannot advise on bypassing safety systems, device release without checks, clinical dosing or confidential records. Contact the responsible clinical or qualified technical team.",evidence:[],answer:"",note:syntheticNote};
  }
- if(inventory.test(query)||specificNumbers.test(query)){
+ if(inventory.test(query)||specificNumbers.test(query)||extraUnknown.test(query)){
   return {status:"unknown",heading:opts.language==="de"?"Keine verifizierten Bestandsdaten":"No verified live asset data",explanation:opts.language==="de"?"Diese Demo hat keinen Zugriff auf echte Inventare, Servicehistorien, gerätespezifische Messwerte oder Softwarestände. Bitte das autorisierte System und die gültige Herstellerunterlage verwenden.":"This demo cannot access real hospital inventory, maintenance history, model specifications or software versions. Use your authorised source system and current manufacturer documentation.",evidence:[],answer:"",note:syntheticNote};
  }
  // Reject obviously out-of-domain prompts before accepting a loose "repair" / "record" match.
- const domain=/(medizin|medtech|device|equipment|geraet|monitor|pump|infusion|spo2|ecg|ekg|beatmung|ventil|alarm|sicher|safety|qualifik|wartung|pruf|pruef|inspection|service|source|dokument|document|manual|sop|sensor|patient|\bstk\b|\bmtk\b|battery|occlusion|clinical|version|revision|instand|bestandsverzeichnis|medizinproduktebuch|quelle|voltage|spann|shock|earth|electric|protokoll|handover)/.test(query);
+ const domain=/(batterie|akku|elektrode|stoerung|storumg|defekt|aufnahme|reparatur|freigab|elektrisch|stromschlag|medizin|medtech|device|equipment|geraet|monitor|pump|infusion|spo2|ecg|ekg|beatmung|ventil|alarm|sicher|safety|qualifik|wartung|pruf|pruef|inspection|service|source|dokument|document|manual|sop|sensor|patient|\bstk\b|\bmtk\b|battery|occlusion|clinical|version|revision|instand|bestandsverzeichnis|medizinproduktebuch|quelle|voltage|spann|shock|earth|electric|protokoll|handover)/.test(query);
  if(!domain)return {status:"unknown",heading:opts.language==="de"?"Außerhalb der Demo-Wissensbasis":"Outside the demo knowledge base",explanation:opts.language==="de"?"Dazu enthält der freigegebene Demo-Korpus keine hinreichende Information. Ein loses Stichwort reicht nicht als Beleg; es wird nicht geraten.":"This question is outside the supported medical engineering document corpus. The assistant won't guess based on a loosely matching word.",evidence:[],answer:"",note:syntheticNote};
- if(/(?:sw\s*2\s*n|softwareversion\s*2|sw\s*1\s*n)/.test(query)&&/(?:vista|draeger|drager)/.test(query)){
-  return {status:"unknown",heading:"Andere Softwareversion",explanation:"Diese kuratierte Herstellerquelle gilt nur für Vista 120/Vista 120S SW 3.n. Für die angefragte Version fehlt hier die passende Unterlage.",evidence:[],answer:"",note:syntheticNote};
- }
+ const hasVista=/\b(?:vista|drager|draeger)\b/.test(query);
+ const isManufacturerAlarm=/\bspo2\b.{0,60}(?:sensor|perfus|rauschen|lichteinfall|komm|kommunikations)/.test(query);
+ if(hasVista&&(!vistaModel.test(query)||wrongVista.test(query)))return {status:"unknown",heading:"Gerätemodell oder Revision unklar",explanation:"Bitte exaktes Modell und Softwareversion prüfen. Die kuratierte Dräger-Referenz gilt ausschließlich für Vista 120/Vista 120S SW 3.n – nicht für Vista 120 SC, Vista 300 oder andere Revisionen.",evidence:[],answer:"",note:syntheticNote};
+ if(isManufacturerAlarm&&!vistaModel.test(query)&&!syntheticModels.some(m=>m.rx.test(query)))return {status:"unknown",heading:"Gerät nicht identifiziert",explanation:"Eine SpO₂-Meldung allein bestimmt noch kein Herstellermodell. Bitte Modell und Revision angeben, bevor eine konkrete Herstellerquelle ausgewählt wird.",evidence:[],answer:"",note:syntheticNote};
+ const synthetic=syntheticModels.find(m=>m.rx.test(query));
+ const exact=vistaModel.test(query)?realAlarmIntents.find(x=>x.pattern.test(query)):null;
+ if(vistaModel.test(query)&&!exact)return {status:"unknown",heading:"Konkrete Meldung nicht im geprüften Auszug",explanation:"Es liegen derzeit nur sieben geprüfte SpO₂-Meldungen für Vista 120/Vista 120S SW 3.n vor. Bitte den genauen Alarmwortlaut prüfen.",evidence:[],answer:"",note:syntheticNote};
  let hits=search(index,question,opts);
- if(/(?:draeger|drager|vista\s*120)/.test(query)){
-  const exact=[
-   [/kein\s+sensor/, "SpO2 Kein Sensor"],
-   [/sensor\s+ab/, "SpO2-Sensor ab"],
-   [/sensorfehler/, "SpO2-Sensorfehler"],
-   [/niedrig\w*\s+perfusion/, "SpO2 niedrige Perfusion"],
-   [/komm\w*\s*fehler|kommunikationsfehler/, "SpO2 Kommunikationsfehler"]
-  ].find(x=>x[0].test(query));
-  if(exact)hits=hits.filter(h=>h.chunk.heading===exact[1]);
- }
+ if(exact)hits=hits.filter(h=>h.chunk.documentId==="IFU-DRAGER-VISTA120-SW3N"&&h.chunk.heading===exact.heading);
+ if(synthetic)hits=hits.filter(h=>h.chunk.documentId===synthetic.doc);
+ if(/\b(?:sop|handbuch)\b/.test(query)&&tokens(query).length<3&&!synthetic&&!exact)return {status:"unknown",heading:"Frage zu allgemein",explanation:"Bitte einen konkreten Arbeitsschritt oder Dokumentnamen angeben. Allgemeine Schlagworte liefern noch keine belastbare Fundstelle.",evidence:[],answer:"",note:syntheticNote};
+ if(/(?:\bdefekt\b|\bkaputt\b)/.test(query)&&!/(?:fehlermeldung|signal|alarm|wartung|service)/.test(query))return {status:"unknown",heading:"Fehlermeldung zu ungenau",explanation:"Aus „Gerät defekt“ lässt sich keine Ursache ableiten. Bitte Gerät, genauen Meldungstext und Situation erfassen.",evidence:[],answer:"",note:syntheticNote};
  if(!hits.length)return {status:"unknown",heading:opts.language==="de"?"Keine passende Quelle":"No supported evidence",explanation:opts.language==="de"?"Im aktiven Demo-Korpus wurde keine ausreichend relevante Fundstelle gefunden. Es werden keine Angaben ergänzt oder erfunden.":"No sufficiently relevant passage was found in the active demo corpus. Nothing is inferred or invented.",evidence:[],answer:"",note:syntheticNote};
  const top=hits[0];
  if(top.score<1.25)return {status:"unknown",heading:opts.language==="de"?"Quelle nicht belastbar":"No supported evidence",explanation:opts.language==="de"?"Die beste Fundstelle ist zu ungenau, um eine Antwort zu rechtfertigen.":"The best match is too weak to support an answer.",evidence:[],answer:"",note:syntheticNote};
