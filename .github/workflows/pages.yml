@@ -16,27 +16,32 @@ concurrency:
 
 jobs:
   deploy:
-    name: Deploy static evidence demo
+    name: Publish fictional fieldnotes demo
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
     steps:
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v4
-      - name: Assemble safe public static bundle
+      - name: Build QR demo labels
         run: |
-          mkdir -p dist/src
-          cp index.html styles.css premium.css dist/
-          cp src/app.js src/knowledge.js src/polish.js dist/src/
-          printf '' > dist/.nojekyll
-      - name: Configure Pages
+          python3 -m pip install --quiet qrcode
+          python3 scripts/make_labels.py dist/qr
+      - name: Assemble public-only files
+        run: |
+          mkdir -p dist/src dist/data
+          cp index.html v4.css dist/
+          cp src/retrieval.js src/fieldnotes.js dist/src/
+          cp data/corpus.json dist/data/
+          touch dist/.nojekyll
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
-      - name: Publish site
+      - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
