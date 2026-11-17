@@ -6,6 +6,8 @@ const root=path.resolve(__dirname,"..");
 const html=fs.readFileSync(path.join(root,"index.html"),"utf8");
 const css=fs.readFileSync(path.join(root,"styles.css"),"utf8");
 const app=fs.readFileSync(path.join(root,"src","app.js"),"utf8");
+const polish=fs.readFileSync(path.join(root,"src","polish.js"),"utf8");
+const premium=fs.readFileSync(path.join(root,"premium.css"),"utf8");
 const source=fs.readFileSync(path.join(root,"src","knowledge.js"),"utf8");
 const K=require(path.join(root,"src","knowledge.js"));
 assert.match(html,/<!doctype html>/i);
@@ -22,6 +24,11 @@ for(const id of ["home","ask","field","library","lab"])assert.ok(html.includes('
 for(const id of ["askForm","fieldDevice","messages","sourceInspector","libraryList","demoList","runChecks","glassSpeak"])
  assert.ok(html.includes('id="'+id+'"'),"UI element missing: "+id);
 new vm.Script(app,{filename:"src/app.js"});
+new vm.Script(polish,{filename:"src/polish.js"});
+assert.match(html, /premium\.css/);
+assert.match(html, /src\/polish\.js/);
+assert.match(html, /id="spotlightTrigger"/);
+assert.match(premium, /\.spotlight-trigger/);
 new vm.Script(source,{filename:"src/knowledge.js"});
 const cases=[
  ["STK §12","Was ist eine STK?","LAW-12"],
