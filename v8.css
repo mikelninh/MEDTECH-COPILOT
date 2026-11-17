@@ -1,0 +1,72 @@
+/* V0.8 / real source proof. Focused evidence-first interaction, no SaaS dashboard. */
+.pdf-proof{background:#fff;border:1px solid #e1e8e0;border-radius:25px;overflow:hidden;box-shadow:0 18px 52px rgba(15,52,34,.06)}
+.pdf-proof-top{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid #e7ece6}
+.pdf-kicker{font-size:10px;letter-spacing:.15em;color:#54775f;font-weight:770}
+.pdf-load-status{font-size:9px;letter-spacing:.08em;font-weight:770;color:#3b895a}
+.pdf-proof-grid{display:grid;grid-template-columns:1.2fr .66fr;gap:28px;align-items:stretch;padding:clamp(25px,3.7vw,52px)}
+.pdf-proof-content{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.pdf-proof-content h1{color:#213c2d;font-size:clamp(38px,4.6vw,66px);font-weight:650;line-height:1.05;letter-spacing:-.065em;margin:5px 0 17px}
+.pdf-proof-content h1 em{font-style:normal;color:#43885d}
+.pdf-proof-content>p{font-size:13px;color:#75897a;line-height:1.75;max-width:540px}
+.pdf-proof-search{display:flex;width:100%;max-width:645px;min-height:57px;background:#f6f9f5;border:1px solid #d6e6d8;border-radius:13px;overflow:hidden;margin:18px 0 16px;padding:5px}
+.pdf-proof-search input{flex:1;min-width:0;background:transparent;border:0;outline:0;padding:10px 11px;color:#294334;font-size:13px}
+.pdf-proof-search button{border:0;background:#1e5940;color:white;border-radius:9px;padding:12px 15px;white-space:nowrap;font-size:11px;font-weight:750}
+.pdf-proof-search button:hover:not(:disabled){background:#2b8052}
+.pdf-proof-search button span{margin-left:8px}
+.pdf-proof-actions{display:flex;gap:8px;flex-wrap:wrap}
+.pdf-proof-actions button{background:white;border:1px solid #dfe9df;border-radius:10px;color:#497354;padding:11px 13px;font-size:11px;font-weight:690}
+.pdf-proof-actions button:hover:not(:disabled){background:#eef7ee;border-color:#a3cdb0}
+.pdf-proof-paper{border-radius:18px;overflow:hidden;border:1px solid #dfebdd;background:linear-gradient(160deg,#f5faf2,#e4f0e2);display:flex;flex-direction:column;box-shadow:0 16px 26px rgba(26,67,37,.055);transform:rotate(1deg)}
+.pdf-paper-top{display:flex;justify-content:space-between;gap:9px;padding:17px;border-bottom:1px solid #d8e8d5;font:700 9px ui-monospace,monospace;letter-spacing:.08em;color:#648168}
+.pdf-paper-body{padding:25px 25px 28px;flex:1;display:flex;flex-direction:column;gap:18px}
+.pdf-paper-page{align-self:start;background:#d7e8d5;color:#418652;border-radius:7px;padding:8px 10px;font-size:10px;font-weight:800}
+.pdf-paper-body strong{font-size:clamp(25px,2.35vw,36px);letter-spacing:-.06em;line-height:1.14;color:#2b593c}
+.pdf-paper-body p{font-size:12px;color:#76917c;margin:auto 0 0}
+.pdf-paper-bottom{display:flex;justify-content:space-between;gap:8px;padding:15px 18px;background:#dbeadb;color:#3d7350;font-size:10px;font-weight:670;line-height:1.4}
+.pdf-footnote{border-top:1px solid #e8eee5;padding:15px 25px;font-size:10px;color:#98a69a}
+.pdf-results{background:#fafdfa;border-top:1px solid #e4eee2;scroll-margin-top:20px}
+.pdf-results-top{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:18px 25px;border-bottom:1px solid #e7efe6;font:700 10px ui-monospace,monospace;letter-spacing:.1em;color:#708976}
+.pdf-answer-status{font:750 10px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:.03em;background:#e5f4e7;color:#2f8553;padding:7px 10px;border-radius:7px}
+.pdf-answer-status.unknown{background:#fff2df;color:#90662d}.pdf-answer-status.blocked{background:#fae7e4;color:#9a4f46}
+.pdf-results-body{display:grid;grid-template-columns:1.1fr .86fr;gap:0}
+.pdf-answer,.pdf-evidence{padding:28px 30px;min-width:0}
+.pdf-answer h3{font-size:23px;color:#224634;letter-spacing:-.05em;margin:5px 0 14px}
+.pdf-answer p{font-size:14px;color:#627e69;line-height:1.75;max-width:640px}
+.pdf-mini-label{display:block;font-size:9px;letter-spacing:.13em;color:#56956d;font-weight:750;margin:22px 0 8px}
+.pdf-extract{margin:0;border-left:3px solid #8bc69b;padding:13px 16px;background:white;color:#335c41;line-height:1.7;font-size:12px}
+.pdf-evidence{border-left:1px solid #e4eee3;background:#f1f7ef}
+.pdf-evidence strong{display:block;font-size:15px;letter-spacing:-.025em;color:#315f42}
+.pdf-evidence p{font-size:11px;margin:10px 0;color:#68846e}
+.pdf-evidence .pdf-citation-version{color:#3c704e;font-weight:700}
+.pdf-document-link{display:inline-block;color:#1d7045;font-weight:750;border-bottom:1px solid #8fb49a;margin:12px 0;font-size:12px;padding-bottom:4px}
+.pdf-evidence small{display:block;color:#a0b0a1;font-family:ui-monospace,monospace;font-size:9px;overflow-wrap:anywhere}
+.pdf-secondary-title{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:33px 4px 17px;font-size:10px;color:#94a599}
+.pdf-secondary-title span{font-weight:780;letter-spacing:.14em;color:#5c8166}
+.pdf-secondary-title p{margin:0;font-size:11px;color:#8fa292}
+@media(max-width:900px){
+.pdf-proof-grid{grid-template-columns:1fr .7fr;gap:14px;padding:26px}
+.pdf-paper-body{padding:19px}.pdf-paper-body strong{font-size:25px}
+}
+@media(max-width:700px){
+.pdf-proof{border-radius:20px}
+.pdf-proof-top{padding:14px 16px}.pdf-kicker,.pdf-load-status{font-size:9px}
+.pdf-proof-grid{grid-template-columns:1fr;padding:23px 19px;gap:20px}
+.pdf-proof-content h1{font-size:clamp(38px,9.5vw,55px);line-height:1.06}
+.pdf-proof-content>p{font-size:12px}
+.pdf-proof-search{margin:12px 0 14px}
+.pdf-proof-search input{font-size:12px}
+.pdf-proof-search button{font-size:11px;padding:11px}
+.pdf-proof-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;gap:5px}
+.pdf-proof-actions button{padding:11px 5px;font-size:10px}
+.pdf-proof-paper{transform:none;min-height:0}
+.pdf-paper-top{padding:11px 14px}.pdf-paper-body{padding:13px 18px;gap:10px}
+.pdf-paper-body strong{font-size:24px}.pdf-paper-body p{font-size:11px}
+.pdf-paper-bottom{padding:12px 15px}
+.pdf-results-top{padding:16px}
+.pdf-results-body{grid-template-columns:1fr}
+.pdf-answer,.pdf-evidence{padding:21px}
+.pdf-evidence{border-left:0;border-top:1px solid #deebdf}
+.pdf-secondary-title{display:block;margin:26px 5px 17px}
+.pdf-secondary-title p{margin-top:8px}
+}
+@media(prefers-reduced-motion:reduce){.pdf-proof-paper{transform:none!important}}
