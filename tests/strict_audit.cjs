@@ -21,7 +21,7 @@ const evidence=[
  ["Was gehört in einen Serviceauftrag?","OPS-001"],
  ["required service intake fields","OPS-001"],
  ["What is an occlusion warning?","FIELD-PUMP-230"],
- ["SpO2 signal missing","FIELD-MON-210"],
+ ["SpO2 signal missing ORION M100","FIELD-MON-210"],
  ["Wie werden Quellen versioniert?","OPS-002"],
  ["Was bedeutet SpO2 Kein Sensor am Dräger Vista 120?","IFU-DRAGER-VISTA120-SW3N","82","SpO₂ Kein Sensor"],
  ["SpO2 Kein Sensor am Vista120","IFU-DRAGER-VISTA120-SW3N","82","SpO₂ Kein Sensor"],
