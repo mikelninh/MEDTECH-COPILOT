@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "corpusName": "MEDTECH COPILOT · Fictional Field Library",
-  "notice": "All documents are fabricated training material. No patient or hospital data.",
+  "corpusName": "MEDTECH COPILOT · Fictional training documents + selected real manufacturer reference",
+  "notice": "Training material is fictional except five official-law summaries and one curated Dräger manufacturer-manual reference. No patient or hospital data. Original manufacturer PDF is linked, not republished.",
   "documents": [
     {
       "id": "FIELD-MON-210",
@@ -430,6 +430,58 @@
           "§ 14",
           "Bestandsverzeichnis",
           "§ 14 verlangt für alle aktiven nichtimplantierbaren Produkte der jeweiligen Betriebsstätte ein Bestandsverzeichnis. Die konkreten erforderlichen Angaben stehen in der aktuellen Rechtsnorm. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
+    },
+    {
+      "id": "IFU-DRAGER-VISTA120-SW3N",
+      "deviceId": null,
+      "title": "Dräger Vista 120/Vista 120S – Gebrauchsanweisung SW 3.n",
+      "titleDe": "Dräger Vista 120/Vista 120S – Gebrauchsanweisung SW 3.n",
+      "kind": "Manufacturer manual reference",
+      "version": "SW 3.n",
+      "status": "PUBLIC_MANUFACTURER_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Dräger (Originaldokument)",
+      "url": "https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf",
+      "language": "de",
+      "sourceType": "curated-paraphrase",
+      "notice": "Nur knappe redaktionelle Zusammenfassungen; die originale Gebrauchsanweisung bleibt bei Dräger. Druckseiten 82–83.",
+      "sections": [
+        [
+          "82",
+          "SpO2 Kein Sensor",
+          "The monitor reports that no SpO2 sensor is connected. The manufacturer identifies the monitor-to-sensor connection as a point to check.",
+          "Die Meldung „SpO₂ Kein Sensor“ bedeutet laut Hersteller, dass der Monitor keinen angeschlossenen SpO₂-Sensor erkennt. Die Verbindung zwischen Monitor und Sensor ist in der Originalanweisung als Prüfansatz genannt.",
+          "SpO₂ Kein Sensor – Sensorverbindung"
+        ],
+        [
+          "82",
+          "SpO2-Sensor ab",
+          "The displayed alarm indicates that the sensor may be detached from the patient; the manual distinguishes this from no sensor being connected to the monitor.",
+          "Bei „SpO₂-Sensor ab“ kann der Sensor von der Messstelle am Patienten gelöst sein. Die Meldung ist nicht gleichbedeutend mit „SpO₂ Kein Sensor“.",
+          "SpO₂-Sensor ab – Messstelle"
+        ],
+        [
+          "82",
+          "SpO2-Sensorfehler",
+          "The manual lists the sensor and its extension cable as possible sources of a sensor malfunction; the displayed warning does not itself confirm a monitor defect.",
+          "Die Meldung „SpO₂-Sensorfehler“ wird im Handbuch einer möglichen Fehlfunktion des Sensors oder Verlängerungskabels zugeordnet; sie beweist allein keinen Defekt des Monitors.",
+          "SpO₂-Sensorfehler – Sensor oder Kabel"
+        ],
+        [
+          "82",
+          "SpO2 niedrige Perfusion",
+          "An insufficient pulse signal or low perfusion at the measurement site may make displayed SpO2 and pulse values unreliable.",
+          "Bei niedriger Perfusion kann das Pulssignal an der Messstelle zu schwach sein; angezeigte SpO₂- und Puls-Werte können dadurch unzuverlässig sein.",
+          "SpO₂ niedrige Perfusion – Messqualität"
+        ],
+        [
+          "83",
+          "SpO2 Kommunikationsfehler",
+          "A communication problem or SpO2 module malfunction is listed as a high-priority technical alarm. The manufacturer points to technical service.",
+          "„SpO₂-Komm. Fehler“ bezeichnet laut Handbuch einen Kommunikations- oder Modulfehler, mit hoher technischer Alarmpriorität. Der Hersteller verweist auf zuständiges Instandhaltungs- bzw. Servicepersonal.",
+          "SpO₂-Kommunikationsfehler – technische Eskalation"
         ]
       ]
     }
