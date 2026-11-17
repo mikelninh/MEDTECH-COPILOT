@@ -96,9 +96,9 @@ function flatten(corpus){
  }
  return result;
 }
-const unsafe=/(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove).{0,110}(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|prufung|pruefung|test|pumpe|pump)|(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|pumpe|pump).{0,110}(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove)|(?:ohne|without).{0,60}(?:prufung|pruefung|inspection|safety check).{0,55}(?:frei|freigeb|release|operate)|(?:dosier|dosierung|dosis|dosage|medication dose|therapy setting|therapie einstellen)|(?:patientendaten|patient record|patient identity|passwort|password)/;
+const unsafe=/(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove).{0,110}(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|prufung|pruefung|test|pumpe|pump)|(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|pumpe|pump).{0,110}(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove)|(?:ohne|without).{0,60}(?:prufung|pruefung|inspection|safety check).{0,55}(?:frei|freigeb|release|operate)|(?:release|freigeb|inbetrieb).{0,75}(?:without|ohne).{0,45}(?:safety|check|inspection|prufung|pruefung)|(?:dosier|dosierung|dosis|dosage|medication dose|therapy setting|therapie einstellen)|(?:patientendaten|patient record|patient identity|passwort|password)/;
 const inventory=/(?:\b(?:unser|unsere|unserem|unserer|our)\b.{0,90}(?:geraet|pumpe|monitor|device|equipment|inventar|bestand|service|wartung|software|last|serial|history)|\b(?:wann zuletzt|zuletzt gewartet|last serviced|actual inventory|current software|real device|seriennummer|serial number|asset history|current service record)\b)/;
-const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
+const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|spannung|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
 const syntheticNote="Fictional training source. Not a manufacturer instruction or permission to work on equipment.";
 function buildIndex(corpus){
  const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY");
@@ -152,6 +152,9 @@ function ask(index,question,opts={}){
  if(inventory.test(query)||specificNumbers.test(query)){
   return {status:"unknown",heading:"No verified live asset data",explanation:"This demo cannot access real hospital inventory, maintenance history, model specifications or software versions. Use your authorised source system and current manufacturer documentation.",evidence:[],answer:"",note:syntheticNote};
  }
+ // Reject obviously out-of-domain prompts before accepting a loose "repair" / "record" match.
+ const domain=/(medizin|medtech|device|equipment|geraet|monitor|pump|infusion|spo2|ecg|ekg|beatmung|ventil|alarm|sicher|safety|qualifik|wartung|pruf|pruef|inspection|service|source|dokument|document|manual|sop|sensor|patient|\bstk\b|\bmtk\b|battery|occlusion|clinical|version|revision|instand|bestandsverzeichnis|medizinproduktebuch|quelle|voltage|spann|shock|earth|electric|protokoll|handover)/.test(query);
+ if(!domain)return {status:"unknown",heading:"Outside the demo knowledge base",explanation:"This question is outside the supported medical engineering document corpus. The assistant won't guess based on a loosely matching word.",evidence:[],answer:"",note:syntheticNote};
  const hits=search(index,question,opts);
  if(!hits.length)return {status:"unknown",heading:"No supported evidence",explanation:"No sufficiently relevant passage was found in the active demo corpus. Nothing is inferred or invented.",evidence:[],answer:"",note:syntheticNote};
  const top=hits[0];
