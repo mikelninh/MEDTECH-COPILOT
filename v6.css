@@ -1,0 +1,28 @@
+/* MEDTECH v0.6 — one real source, one clear question, three tests */
+.real-source-hero{display:grid;grid-template-columns:minmax(0,1.23fr) minmax(240px,.65fr);min-height:365px;border-radius:24px;background:#19312b;color:#f5fff6;overflow:hidden;position:relative}
+.real-source-hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 80% 10%,rgba(141,214,172,.14),transparent 52%)}
+.real-source-copy{position:relative;padding:clamp(29px,4.4vw,59px) clamp(28px,4.3vw,62px);align-self:center}
+.real-source-kicker{font-size:10px;letter-spacing:.15em;color:#9bdfb3;font-weight:800}
+.real-source-copy h1{font-size:clamp(38px,4.5vw,64px);line-height:1.06;letter-spacing:-.07em;margin:21px 0 14px}
+.real-source-copy h1 em{font-style:normal;color:#b6f0c5}
+.real-source-copy p{font-size:13px;line-height:1.75;color:#b3cab8;max-width:480px;margin-bottom:24px}
+.real-source-cta{background:#b7f1c7;color:#173d2c;border:0;border-radius:11px;padding:15px 18px;min-height:47px;display:inline-flex;align-items:center;justify-content:space-between;gap:27px;font-size:12px;font-weight:770}
+.real-source-cta:hover{background:#d0ffdd}
+.real-source-original{display:block;margin:15px 0 0;color:#a2d5b0;font-size:11px;width:fit-content}
+.real-source-original:hover{color:#d5ffe0}
+.real-source-preview{margin:auto 34px auto 0;max-width:345px;width:calc(100% - 10px);background:#f9fbf7;border-radius:16px;overflow:hidden;border:1px solid #d8e5d8;color:#223c2c;box-shadow:0 22px 50px rgba(3,18,9,.22);transform:rotate(1.5deg);position:relative}
+.real-source-dochead{padding:16px;display:flex;justify-content:space-between;gap:8px;align-items:center;border-bottom:1px solid #e8ede6;font-family:ui-monospace,monospace;font-size:8px;letter-spacing:.07em;color:#72927b}
+.real-source-docbody{padding:25px 21px 19px;display:grid;gap:11px}
+.real-source-page{width:fit-content;background:#e6f2e6;color:#377e53;font-size:10px;padding:6px 8px;border-radius:6px;font-weight:740}
+.real-source-docbody strong{font-size:24px;letter-spacing:-.055em}
+.real-source-docbody p{margin:0;color:#667f6c;font-size:12px}
+.real-source-docbody small{margin-top:10px;color:#99a99a;font-size:9px}
+.real-source-docfoot{display:flex;justify-content:space-between;gap:9px;background:#e8f3e6;padding:14px 20px;color:#4c7854;font-size:10px;font-weight:650}
+.real-test-options{display:flex;gap:10px;align-items:center;margin:21px 0 47px;flex-wrap:wrap}
+.real-test-options>span{font-size:10px;color:#809580;font-weight:750;letter-spacing:.13em;margin-right:9px}
+.real-test-options button{border:1px solid #dfe7dd;background:white;border-radius:10px;padding:12px 15px;font-size:12px;color:#405e47;font-weight:650;display:flex;gap:10px;align-items:center}
+.real-test-options button strong{font-size:10px;color:#5d9973;font-family:ui-monospace,monospace}
+.real-test-options button:hover{border-color:#95c7a2;background:#f3faf3}
+#view-desk .section-title{margin-top:0}
+@media(max-width:950px){.real-source-hero{grid-template-columns:minmax(0,1fr) minmax(210px,.6fr)}.real-source-copy{padding:35px 27px}.real-source-copy h1{font-size:clamp(38px,5vw,55px)}.real-source-preview{margin-right:22px}}
+@media(max-width:690px){.real-source-hero{grid-template-columns:1fr;border-radius:19px}.real-source-copy{padding:30px 23px 19px}.real-source-copy h1{font-size:clamp(35px,10vw,51px)}.real-source-preview{margin:3px 23px 25px;max-width:none;width:calc(100% - 46px);transform:none}.real-source-docbody{padding:17px;gap:8px}.real-source-docbody strong{font-size:20px}.real-source-dochead{padding:12px}.real-source-docfoot{padding:11px 15px}.real-source-cta{width:100%}.real-test-options{margin:17px 0 33px;gap:8px}.real-test-options>span{width:100%}.real-test-options button{flex:1;justify-content:center;min-width:0;padding:11px 5px;white-space:nowrap;font-size:10px;gap:6px}.real-test-options button strong{font-size:9px}}
