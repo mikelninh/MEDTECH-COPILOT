@@ -79,18 +79,17 @@ function feedback(p,rows,j){
   const safetyBanner=await page.locator(".safety-strip").innerText();
   const outcomes=[];
   for(const [question,expected,source,pageNo] of p.task){
-   await page.locator(".mobile-nav button[data-view='desk']").click().catch(async()=>{
-     await page.locator(".nav-tabs button[data-view='desk']").click();
-   });
+   await page.locator(mobile?".mobile-nav button[data-view='desk']":".nav-tabs button[data-view='desk']").click();
    await page.locator("#searchInput").fill(question);
    await page.locator("#searchForm button[type='submit']").click();
    const status=await page.locator("#answerStatus").innerText();
    const actual=Object.keys(statusText).find(k=>statusText[k]===status)||"other";
    const evidence=await page.locator("#evidenceList").innerText();
-   const docOk=!source||evidence.includes(source)||await page.evaluate(
-     ({q,doc})=>window.MedtechRetrieval.ask(window.MedtechFieldnotes.getIndex(),q,{language:"de"}).evidence.some(e=>e.documentId===doc),
+   const docEvidence=source?await page.evaluate(
+     ({q,doc})=>window.MedtechRetrieval.ask(window.MedtechFieldnotes.getIndex(),q,{language:"de"}).evidence.find(e=>e.documentId===doc)||null,
      {q:question,doc:source}
-   );
+   ):null;
+   const docOk=!source||!!docEvidence&&evidence.includes(docEvidence.documentTitle);
    const pageOk=!pageNo||evidence.includes("Druckseite "+pageNo);
    const metExpected=actual===expected&&docOk&&pageOk;
    outcomes.push({question,expected,actual,sourceExpected:source||null,sourceCheck:docOk,pageExpected:pageNo||null,pageCheck:pageOk,metExpected});
