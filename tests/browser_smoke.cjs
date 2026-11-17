@@ -88,7 +88,7 @@ const {chromium}=require("playwright");
  assert.match(await desktop.locator("#demoStepDetails").innerText(),/Verschlussalarm/);
  assert.match(await desktop.locator("#demoStepDetails").innerText(),/Fiktives Pumpenhandbuch/);
  await desktop.locator("#demoForward").click();
- assert.match(await desktop.locator("#demoStepDetails").innerText(),/Behandlungsteam/);
+ assert.match(await desktop.locator("#demoStepDetails").innerText(),/Klinisches Team/);
  await desktop.screenshot({path:"artifacts/06-realistic-demo-flow.png",fullPage:true});
  await desktop.locator("[data-demo-case='monitor']").click();
  await desktop.locator("[data-demo-step='2']").click();
