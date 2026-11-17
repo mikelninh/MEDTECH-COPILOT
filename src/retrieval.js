@@ -35,6 +35,10 @@ const SYN={
   stoerung:["malfunction","fault","alert"],
   dokumentieren:["record","documentation","fields"],
   dokumentation:["record","documentation","service"],
+  dokumentiert:["record","documentation","intake","fields"],
+  servicefall:["service","intake","handover","documentation"],
+  servicefalle:["service","intake","handover","documentation"],
+  servicefaelle:["service","intake","handover","documentation"],
   protokoll:["record","documentation","service"],
   freigabe:["release","approval","authorised"],
   sicherheit:["safety","clinical","qualified"],
@@ -141,8 +145,11 @@ function search(index,question,opts={}){
  const best=results[0]?.score||0;
  if(!best)return [];
  // Avoid low-relevance guessed citations. Require relevance, not just a single very common word.
- const threshold=Math.max(1.25,best*.34);
- return results.filter(r=>r.score>=threshold).slice(0,opts.limit||4);
+ const threshold=Math.max(1.25,best*.66);
+ const relevant=results.filter(r=>r.score>=threshold);
+ // Do not mix a precise official-law citation with a vaguely related SOP.
+ if(results[0]?.chunk.kind==="Public legal summary")return relevant.filter(r=>r.chunk.documentId===results[0].chunk.documentId).slice(0,1);
+ return relevant.slice(0,opts.limit||3);
 }
 function ask(index,question,opts={}){
  const query=normalize(question);
