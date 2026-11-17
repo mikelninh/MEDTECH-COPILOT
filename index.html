@@ -7,8 +7,10 @@
   <meta name="description" content="MEDTECH COPILOT v0.2 – unabhängiger, evidenzorientierter Demonstrator für Krankenhaus-Medizintechnik. Keine klinische Anwendung.">
   <title>MEDTECH COPILOT — Evidence at the point of work</title>
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./premium.css">
   <script defer src="./src/knowledge.js"></script>
   <script defer src="./src/app.js"></script>
+  <script defer src="./src/polish.js"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -36,7 +38,7 @@
     <header class="topbar">
       <div class="breadcrumbs"><span>FIELD INTELLIGENCE</span><span class="slash">/</span><strong id="currentScreen">Übersicht</strong></div>
       <div class="top-controls">
-        <span class="chip-outline"><span class="pulse-dot"></span> v0.2 · Public Demo</span>
+        <span class="chip-outline"><span class="pulse-dot"></span> v0.3 · Public Demo</span>
         <button class="btn btn-subtle top-help" id="privacyButton" type="button">Datenschutz & Grenzen</button>
       </div>
     </header>
@@ -45,12 +47,13 @@
 
       <section id="screen-home" class="screen">
         <div class="home-heading">
-          <div><div class="kicker">EVIDENCE, WHERE IT MATTERS</div>
+          <div><div class="kicker">MADE FOR THE MOMENT THAT MATTERS</div>
             <h1>Weniger suchen.<br><em>Mehr verstehen.</em></h1>
-            <p class="lead">Stell dir vor, das technische Wissen deines Teams wäre genau dort verfügbar, wo du es brauchst: am Arbeitsplatz, am Gerät oder über eine kurze Sprachfrage.</p>
-            <div class="hero-actions"><button class="btn btn-primary" data-screen="lab" type="button">Vier Demos erleben <span>↗</span></button><button class="btn btn-light" data-screen="ask" type="button">Frage stellen →</button></div>
+            <p class="lead">Das richtige Wissen. Im richtigen Moment. Ein leiser, verlässlicher Begleiter für die Medizintechnik – vom Schreibtisch bis zum Gerät.</p>
+            <div class="hero-actions"><button class="btn btn-primary" data-screen="lab" type="button">Demo erleben <span>↗</span></button><button class="btn btn-light" data-screen="ask" type="button">Wissenssuche öffnen →</button></div>
+            <button class="spotlight-trigger" id="spotlightTrigger" type="button" aria-label="Schnellsuche öffnen"><span class="spotlight-glyph">⌕</span><span>Was möchtest du wissen?</span><kbd>⌘ K</kbd></button>
           </div>
-          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div><div class="hero-core"><span>✳</span></div><div class="hero-glint one"></div><div class="hero-glint two"></div><div class="hero-caption">GROUNDED<br>NOT GUESSED</div></div>
+          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div><div class="hero-core"><span>✳</span></div><div class="hero-glint one"></div><div class="hero-glint two"></div><div class="hero-caption">GROUNDED<br>NOT GUESSED</div><div class="hero-pill hero-pill-top"><span></span> Evidence verified</div><div class="hero-pill hero-pill-bottom"><strong>Only what we know.</strong><small>Everything else, clearly marked.</small></div></div>
         </div>
         <div class="metric-grid">
           <div class="metric-card"><span>WISSEN</span><strong id="metricSources">9</strong><small>aktive Demo-Fundstellen</small></div>
@@ -123,7 +126,7 @@
         <div class="panel lab-tests"><div class="panel-head"><span>◈ &nbsp; Quality & Safety Lab</span><span class="tag">LOKALER CHECK</span></div><div class="panel-pad"><p>Die Tests prüfen ausgewählte Regeln der Demo-Engine – keine Freigabe für Krankenhausbetrieb und kein Nachweis für klinische Sicherheit.</p><button class="btn btn-primary" id="runChecks" type="button">Regressionstests starten →</button><div id="checksOutput" aria-live="polite"></div></div></div>
       </section>
 
-      <footer class="footer"><span>MEDTECH COPILOT · Prototype v0.2 · Independent exploration</span><span>Keine Krankenhausfreigabe. <a href="https://www.datenschutzkonferenz-online.de/media/oh/DSK_OH_RAG.pdf" target="_blank" rel="noopener noreferrer">RAG-Datenschutzgrundlagen ↗</a></span></footer>
+      <footer class="footer"><span>MEDTECH COPILOT · Prototype v0.3 · Independent exploration</span><span>Keine Krankenhausfreigabe. <a href="https://www.datenschutzkonferenz-online.de/media/oh/DSK_OH_RAG.pdf" target="_blank" rel="noopener noreferrer">RAG-Datenschutzgrundlagen ↗</a></span></footer>
     </main>
   </div>
 </div>
