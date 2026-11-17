@@ -452,49 +452,49 @@
           "82",
           "SpO2 Kein Sensor",
           "The monitor reports that no SpO2 sensor is connected. The manufacturer identifies the monitor-to-sensor connection as a point to check.",
-          "Die Meldung „SpO₂ Kein Sensor“ bedeutet laut Hersteller, dass der Monitor keinen angeschlossenen SpO₂-Sensor erkennt. Die Verbindung zwischen Monitor und Sensor ist in der Originalanweisung als Prüfansatz genannt.",
+          "Die Meldung „SpO₂ Kein Sensor“ bedeutet laut Hersteller, dass der Monitor keinen angeschlossenen SpO₂-Sensor erkennt. Die Verbindung zwischen Monitor und Sensor ist in der Originalanweisung als Prüfansatz genannt. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂ Kein Sensor – Sensorverbindung"
         ],
         [
           "82",
           "SpO2-Sensor ab",
           "The displayed alarm indicates that the sensor may be detached from the patient; the manual distinguishes this from no sensor being connected to the monitor.",
-          "Bei „SpO₂-Sensor ab“ kann der Sensor von der Messstelle am Patienten gelöst sein. Die Meldung ist nicht gleichbedeutend mit „SpO₂ Kein Sensor“.",
+          "Bei „SpO₂-Sensor ab“ kann der Sensor von der Messstelle am Patienten gelöst sein. Die Meldung ist nicht gleichbedeutend mit „SpO₂ Kein Sensor“. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂-Sensor ab – Messstelle"
         ],
         [
           "82",
           "SpO2-Sensorfehler",
           "The manual lists the sensor and its extension cable as possible sources of a sensor malfunction; the displayed warning does not itself confirm a monitor defect.",
-          "Die Meldung „SpO₂-Sensorfehler“ wird im Handbuch einer möglichen Fehlfunktion des Sensors oder Verlängerungskabels zugeordnet; sie beweist allein keinen Defekt des Monitors.",
+          "Die Meldung „SpO₂-Sensorfehler“ wird im Handbuch einer möglichen Fehlfunktion des Sensors oder Verlängerungskabels zugeordnet; sie beweist allein keinen Defekt des Monitors. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂-Sensorfehler – Sensor oder Kabel"
         ],
         [
           "82",
           "SpO2 niedrige Perfusion",
           "An insufficient pulse signal or low perfusion at the measurement site may make displayed SpO2 and pulse values unreliable.",
-          "Bei niedriger Perfusion kann das Pulssignal an der Messstelle zu schwach sein; angezeigte SpO₂- und Puls-Werte können dadurch unzuverlässig sein.",
+          "Bei niedriger Perfusion kann das Pulssignal an der Messstelle zu schwach sein; angezeigte SpO₂- und Puls-Werte können dadurch unzuverlässig sein. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂ niedrige Perfusion – Messqualität"
         ],
         [
           "83",
           "SpO2 Kommunikationsfehler",
           "A communication problem or SpO2 module malfunction is listed as a high-priority technical alarm. The manufacturer points to technical service.",
-          "„SpO₂-Komm. Fehler“ bezeichnet laut Handbuch einen Kommunikations- oder Modulfehler, mit hoher technischer Alarmpriorität. Der Hersteller verweist auf zuständiges Instandhaltungs- bzw. Servicepersonal.",
+          "„SpO₂-Komm. Fehler“ bezeichnet laut Handbuch einen Kommunikations- oder Modulfehler, mit hoher technischer Alarmpriorität. Der Hersteller verweist auf zuständiges Instandhaltungs- bzw. Servicepersonal. Angegebene technische Alarmpriorität: Hoch.",
           "SpO₂-Kommunikationsfehler – technische Eskalation"
         ],
         [
           "82",
           "SpO2 Rauschen",
           "Movement, ambient light, electrical interference or other causes may disturb SpO2 signal quality.",
-          "Bei „SpO₂ Rauschen“ nennt die Gebrauchsanweisung Bewegung, Umgebungslicht, elektrische Störungen oder andere Einflüsse als mögliche Gründe für ein gestörtes Messsignal.",
+          "Bei „SpO₂ Rauschen“ nennt die Gebrauchsanweisung Bewegung, Umgebungslicht, elektrische Störungen oder andere Einflüsse als mögliche Gründe für ein gestörtes Messsignal. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂ Rauschen – mögliche Störeinflüsse"
         ],
         [
           "83",
           "SpO2 Störender Lichteinfall",
           "Excessive ambient light around the sensor can interfere with SpO2 measurement.",
-          "Die Meldung „SpO₂: Störender Lichteinfall“ beschreibt laut Hersteller zu starkes Umgebungslicht am Sensor als möglichen Störeinfluss.",
+          "Die Meldung „SpO₂: Störender Lichteinfall“ beschreibt laut Hersteller zu starkes Umgebungslicht am Sensor als möglichen Störeinfluss. Angegebene technische Alarmpriorität: Tief.",
           "SpO₂ Störender Lichteinfall – Umgebungslicht"
         ]
       ],
