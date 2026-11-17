@@ -59,6 +59,8 @@ jobs:
           python3 -m http.server 4173 >/tmp/medtech-server.log 2>&1 &
           sleep 2
           node tests/browser_smoke.cjs
+      - name: Simulated user journeys (7 personas, 28 fresh questions)
+        run: node tests/simulated_users.cjs
       - name: Upload actual UI screenshots
         if: always()
         uses: actions/upload-artifact@v4
