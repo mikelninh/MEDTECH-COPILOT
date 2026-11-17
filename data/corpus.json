@@ -443,10 +443,10 @@
       "status": "PUBLIC_MANUFACTURER_SUMMARY",
       "updated": "2026-11-17",
       "owner": "Dräger (Originaldokument)",
-      "url": "https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf",
+      "url": "https://www.draeger.com/ifu",
       "language": "de",
       "sourceType": "curated-paraphrase",
-      "notice": "Nur knappe redaktionelle Zusammenfassungen; die originale Gebrauchsanweisung bleibt bei Dräger. Druckseiten 82–83.",
+      "notice": "Hersteller-PDF mit Druckseiten 82/83 in Drägers indexierten Unterlagen gegengeprüft. Der bisherige direkte deutsche PDF-Link gab bei Live-Abruf 404 zurück. Für den Nachweis ist deshalb die offizielle Dräger Dokumentensuche hinterlegt; dort Modell und Version kontrollieren. Kein direkter PDF-Link garantiert.",
       "sections": [
         [
           "82",
@@ -482,8 +482,25 @@
           "A communication problem or SpO2 module malfunction is listed as a high-priority technical alarm. The manufacturer points to technical service.",
           "„SpO₂-Komm. Fehler“ bezeichnet laut Handbuch einen Kommunikations- oder Modulfehler, mit hoher technischer Alarmpriorität. Der Hersteller verweist auf zuständiges Instandhaltungs- bzw. Servicepersonal.",
           "SpO₂-Kommunikationsfehler – technische Eskalation"
+        ],
+        [
+          "82",
+          "SpO2 Rauschen",
+          "Movement, ambient light, electrical interference or other causes may disturb SpO2 signal quality.",
+          "Bei „SpO₂ Rauschen“ nennt die Gebrauchsanweisung Bewegung, Umgebungslicht, elektrische Störungen oder andere Einflüsse als mögliche Gründe für ein gestörtes Messsignal.",
+          "SpO₂ Rauschen – mögliche Störeinflüsse"
+        ],
+        [
+          "83",
+          "SpO2 Störender Lichteinfall",
+          "Excessive ambient light around the sensor can interfere with SpO2 measurement.",
+          "Die Meldung „SpO₂: Störender Lichteinfall“ beschreibt laut Hersteller zu starkes Umgebungslicht am Sensor als möglichen Störeinfluss.",
+          "SpO₂ Störender Lichteinfall – Umgebungslicht"
         ]
-      ]
+      ],
+      "originalIndexedUrl": "https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf",
+      "referenceStatus": "DIRECT_PDF_UNAVAILABLE_AT_REVIEW",
+      "linkLabel": "Dräger Dokumentensuche (Vista 120/Vista 120S, SW 3.n)"
     }
   ]
 }
