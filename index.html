@@ -53,7 +53,7 @@
             <div class="hero-actions"><button class="btn btn-primary" data-screen="lab" type="button">Demo erleben <span>↗</span></button><button class="btn btn-light" data-screen="ask" type="button">Wissenssuche öffnen →</button></div>
             <button class="spotlight-trigger" id="spotlightTrigger" type="button" aria-label="Schnellsuche öffnen"><span class="spotlight-glyph">⌕</span><span>Was möchtest du wissen?</span><kbd>⌘ K</kbd></button>
           </div>
-          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div><div class="hero-core"><span>✳</span></div><div class="hero-glint one"></div><div class="hero-glint two"></div><div class="hero-caption">GROUNDED<br>NOT GUESSED</div><div class="hero-pill hero-pill-top"><span></span> Evidence verified</div><div class="hero-pill hero-pill-bottom"><strong>Only what we know.</strong><small>Everything else, clearly marked.</small></div></div>
+          <div class="hero-art" aria-hidden="true"><div class="hero-orbit orbit-a"></div><div class="hero-orbit orbit-b"></div><div class="hero-core"><span>✳</span></div><div class="hero-glint one"></div><div class="hero-glint two"></div><div class="hero-caption">GROUNDED<br>NOT GUESSED</div><div class="hero-pill hero-pill-top"><span></span> Traceable sources</div><div class="hero-pill hero-pill-bottom"><strong>Only what we know.</strong><small>Everything else, clearly marked.</small></div></div>
         </div>
         <div class="metric-grid">
           <div class="metric-card"><span>WISSEN</span><strong id="metricSources">9</strong><small>aktive Demo-Fundstellen</small></div>
@@ -91,7 +91,8 @@
 
       <section id="screen-field" class="screen hidden">
         <div class="pagehead"><div><div class="kicker">AT THE POINT OF WORK</div><h1>Der richtige Kontext.</h1><p>Ein Gerät auswählen und einen sicheren, fiktiven Serviceablauf erkunden.</p></div><span class="pagehead-mark">▤</span></div>
-        <div class="field-grid">
+        <div class="field-view-picker" role="group" aria-label="Interaktionsmodus"><button type="button" data-field-view="phone" class="active" aria-pressed="true">▯ &nbsp; Handy</button><button type="button" data-field-view="audio" aria-pressed="false">◖ &nbsp; Audio</button><button type="button" data-field-view="glasses" aria-pressed="false">◎ &nbsp; Glasses</button><span class="view-picker-hint">Ein Gerät. Drei Möglichkeiten.</span></div>
+        <div class="field-grid" id="fieldGrid" data-view="phone">
           <div class="panel field-main">
             <div class="panel-head"><span>Übungsgerät</span><span class="tag tag-demo">SIMULIERT</span></div>
             <div class="device-intro"><span class="device-icon">▣</span><div><span class="kicker">DEMO INVENTORY</span><h2 id="deviceTitle">Patientenmonitor</h2><p id="deviceSubtitle">Fiktiv · kein reales Inventarsystem</p></div></div>
@@ -106,7 +107,7 @@
           </div>
           <aside class="field-right">
             <div class="panel device-help"><div class="panel-head">◉ &nbsp; Kontext-Frage</div><div class="panel-pad"><p>Eine Frage zur ausgewählten Geräteart stellen. Der Kontext ist fiktiv; keine realen technischen Spezifikationen.</p><button class="btn btn-light full" id="askAboutDevice" type="button">Zum Assistenten →</button><button class="btn btn-light full" id="copyDeviceLink" type="button" style="margin-top:9px">⌁ Demo-Gerät ans Handy schicken</button><p id="copyLinkStatus" class="evidence-note" role="status" aria-live="polite"></p></div></div>
-            <div class="panel glasses-panel"><div class="panel-head"><span>◎ &nbsp; Glasses Preview</span><span class="tag tag-demo">KONZEPT</span></div><div class="panel-pad">
+            <div class="panel audio-panel"><div class="panel-head"><span>◖ &nbsp; Audio Guide</span><span class="tag tag-demo">BROWSER</span></div><div class="panel-pad"><div class="audio-visual" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div><h3>Kurze Hinweise. Hände frei.</h3><p>Der aktuelle Lernschritt wird vorgelesen. Nur nach Klick, ohne dauerhaftes Mithören. Ob ein Kopfhörer genutzt wird, entscheidet das Betriebssystem.</p><button type="button" class="btn btn-primary full" id="audioPlay">◖ &nbsp; Aktuellen Schritt vorlesen</button><button type="button" class="btn btn-light full audio-stop" id="audioStop">Wiedergabe stoppen</button><p class="evidence-note" id="audioStatus" role="status">Keine Aufnahme aktiv. Keine Hardware-Verbindung.</p></div></div><div class="panel glasses-panel"><div class="panel-head"><span>◎ &nbsp; Glasses Preview</span><span class="tag tag-demo">KONZEPT</span></div><div class="panel-pad">
               <p>Eine einzige Information im Blickfeld. Keine Kamera, keine Personenaufnahmen, keine reale Brillensteuerung.</p>
               <div class="glasses-frame"><div class="glasses-content"><span class="glasses-kicker">MEDTECH · DEMO</span><strong id="glassesTitle">Sicherheit zuerst</strong><span id="glassesText">Patientenversorgung und Zuständigkeit klären.</span><small id="glassesSource">Fiktiver Lernfall</small></div></div>
               <button type="button" id="glassSpeak" class="btn btn-light full">◖ Kurzhinweis vorlesen</button>
