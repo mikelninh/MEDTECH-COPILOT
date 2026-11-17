@@ -108,7 +108,7 @@ const {chromium}=require("playwright");
  const heroClipping=await mobile.locator("#view-desk .real-source-hero h1").evaluate(h=>h.scrollWidth-h.clientWidth);
  assert.ok(heroClipping<=2,"Headline clipped at 390px: "+heroClipping);
  console.log("PASS mobile editorial headline fully visible");
- await mobile.locator('[data-real-test="supported"]').click();
+ await mobile.locator('#testRealSource').click();
  assert.match(await mobile.locator("#evidenceList").innerText(),/Druckseite 82/);
  await mobile.locator("#searchInput").fill("Was tun bei einem Verschlussalarm der Demopumpe?");
  await mobile.locator("#searchForm button[type='submit']").click();
