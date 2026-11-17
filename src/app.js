@@ -11,6 +11,13 @@ const deviceById=id=>K.devices.find(d=>d.id===id)||K.devices[0];
 const state={screen:"home",deviceId:K.devices[0].id,step:0,lastAnswer:null,microphone:null,voiceActive:false};
 const screens=["home","ask","field","library","lab"];
 const titleOf={home:"Übersicht",ask:"Fragen & Quellen",field:"Am Gerät",library:"Wissensbasis",lab:"Demo Lab"};
+function setFieldView(mode){
+ const allowed=["phone","audio","glasses"];if(!allowed.includes(mode))mode="phone";
+ const grid=byId("fieldGrid");if(grid)grid.dataset.view=mode;
+ document.querySelectorAll("[data-field-view]").forEach(b=>{
+  const current=b.dataset.fieldView===mode;b.classList.toggle("active",current);b.setAttribute("aria-pressed",String(current));
+ });
+}
 const escapeFocus=()=>{
  const el=document.activeElement;
  if(el&&el.closest&&el.closest(".screen"))el.blur();
@@ -27,7 +34,7 @@ function navigate(to,opts={}){
  byId("currentScreen").textContent=titleOf[to];
  state.screen=to;
  if(opts.scroll!==false)window.scrollTo({top:0,behavior:"instant"});
- if(opts.glass)byId("glassesTitle").focus?.();
+ if(opts.glass)setFieldView("glasses");
 }
 function renderSources(r){
  const dest=byId("evidenceContent");dest.replaceChildren();
@@ -198,6 +205,16 @@ function setup(){
  document.querySelectorAll("button[data-question]").forEach(b=>b.addEventListener("click",()=>sendQuestion(b.dataset.question)));
  byId("readLast").addEventListener("click",()=>{if(state.lastAnswer)readText(state.lastAnswer.text)});
  byId("fieldDevice").addEventListener("change",e=>{state.deviceId=e.target.value;state.step=0;renderDevices()});
+ document.querySelectorAll("[data-field-view]").forEach(b=>b.addEventListener("click",()=>setFieldView(b.dataset.fieldView)));
+ byId("audioPlay").addEventListener("click",()=>{
+  const flow=K.workflows[state.deviceId],current=flow[state.step];
+  const ok=readText(current.title+". "+current.text);
+  byId("audioStatus").textContent=ok?"Der Browser liest den aktuellen fiktiven Lernschritt vor.":"Sprachausgabe ist in diesem Browser nicht verfügbar.";
+ });
+ byId("audioStop").addEventListener("click",()=>{
+  if("speechSynthesis" in window)window.speechSynthesis.cancel();
+  byId("audioStatus").textContent="Wiedergabe gestoppt.";
+ });
  byId("fieldNext").addEventListener("click",()=>{const n=K.workflows[state.deviceId].length;state.step=(state.step+1)%n;renderStep()});
  byId("fieldPrev").addEventListener("click",()=>{state.step=Math.max(0,state.step-1);renderStep()});
  byId("copyDeviceLink").addEventListener("click",async()=>{
