@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   quality:
-    name: Python and assistant regression
+    name: Python and knowledge regression
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -23,5 +23,33 @@ jobs:
           python-version: '3.12'
       - name: Document ingestion unit tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
-      - name: Assistant routing, refusal, and syntax tests
+      - name: Knowledge, safety, source and UI-contract tests
         run: node tests/test_assistant.cjs
+
+  browser:
+    name: Chromium UI smoke (desktop & mobile)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test actual browser journeys
+        run: |
+          python3 -m http.server 4173 >/tmp/medtech-server.log 2>&1 &
+          sleep 2
+          node tests/browser_smoke.cjs
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: medtech-ui-screenshots
+          path: artifacts/
+          if-no-files-found: ignore
