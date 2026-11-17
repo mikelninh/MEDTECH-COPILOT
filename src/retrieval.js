@@ -166,7 +166,17 @@ function ask(index,question,opts={}){
  if(/(?:sw\s*2\s*n|softwareversion\s*2|sw\s*1\s*n)/.test(query)&&/(?:vista|draeger|drager)/.test(query)){
   return {status:"unknown",heading:"Andere Softwareversion",explanation:"Diese kuratierte Herstellerquelle gilt nur für Vista 120/Vista 120S SW 3.n. Für die angefragte Version fehlt hier die passende Unterlage.",evidence:[],answer:"",note:syntheticNote};
  }
- const hits=search(index,question,opts);
+ let hits=search(index,question,opts);
+ if(/(?:draeger|drager|vista\s*120)/.test(query)){
+  const exact=[
+   [/kein\s+sensor/, "SpO2 Kein Sensor"],
+   [/sensor\s+ab/, "SpO2-Sensor ab"],
+   [/sensorfehler/, "SpO2-Sensorfehler"],
+   [/niedrig\w*\s+perfusion/, "SpO2 niedrige Perfusion"],
+   [/komm\w*\s*fehler|kommunikationsfehler/, "SpO2 Kommunikationsfehler"]
+  ].find(x=>x[0].test(query));
+  if(exact)hits=hits.filter(h=>h.chunk.heading===exact[1]);
+ }
  if(!hits.length)return {status:"unknown",heading:opts.language==="de"?"Keine passende Quelle":"No supported evidence",explanation:opts.language==="de"?"Im aktiven Demo-Korpus wurde keine ausreichend relevante Fundstelle gefunden. Es werden keine Angaben ergänzt oder erfunden.":"No sufficiently relevant passage was found in the active demo corpus. Nothing is inferred or invented.",evidence:[],answer:"",note:syntheticNote};
  const top=hits[0];
  if(top.score<1.25)return {status:"unknown",heading:opts.language==="de"?"Quelle nicht belastbar":"No supported evidence",explanation:opts.language==="de"?"Die beste Fundstelle ist zu ungenau, um eine Antwort zu rechtfertigen.":"The best match is too weak to support an answer.",evidence:[],answer:"",note:syntheticNote};
