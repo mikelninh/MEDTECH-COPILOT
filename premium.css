@@ -256,3 +256,31 @@ main{max-width:1530px;padding:25px clamp(24px,3.7vw,62px) 42px}
   .topbar .top-help:before{content:"ⓘ";font-size:15px;color:#67848a}
   .top-controls{gap:7px}
 }
+
+/* Context-sensitive field modes: show only what this moment requires */
+.field-view-picker{display:flex;align-items:center;gap:4px;padding:5px;width:fit-content;max-width:100%;border:1px solid #e6eded;background:#edf2f2;border-radius:15px;margin:-4px 0 22px;box-shadow:inset 0 1px 2px rgba(18,44,48,.025)}
+.field-view-picker button{border:0;background:transparent;border-radius:11px;padding:11px 18px;color:#7d9098;font-size:12px;font-weight:690;white-space:nowrap}
+.field-view-picker button:hover{color:#1b5a56}
+.field-view-picker button.active{background:#fff;color:#08786c;box-shadow:0 2px 8px rgba(15,43,50,.095),0 0 0 1px rgba(16,43,48,.04)}
+.view-picker-hint{margin:0 13px;font-size:10px;color:#9aadb1;white-space:nowrap}
+.field-grid[data-view="phone"] .glasses-panel,.field-grid[data-view="phone"] .audio-panel,
+.field-grid[data-view="audio"] .glasses-panel,.field-grid[data-view="audio"] .device-help,
+.field-grid[data-view="glasses"] .audio-panel,.field-grid[data-view="glasses"] .device-help{display:none}
+.audio-panel{background:linear-gradient(155deg,#fff 30%,#f2faf7)}
+.audio-panel h3{font-size:19px;font-weight:740;letter-spacing:-.05em;color:#213b42}
+.audio-visual{height:142px;border-radius:20px;margin-bottom:22px;display:flex;gap:5px;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,#174950 0%,#0e2839 75%);box-shadow:inset 0 1px 0 rgba(255,255,255,.1)}
+.audio-visual span{height:25px;width:5px;border-radius:100px;background:linear-gradient(180deg,#b6fcea,#50d8bd);opacity:.8;transform-origin:center;animation:audio-idle 1.8s ease-in-out infinite}
+.audio-visual span:nth-child(2),.audio-visual span:nth-child(8){height:45px;animation-delay:-.35s}
+.audio-visual span:nth-child(3),.audio-visual span:nth-child(7){height:66px;animation-delay:-.8s}
+.audio-visual span:nth-child(4),.audio-visual span:nth-child(6){height:37px;animation-delay:-.5s}
+.audio-visual span:nth-child(5){height:78px;animation-delay:-1.1s}
+@keyframes audio-idle{0%,100%{transform:scaleY(.6);opacity:.5}50%{transform:scaleY(1);opacity:.94}}
+.audio-stop{margin-top:10px}
+.audio-panel .evidence-note{margin-top:13px;line-height:1.6}
+@media(max-width:650px){
+ .field-view-picker{margin:-4px 0 19px;width:100%;gap:4px;padding:5px}
+ .field-view-picker button{flex:1;padding:11px 4px;font-size:12px}
+ .view-picker-hint{display:none}
+ .field-right{display:block}
+ .field-grid[data-view="phone"] .device-help,.field-grid[data-view="audio"] .audio-panel,.field-grid[data-view="glasses"] .glasses-panel{display:block}
+}
