@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "corpusName": "MEDTECH COPILOT · Fictional Field Library",
+  "notice": "All documents are fabricated training material. No patient or hospital data.",
+  "documents": [
+    {
+      "id": "FIELD-MON-210",
+      "deviceId": "DEMO-MON-01",
+      "title": "ORION M100 — Field knowledge card",
+      "kind": "Fictional device manual",
+      "version": "2.1",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-10",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Purpose and limits",
+          "The ORION M100 is a fictional patient-monitor training device. This training card is not a manufacturer instruction. For a device connected to a patient, clinical assessment and continuity of care take priority over technical troubleshooting."
+        ],
+        [
+          "2",
+          "No SpO₂ value",
+          "If the simulated SpO₂ channel displays no value, record the precise displayed message, accessory identification, device identifier and time. The clinical team must assess any patient-related concern. Technical investigation requires the approved manual for the exact real model."
+        ],
+        [
+          "3",
+          "Noisy ECG trace",
+          "A noisy simulated ECG trace may originate from electrode contact, motion, cable damage or electromagnetic interference. These are categories to investigate, not a diagnosis or permission to change patient connections."
+        ],
+        [
+          "4",
+          "Escalation",
+          "A suspected malfunction of a real medical electrical device must be handled by the authorised team under local procedure. Never return a device to use based on a chatbot response alone."
+        ],
+        [
+          "5",
+          "Evidence and documentation",
+          "Capture the unique asset ID, observed symptom, exact alarms, affected accessory, reporter, timestamp, relevant approved document version and who accepted the handover. Avoid including patient identifiers in this demonstration."
+        ]
+      ]
+    },
+    {
+      "id": "FIELD-PUMP-230",
+      "deviceId": "DEMO-PUMP-02",
+      "title": "LUMEN P200 — Field knowledge card",
+      "kind": "Fictional device manual",
+      "version": "2.3",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-11",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Purpose and limits",
+          "The LUMEN P200 is a completely fictional infusion-pump training device. No infusion management, therapy change, alarm override or equipment release may be based on this demo."
+        ],
+        [
+          "2",
+          "Occlusion warning",
+          "In the simulation, an occlusion warning means the device has flagged a possible flow obstruction. In clinical practice the responsible clinical team assesses the patient and infusion. The technical team records the exact alert and matches the correct model-specific manufacturer documentation."
+        ],
+        [
+          "3",
+          "Battery-related alert",
+          "For the fictional LUMEN P200, the training card distinguishes a displayed battery-related message from a verified battery failure. Capture the alert and operating context before assigning a cause. Do not improvise internal repair steps."
+        ],
+        [
+          "4",
+          "Source version check",
+          "The currently approved training card is version 2.3. The fictional version 1.0 is retired. Retired versions must never be presented as current service guidance."
+        ],
+        [
+          "5",
+          "Handover",
+          "A useful service handover includes device identity, observed alarm, relevant accessory, time, containment status, responsible staff and exact source version. The release decision belongs to qualified personnel following applicable procedures."
+        ],
+        [
+          "6",
+          "Voice safety",
+          "Voice playback may read approved learning content, but it does not authorise clinical action. Users must have an easy stop control and must not dictate patient data into public demonstrations."
+        ]
+      ]
+    },
+    {
+      "id": "FIELD-VENT-110",
+      "deviceId": "DEMO-VENT-03",
+      "title": "AERIS V300 — Field knowledge card",
+      "kind": "Fictional device manual",
+      "version": "1.1",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-12",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Purpose and limits",
+          "The AERIS V300 is a fictional ventilator training prop. Any ventilation interruption or clinically relevant alarm must immediately follow the hospital's authorised clinical escalation process, not chatbot guidance."
+        ],
+        [
+          "2",
+          "Alarm triage",
+          "For this fictional case, distinguish alert documentation from clinical interpretation. Record exact displayed wording, device identification, the time and the responsible contact. Never suppress alarms or modify therapy on the advice of the demo."
+        ],
+        [
+          "3",
+          "Accessory and circuit context",
+          "In real equipment, accessories and breathing circuits must be compatible with a specific model and approved configuration. This demonstration does not contain compatibility tables or safe replacement instructions."
+        ],
+        [
+          "4",
+          "Maintenance lifecycle",
+          "Inspections, maintenance, post-service safety checks and final equipment release require personnel, tools and documentation appropriate to the concrete product and its manufacturer instructions."
+        ]
+      ]
+    },
+    {
+      "id": "OPS-001",
+      "deviceId": null,
+      "title": "Demo SOP — Service intake and escalation",
+      "kind": "Fictional process SOP",
+      "version": "3.0",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-10",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Safe intake",
+          "First establish if a reported fault could affect patient care. The clinical team owns decisions about ongoing therapy and patient assessment. Technical personnel coordinate through local authorisation and escalation."
+        ],
+        [
+          "2",
+          "Required service intake fields",
+          "Record asset identifier, model, location code without patient identity, exact fault observation, date and time, reporter role, urgency and available manual revision. A service request is not a repair authorisation."
+        ],
+        [
+          "3",
+          "Safe handover",
+          "Log who accepted the issue, what was reported, whether the device was placed under the authorised local process and what follow-up is required. Never mark a device safe for reuse solely on a generated answer."
+        ],
+        [
+          "4",
+          "Scope of assistant",
+          "The public MEDTECH COPILOT demo can locate relevant fictional text and link publicly available statutes. It cannot perform electrical tests, operate devices, submit service tickets or release equipment."
+        ]
+      ]
+    },
+    {
+      "id": "OPS-002",
+      "deviceId": null,
+      "title": "Demo SOP — Source governance and traceability",
+      "kind": "Fictional process SOP",
+      "version": "2.2",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-13",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Document approval",
+          "Only documents with approved status, an accountable owner, version identifier, review date and sufficient access rights can be returned as operational guidance. This public demo uses fictional material exclusively."
+        ],
+        [
+          "2",
+          "Source precedence",
+          "The exact device model and document revision matter. When multiple sources conflict, the assistant must not silently choose an obsolete instruction. Refer the question to the responsible document owner."
+        ],
+        [
+          "3",
+          "Citation granularity",
+          "Each retrieved answer must identify document title, section or page, current version, approval state and the excerpt that supports the answer. A generic reference without a matching passage is insufficient."
+        ],
+        [
+          "4",
+          "Revocation",
+          "On document withdrawal, access revocation or updated approval, the previous version should be excluded from search, cache and any generated responses. This public prototype models document status but does not implement live synchronisation."
+        ],
+        [
+          "5",
+          "Auditability",
+          "An internal pilot should log access events and source versions without storing more personal information than necessary, subject to the hospital's approved retention policy."
+        ]
+      ]
+    },
+    {
+      "id": "OPS-003",
+      "deviceId": null,
+      "title": "Demo SOP — Electrical safety boundaries",
+      "kind": "Fictional process SOP",
+      "version": "1.4",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-12",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Electric shock risk",
+          "Medical electrical equipment can pose shock and functional hazards. Never defeat protective earth, open enclosures, bypass interlocks or carry out powered electrical testing based on a chatbot response."
+        ],
+        [
+          "2",
+          "Testing responsibility",
+          "Only suitably qualified authorised personnel may conduct required tests using appropriate calibrated equipment and device-specific approved procedures. This public demo cannot substitute for STK, MTK or other legally required activities."
+        ],
+        [
+          "3",
+          "After work",
+          "After maintenance or repair, the necessary safety and functional checks and documented release are part of the approved local workflow. No AI tool should autonomously certify a device."
+        ]
+      ]
+    },
+    {
+      "id": "OPS-004",
+      "deviceId": null,
+      "title": "Demo SOP — Spoken guidance and privacy",
+      "kind": "Fictional process SOP",
+      "version": "1.0",
+      "status": "APPROVED_DEMO",
+      "updated": "2026-11-09",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Push-to-talk",
+          "Spoken interaction should start through an explicit button press, visibly show microphone state, allow immediate cancellation and provide a keyboard alternative."
+        ],
+        [
+          "2",
+          "Speech privacy",
+          "Browser speech recognition may route audio to an external service, depending on browser and device. Never speak patient or internal hospital information into this public demonstration."
+        ],
+        [
+          "3",
+          "Audio output",
+          "Read short source-backed summaries rather than lengthy procedures. Provide stop and repeat controls and always maintain visible text and citations."
+        ],
+        [
+          "4",
+          "Smart glasses boundary",
+          "Smart glasses are conceptual only in this version. No ambient recording, camera capture of patients, or operational AR overlays are authorised by this demo."
+        ]
+      ]
+    },
+    {
+      "id": "FIELD-PUMP-100-RETIRED",
+      "deviceId": "DEMO-PUMP-02",
+      "title": "LUMEN P200 — Archived training card",
+      "kind": "Fictional device manual",
+      "version": "1.0",
+      "status": "RETIRED",
+      "updated": "2025-01-01",
+      "owner": "MEDTECH Demo Lab",
+      "sections": [
+        [
+          "1",
+          "Historical training draft",
+          "This is an intentionally retired fictional knowledge card used only to demonstrate version filtering. Its contents must not appear in normal retrieval results."
+        ],
+        [
+          "2",
+          "Historical escalation route",
+          "The fictitious escalation inbox formerly used the legacy demo channel. This obsolete detail exists only to demonstrate that archive contents are excluded from active retrieval."
+        ]
+      ]
+    }
+  ]
+}
