@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="./v5.css">
 <link rel="stylesheet" href="./v6.css">
 <script defer src="./src/retrieval.js"></script>
+<script defer src="./src/scenarios.js"></script>
 <script defer src="./src/fieldnotes.js"></script>
 </head>
 <body>
@@ -40,10 +41,10 @@
           <h1>„SpO₂ Kein Sensor“.<br><em>Was bedeutet das?</em></h1>
           <p>Eine Fehlermeldung. Eine überprüfbare Erklärung. Die konkrete Druckseite im Originalhandbuch.</p>
           <button type="button" id="testRealSource" class="real-source-cta" data-real-test="supported">Antwort mit Quelle prüfen <span>↗</span></button>
-          <a class="real-source-original" href="https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf" target="_blank" rel="noopener noreferrer">Original-Gebrauchsanweisung öffnen</a>
+          <a class="real-source-original" href="https://www.draeger.com/ifu" target="_blank" rel="noopener noreferrer">Dräger-Dokumentensuche öffnen (Vista 120, SW 3.n)</a>
         </div>
         <div class="real-source-preview">
-          <div class="real-source-dochead"><span>DRÄGER · SW 3.n</span><span>ORIGINALDOKUMENT</span></div>
+          <div class="real-source-dochead"><span>DRÄGER · SW 3.n</span><span>KURATIERTE QUELLE</span></div>
           <div class="real-source-docbody"><span class="real-source-page">S. 82</span>
             <strong>SpO₂ Kein Sensor</strong>
             <p>Keine erkannte Sensorverbindung am Monitor.</p>
@@ -145,14 +146,20 @@
 
     <section id="view-lab" class="view hidden">
       <div class="demo-page-title">
-        <div class="eyebrow">LIVE WALKTHROUGH / SIMULIERTE EINSÄTZE</div>
+        <div class="eyebrow">LIVE WALKTHROUGH / HERSTELLERQUELLE & ÜBUNGSFÄLLE</div>
         <h1>Du bekommst eine Meldung.<br><em>Was machst du als Nächstes?</em></h1>
-        <p>Wähle einen Fall. Die Demo zeigt nicht nur eine Antwort, sondern den gesamten Informationsweg: <strong>Meldung → Gerät → belegte Fundstelle → Zuständigkeit.</strong></p>
+        <p>Wähle einen Fall. Der Copilot zeigt die Quelle und ihre Grenzen – ohne eine Diagnose oder Freigabe zu erfinden.</p>
+      </div>
+      <div class="scenario-filters" role="group" aria-label="Fallkategorie">
+        <button type="button" data-case-filter="real" class="active" aria-pressed="true">Herstellerquelle <span>7</span></button>
+        <button type="button" data-case-filter="workflow" aria-pressed="false">Arbeitsalltag <span>7</span></button>
+        <button type="button" data-case-filter="boundary" aria-pressed="false">Grenzfälle <span>3</span></button>
+        <small id="scenarioCount" aria-live="polite">7 ausgewählte Situationen</small>
       </div>
       <div class="scenario-grid" id="scenarioGrid" role="group" aria-label="Fall auswählen"></div>
       <div class="demo-workspace" id="demoWorkspace">
         <div class="demo-flow-head">
-          <div><span class="eyebrow">LIVE DEMO · SYNTHETISCHER FALL</span><h2 id="demoCaseTitle">Pumpenalarm – wo ist die richtige Anweisung?</h2><p id="demoCaseContext">Fiktives Beispiel ohne Patienten- oder UKB-Daten.</p></div>
+          <div><span class="eyebrow">BEISPIELVORFALL · FIKTIV</span><h2 id="demoCaseTitle">Pumpenalarm – wo ist die richtige Anweisung?</h2><p id="demoCaseContext">Fiktives Beispiel ohne Patienten- oder UKB-Daten.</p></div>
           <div class="demo-flow-num"><strong id="demoCaseNumber">01</strong><small>ÜBUNGSFALL</small></div>
         </div>
         <div class="demo-progress" id="demoProgress" role="group" aria-label="Demo-Fortschritt">
@@ -181,7 +188,7 @@
       </div>
       <div class="eval-board"><div><span class="eyebrow">QUALITY LAB</span><h2>Does it actually work?</h2><p>Automatisierte Fälle prüfen die Quellenwahl, den Umgang mit unbekannten Informationen und das Ausblenden alter Versionen. Kein medizinischer Abnahmetest.</p><button type="button" class="dark-button" id="runEvaluation">Tests ausführen <span>↗</span></button></div><div id="evaluationResult" class="eval-results"><span class="eval-idle">Awaiting evaluation<br><strong>— / —</strong></span></div></div>
     </section>
-    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.6</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
+    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.7</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
