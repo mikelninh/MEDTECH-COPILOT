@@ -60,6 +60,15 @@
         <button type="button" data-real-test="unsafe"><strong>03</strong> Sicherheitsgrenze</button>
       </div>
 
+      <form id="searchForm" class="hero-search real-source-search" autocomplete="off" aria-label="Eigene Fachfrage">
+        <label for="searchInput" class="visually-hidden">Eigene Frage stellen</label>
+        <span class="search-lens" aria-hidden="true">⌕</span>
+        <input id="searchInput" type="search" maxlength="420" placeholder="Oder eine eigene Fachfrage stellen …">
+        <button type="button" id="dictate" class="mic-button" disabled aria-label="Spracheingabe starten" title="Browser-Spracherkennung">◉</button>
+        <button type="submit" class="submit-search" aria-label="Frage suchen">→</button>
+      </form>
+      <p id="micInfo" class="real-search-note">Lokale Recherche. Browser-Sprachfunktion nur nach Freigabe.</p>
+
       <div class="section-title"><div><span class="eyebrow">02 / EVIDENCE VIEW</span><h2>Antworten, die du nachprüfen kannst.</h2></div><span id="resultCounter" class="subtle-meta">Noch keine Suche</span></div>
       <div class="results-layout">
         <article class="answer-pane" id="answerPane" aria-live="polite">
