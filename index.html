@@ -10,8 +10,11 @@
 <link rel="stylesheet" href="./v5.css">
 <link rel="stylesheet" href="./v6.css">
 <link rel="stylesheet" href="./v7.css">
+<link rel="stylesheet" href="./v8.css">
 <script defer src="./src/retrieval.js"></script>
 <script defer src="./src/scenarios.js"></script>
+<script defer src="./src/pdf_evidence.js"></script>
+<script defer src="./src/pdf_demo.js"></script>
 <script defer src="./src/fieldnotes.js"></script>
 </head>
 <body>
@@ -36,6 +39,47 @@
     <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Übungsgeräte plus eine kuratierte öffentliche Herstellerquelle. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
 
     <section id="view-desk" class="view">
+      <section class="pdf-proof" aria-label="V0.8 Original-PDF nachweisen">
+        <div class="pdf-proof-top">
+          <span class="pdf-kicker">V0.8 / VERIFIED EVIDENCE</span>
+          <span id="pdfLoadStatus" class="pdf-load-status">PDF-QUELLE WIRD GEPRÜFT</span>
+        </div>
+        <div class="pdf-proof-grid">
+          <div class="pdf-proof-content">
+            <h1>Die Antwort ist gut.<br><em>Die Quelle ist besser.</em></h1>
+            <p>Ein echtes Hersteller-PDF. Eine präzise Frage. Und ein Link direkt zur passenden Originalseite.</p>
+            <form id="pdfSearchForm" class="pdf-proof-search">
+              <label class="visually-hidden" for="pdfQuestion">Frage zum Philips-Dokument</label>
+              <input id="pdfQuestion" name="question" maxlength="420" autocomplete="off" placeholder="Frage zum Philips-Addendum …">
+              <button type="submit" id="pdfSearchButton" disabled>Quelle finden <span aria-hidden="true">↗</span></button>
+            </form>
+            <div class="pdf-proof-actions" aria-label="Drei unabhängige Prüffragen">
+              <button type="button" data-pdf-case="battery" disabled>01 · Belegbar</button>
+              <button type="button" data-pdf-case="unknown" disabled>02 · Unbekannt</button>
+              <button type="button" data-pdf-case="unsafe" disabled>03 · Sicherheitsgrenze</button>
+            </div>
+          </div>
+          <aside class="pdf-proof-paper">
+            <div class="pdf-paper-top"><span>PHILIPS / IFU ADDENDUM</span><span>2025</span></div>
+            <div class="pdf-paper-body">
+              <span class="pdf-paper-page">4 PDF-Seiten · 5 Fundstellen</span>
+              <strong>Originaltext<br>statt erfundener<br>Antworten.</strong>
+              <p>Nur kurze Ausschnitte aus einer während des Builds geprüften Herstellerdatei.</p>
+            </div>
+            <div class="pdf-paper-bottom"><span id="pdfSourceLabel">Philips · Dokument 453665155181</span><span>↗</span></div>
+          </aside>
+        </div>
+        <div id="pdfResults" class="pdf-results hidden" aria-live="polite">
+          <div class="pdf-results-top"><strong>ERGEBNIS / EVIDENCE</strong><span id="pdfAnswerStatus" class="pdf-answer-status">BEREIT</span></div>
+          <div class="pdf-results-body">
+            <div id="pdfAnswer" class="pdf-answer"></div>
+            <aside id="pdfEvidence" class="pdf-evidence"></aside>
+          </div>
+        </div>
+        <div class="pdf-footnote">Demonstrator, kein medizinisch freigegebenes System. Die Quellenfassung muss für das konkrete Gerät überprüft werden.</div>
+      </section>
+      <div class="pdf-secondary-title"><span>WEITERE DEMOS</span><p>Die bisherige Dräger-Lernkarte bleibt zum Vergleich verfügbar. Sie ist keine vollständige PDF-Ingestion.</p></div>
+
       <section class="real-source-hero" aria-label="Echte Herstellerquelle testen">
         <div class="real-source-copy">
           <span class="real-source-kicker">ECHTE HERSTELLERQUELLE · DRÄGER VISTA 120</span>
@@ -189,7 +233,7 @@
       </div>
       <div class="eval-board"><div><span class="eyebrow">QUALITY LAB</span><h2>Does it actually work?</h2><p>Automatisierte Fälle prüfen die Quellenwahl, den Umgang mit unbekannten Informationen und das Ausblenden alter Versionen. Kein medizinischer Abnahmetest.</p><button type="button" class="dark-button" id="runEvaluation">Tests ausführen <span>↗</span></button></div><div id="evaluationResult" class="eval-results"><span class="eval-idle">Awaiting evaluation<br><strong>— / —</strong></span></div></div>
     </section>
-    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.7</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
+    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.8</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
