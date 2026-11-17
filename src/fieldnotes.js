@@ -89,7 +89,7 @@ function search(question,context=null){
  if(!q)return null;
  $("searchInput").value=q;
  go("desk");
- const res=R.ask(state.index,q,context?{deviceId:context}:{});
+ const res=R.ask(state.index,q,{...(context?{deviceId:context}:{}),language:"de"});
  renderAsk(res,q);
  $("answerPane").scrollIntoView({behavior:"smooth",block:"start"});
  return res;
