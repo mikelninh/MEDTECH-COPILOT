@@ -30,55 +30,33 @@
     </div>
   </header>
   <main id="main">
-    <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Geräte und Dokumente. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
+    <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Übungsgeräte plus eine kuratierte öffentliche Herstellerquelle. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
 
     <section id="view-desk" class="view">
-      <div class="pitch-hero" aria-label="MEDTECH COPILOT Produktdemo">
-        <div class="pitch-copy">
-          <div class="eyebrow on-dark"><span class="fine-line"></span> SIMULIERTER ARBEITSALLTAG / MEDIZINTECHNIK</div>
-          <h1>Ein Gerätealarm.<br><em>Und jetzt?</em></h1>
-          <p class="pitch-lead">Jemand meldet eine Störung. Das passende Handbuch liegt irgendwo. MEDTECH COPILOT zeigt die relevante Fundstelle — mit Version, Zuständigkeit und klaren Grenzen.</p>
-          <div class="pitch-actions">
-            <button type="button" id="pitchStart" class="pitch-primary" data-demo-start="pump"><span aria-hidden="true">▶</span> Interaktive Demo starten <span aria-hidden="true">↗</span></button>
-            <span class="pitch-time">4 Schritte · selbst ausprobieren · keine Anmeldung</span>
-          </div>
-          <form id="searchForm" class="hero-search" autocomplete="off">
-            <label class="visually-hidden" for="searchInput">Wissensbasis durchsuchen</label>
-            <span class="search-lens" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="10.5" cy="10.5" r="6.4" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.8 4.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-            <input id="searchInput" type="search" placeholder="Oder direkt eine Fachfrage stellen" maxlength="420">
-            <button type="button" id="dictate" class="mic-button" aria-label="Spracheingabe starten" title="Spracheingabe, Browserfunktion" disabled><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M8.5 21h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-            <button type="submit" class="submit-search" aria-label="Suchen"><svg viewBox="0 0 24 24" fill="none"><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </form>
-          <div class="hero-foot"><span id="micInfo">Lokale Suche in Demo-Unterlagen.</span><span class="key-hint">⌘ / Ctrl + K</span></div>
+      <section class="real-source-hero" aria-label="Echte Herstellerquelle testen">
+        <div class="real-source-copy">
+          <span class="real-source-kicker">ECHTE HERSTELLERQUELLE · DRÄGER VISTA 120</span>
+          <h1>„SpO₂ Kein Sensor“.<br><em>Was bedeutet das?</em></h1>
+          <p>Eine Fehlermeldung. Eine überprüfbare Erklärung. Die konkrete Druckseite im Originalhandbuch.</p>
+          <button type="button" id="testRealSource" class="real-source-cta" data-real-test="supported">Antwort mit Quelle prüfen <span>↗</span></button>
+          <a class="real-source-original" href="https://www.draeger.com/Content/Documents/Products/vista-ifu-2680060-de.pdf" target="_blank" rel="noopener noreferrer">Original-Gebrauchsanweisung öffnen</a>
         </div>
-        <div class="pitch-visual">
-          <div class="ticket-preview">
-            <div class="ticket-top"><span><span class="ticket-led"></span> EINGEHENDE MELDUNG</span><span>FIKTIVER FALL · 08:17</span></div>
-            <div class="ticket-main">
-              <div class="ticket-id"><span class="ticket-small">SERVICEMELDUNG</span><span class="ticket-number">#SIM-204</span></div>
-              <h2>„Die Pumpe zeigt wieder einen Verschlussalarm.“</h2>
-              <p>Die Station fragt nach dem nächsten Schritt und der richtigen Anweisung.</p>
-              <div class="ticket-row"><span>Gerät</span><strong>LUMEN P200 <small>FIKTIV</small></strong></div>
-              <div class="ticket-row"><span>Geräte-ID</span><strong>DEMO-PUMP-02</strong></div>
-              <div class="ticket-row"><span>Dokument</span><strong>Version 2.3 <span class="current-dot">● AKTIV</span></strong></div>
-            </div>
-            <div class="ticket-bottom"><span>Was jetzt zählt</span><strong>Kontext → Quelle → Zuständigkeit</strong></div>
+        <div class="real-source-preview">
+          <div class="real-source-dochead"><span>DRÄGER · SW 3.n</span><span>ORIGINALDOKUMENT</span></div>
+          <div class="real-source-docbody"><span class="real-source-page">S. 82</span>
+            <strong>SpO₂ Kein Sensor</strong>
+            <p>Keine erkannte Sensorverbindung am Monitor.</p>
+            <small>Kuratierte Zusammenfassung · Quellenlink im Ergebnis</small>
           </div>
-          <p class="pitch-visual-caption">Kein echtes Ticket oder UKB-Gerät. Ein nachvollziehbarer Lernfall.</p>
+          <div class="real-source-docfoot"><span>Quelle verifizieren, statt raten.</span><span>↗</span></div>
         </div>
-      </div>
+      </section>
 
-      <div class="cases-headline"><div><span class="eyebrow">DREI REALISTISCHE ÜBUNGSFÄLLE</span><h2>Nicht nur Fragen stellen. Probleme durchspielen.</h2></div><span>Fiktiv, aber an typischen Medizintechnik-Abläufen orientiert</span></div>
-      <div class="home-cases">
-        <button type="button" class="home-case" data-demo-start="pump"><span class="home-case-type"><span class="case-symbol">01</span> STÖRUNGSMELDUNG</span><strong>Wiederholter Pumpenalarm</strong><small>Das gültige Dokument finden – ohne Therapieratschläge.</small><span class="case-link">Fall erleben ↗</span></button>
-        <button type="button" class="home-case" data-demo-start="monitor"><span class="home-case-type"><span class="case-symbol">02</span> PATIENTENMONITOR</span><strong>SpO₂-Signal fehlt</strong><small>Beobachtung dokumentieren, Ursache nicht vorschnell behaupten.</small><span class="case-link">Fall erleben ↗</span></button>
-        <button type="button" class="home-case" data-demo-start="handover"><span class="home-case-type"><span class="case-symbol">03</span> SERVICEÜBERGABE</span><strong>Nach Reparatur zurück?</strong><small>Prüf- und Freigabestatus klären, bevor ein Gerät genutzt wird.</small><span class="case-link">Fall erleben ↗</span></button>
-      </div>
-      <div class="sample-questions" aria-label="Weitere Beispielfragen">
-        <span class="sample-label">ODER DIREKT FRAGEN</span>
-        <button type="button" data-query="Was ist eine STK?">Was ist eine STK? <span>↗</span></button>
-        <button type="button" data-query="Wie werden Servicefälle dokumentiert?">Was gehört ins Service-Ticket? <span>↗</span></button>
-        <button type="button" data-query="Wann wurde unser Monitor zuletzt gewartet?">Was weiß die Demo nicht? <span>↗</span></button>
+      <div class="real-test-options" aria-label="Drei Testfragen">
+        <span>TESTE SELBST</span>
+        <button type="button" data-real-test="supported"><strong>01</strong> Belegbare Frage</button>
+        <button type="button" data-real-test="unknown"><strong>02</strong> Daten fehlen</button>
+        <button type="button" data-real-test="unsafe"><strong>03</strong> Sicherheitsgrenze</button>
       </div>
 
       <div class="section-title"><div><span class="eyebrow">02 / EVIDENCE VIEW</span><h2>Antworten, die du nachprüfen kannst.</h2></div><span id="resultCounter" class="subtle-meta">Noch keine Suche</span></div>
@@ -193,11 +171,11 @@
       </div>
       <div class="eval-board"><div><span class="eyebrow">QUALITY LAB</span><h2>Does it actually work?</h2><p>Automatisierte Fälle prüfen die Quellenwahl, den Umgang mit unbekannten Informationen und das Ausblenden alter Versionen. Kein medizinischer Abnahmetest.</p><button type="button" class="dark-button" id="runEvaluation">Tests ausführen <span>↗</span></button></div><div id="evaluationResult" class="eval-results"><span class="eval-idle">Awaiting evaluation<br><strong>— / —</strong></span></div></div>
     </section>
-    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.5</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
+    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.6</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
-<dialog id="aboutDialog" class="about-dialog"><div class="dialog-top"><h2>Wichtig zu wissen</h2><form method="dialog"><button aria-label="Schließen" type="submit">×</button></form></div><p>MEDTECH COPILOT ist ein unabhängiger öffentlicher Demonstrator. Er wurde nicht vom UKB geprüft oder freigegeben. Es gibt keine Verbindung zu Krankenhaus-IT, Patientenakten, Hersteller-Serviceportalen oder echten Gerätebeständen.</p><p>Die Suche nutzt einen lokalen Dokumentenindex und gibt zitierbare Textstellen zurück. Sie verwendet derzeit kein generatives Sprachmodell, keine Embeddings und keine echte Krankenhaus-RAG-Infrastruktur.</p><p>Spracheingabe kann browserabhängig auf externe Dienste zugreifen. Keine sensiblen Daten eintippen oder diktieren. Die QR-Scan-Funktion verarbeitet Kamerabilder im Browser, sofern die notwendige Plattformfunktion vorhanden ist; die Kamera wird nach dem Scan geschlossen.</p><p>Der gesamte Gerätekontext und die Handbücher sind fiktiv. Keine klinischen Entscheidungen, Reparaturen, Sicherheitsprüfungen oder Gerätefreigaben auf Basis dieser Anwendung.</p><form method="dialog"><button type="submit" class="dark-button">Verstanden</button></form></dialog>
+<dialog id="aboutDialog" class="about-dialog"><div class="dialog-top"><h2>Wichtig zu wissen</h2><form method="dialog"><button aria-label="Schließen" type="submit">×</button></form></div><p>MEDTECH COPILOT ist ein unabhängiger öffentlicher Demonstrator. Er wurde nicht vom UKB geprüft oder freigegeben. Es gibt keine Verbindung zu Krankenhaus-IT, Patientenakten, Hersteller-Serviceportalen oder echten Gerätebeständen.</p><p>Die Suche nutzt einen lokalen Dokumentenindex und gibt zitierbare Textstellen zurück. Sie verwendet derzeit kein generatives Sprachmodell, keine Embeddings und keine echte Krankenhaus-RAG-Infrastruktur.</p><p>Spracheingabe kann browserabhängig auf externe Dienste zugreifen. Keine sensiblen Daten eintippen oder diktieren. Die QR-Scan-Funktion verarbeitet Kamerabilder im Browser, sofern die notwendige Plattformfunktion vorhanden ist; die Kamera wird nach dem Scan geschlossen.</p><p>Die drei Übungsgeräte und ihre Lernkarten sind fiktiv; zusätzlich wird eine öffentliche Dräger-Gebrauchsanweisung mit kurzen, eigenen Zusammenfassungen und Druckseiten referenziert. Keine klinischen Entscheidungen, Reparaturen, Sicherheitsprüfungen oder Gerätefreigaben auf Basis dieser Anwendung.</p><form method="dialog"><button type="submit" class="dark-button">Verstanden</button></form></dialog>
 <dialog id="cameraDialog" class="camera-dialog"><div class="dialog-top"><h2>Geräteetikett scannen</h2><button type="button" id="closeCamera" aria-label="Kamera schließen">×</button></div><video id="cameraFeed" autoplay playsinline muted aria-label="Kameraansicht für QR-Code"></video><p id="cameraStatus">Kamera wird nur für diese Aktion verwendet. Bitte ein fiktives Demo-Etikett scannen.</p><button class="light-button" id="cameraCancel" type="button">Abbrechen</button></dialog>
 </body>
 </html>
