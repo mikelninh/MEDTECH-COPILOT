@@ -263,6 +263,101 @@
           "The fictitious escalation inbox formerly used the legacy demo channel. This obsolete detail exists only to demonstrate that archive contents are excluded from active retrieval."
         ]
       ]
+    },
+    {
+      "id": "LAW-7",
+      "deviceId": null,
+      "title": "MPBetreibV § 7 — Instandhaltung",
+      "kind": "Public legal summary",
+      "version": "Stand geprüft 2026-11-17",
+      "status": "PUBLIC_OFFICIAL_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Bundesministerium der Justiz / BfJ (Originalrecht)",
+      "url": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__7.html",
+      "language": "de",
+      "sections": [
+        [
+          "§ 7",
+          "Instandhaltung",
+          "Der Betreiber hat Medizinprodukte instand zu halten. § 7 regelt unter anderem Wartung, Inspektion, Instandsetzung und Prüfungen nach Maßnahmen, die sicherheits- oder funktionsrelevante Merkmale beeinträchtigen können. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
+    },
+    {
+      "id": "LAW-12",
+      "deviceId": null,
+      "title": "MPBetreibV § 12 — Sicherheitstechnische Kontrollen (STK)",
+      "kind": "Public legal summary",
+      "version": "Stand geprüft 2026-11-17",
+      "status": "PUBLIC_OFFICIAL_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Bundesministerium der Justiz / BfJ (Originalrecht)",
+      "url": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html",
+      "language": "de",
+      "sections": [
+        [
+          "§ 12",
+          "Sicherheitstechnische Kontrollen (STK)",
+          "§ 12 regelt die sicherheitstechnischen Kontrollen für bestimmte Medizinprodukte nach Anlage 1. Ob eine STK erforderlich ist, wie sie durchzuführen ist und welche Frist gilt, muss für das konkrete Produkt anhand der geltenden Vorschrift geprüft werden. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
+    },
+    {
+      "id": "LAW-15",
+      "deviceId": null,
+      "title": "MPBetreibV § 15 — Messtechnische Kontrollen (MTK)",
+      "kind": "Public legal summary",
+      "version": "Stand geprüft 2026-11-17",
+      "status": "PUBLIC_OFFICIAL_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Bundesministerium der Justiz / BfJ (Originalrecht)",
+      "url": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__15.html",
+      "language": "de",
+      "sections": [
+        [
+          "§ 15",
+          "Messtechnische Kontrollen (MTK)",
+          "§ 15 regelt messtechnische Kontrollen für bestimmte Medizinprodukte nach Anlage 2. Sie dienen der Überprüfung relevanter Messabweichungen; konkrete Fristen und Anforderungen sind produktspezifisch zu prüfen. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
+    },
+    {
+      "id": "LAW-13",
+      "deviceId": null,
+      "title": "MPBetreibV § 13 — Medizinproduktebuch",
+      "kind": "Public legal summary",
+      "version": "Stand geprüft 2026-11-17",
+      "status": "PUBLIC_OFFICIAL_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Bundesministerium der Justiz / BfJ (Originalrecht)",
+      "url": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__13.html",
+      "language": "de",
+      "sections": [
+        [
+          "§ 13",
+          "Medizinproduktebuch",
+          "§ 13 enthält Anforderungen an das Medizinproduktebuch für bestimmte Medizinprodukte. Ein Medizinproduktebuch ist nicht identisch mit einem Bestandsverzeichnis. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
+    },
+    {
+      "id": "LAW-14",
+      "deviceId": null,
+      "title": "MPBetreibV § 14 — Bestandsverzeichnis",
+      "kind": "Public legal summary",
+      "version": "Stand geprüft 2026-11-17",
+      "status": "PUBLIC_OFFICIAL_SUMMARY",
+      "updated": "2026-11-17",
+      "owner": "Bundesministerium der Justiz / BfJ (Originalrecht)",
+      "url": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__14.html",
+      "language": "de",
+      "sections": [
+        [
+          "§ 14",
+          "Bestandsverzeichnis",
+          "§ 14 verlangt für alle aktiven nichtimplantierbaren Produkte der jeweiligen Betriebsstätte ein Bestandsverzeichnis. Die konkreten erforderlichen Angaben stehen in der aktuellen Rechtsnorm. Dies ist eine Kurz-Zusammenfassung und kein vollständiger Gesetzeswortlaut."
+        ]
+      ]
     }
   ]
 }
