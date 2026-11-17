@@ -55,7 +55,10 @@ const SYN={
   sprache:["voice","speech"],
   kopfhoerer:["voice","audio"],
   brille:["glasses","smart"],
-  datenschutz:["privacy","data","speech"]
+  datenschutz:["privacy","data","speech"],
+  patientensicherheit:["patient","clinical","safety"],
+  medizinproduktebuch:["medizinproduktebuch","book","record"],
+  bestandsverzeichnis:["bestandsverzeichnis","inventory"]
 };
 function normalize(input){
  return String(input||"").normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/ß/g,"ss").replace(/[^a-z0-9]+/g," ").trim();
@@ -93,9 +96,9 @@ function flatten(corpus){
  }
  return result;
 }
-const unsafe=/(?:\b(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove)\w*\b.{0,90}\b(?:alarm|schutzleiter|sicherung|interlock|earth|ground|safety|prufung|pruefung|test)\w*\b|\b(?:alarm|schutzleiter|sicherung|interlock|earth|ground|safety)\w*\b.{0,90}\b(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove)\w*\b|(?:ohne|without).{0,55}(?:prufung|pruefung|inspection|safety check).{0,45}(?:frei|freigeb|release|operate)|(?:dosier|dosierung|dosis|dosage|medication dose|therapy setting|therapie einstellen)|(?:patientendaten|patient record|patient identity|passwort|password))/;
+const unsafe=/(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove).{0,110}(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|prufung|pruefung|test|pumpe|pump)|(?:alarm|warnung|schutzleiter|sicherung|safety|interlock|earth|ground|pumpe|pump).{0,110}(?:umgeh|uberbruck|ueberbruck|ausschalt|deaktiv|entfern|abklemm|disable|override|bypass|defeat|suppress|remove)|(?:ohne|without).{0,60}(?:prufung|pruefung|inspection|safety check).{0,55}(?:frei|freigeb|release|operate)|(?:dosier|dosierung|dosis|dosage|medication dose|therapy setting|therapie einstellen)|(?:patientendaten|patient record|patient identity|passwort|password)/;
 const inventory=/(?:\b(?:unser|unsere|unserem|unserer|our)\b.{0,90}(?:geraet|pumpe|monitor|device|equipment|inventar|bestand|service|wartung|software|last|serial|history)|\b(?:wann zuletzt|zuletzt gewartet|last serviced|actual inventory|current software|real device|seriennummer|serial number|asset history|current service record)\b)/;
-const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)/;
+const specificNumbers=/(?:welche|wieviel|wie viel|how much|how many|what is the).{0,40}(?:volt|voltage|joule|grenzwert|alarmcode|error code|serial number|ampere|milliampere|reparaturcode)|(?:\b(?:alarm|error|fehler)\s*(?:code|nummer|nr)\s*[a-z0-9-]+\b)|(?:\b(?:alarmcode|fehlercode|errorcode)\b)/;
 const syntheticNote="Fictional training source. Not a manufacturer instruction or permission to work on equipment.";
 function buildIndex(corpus){
  const all=flatten(corpus),active=all.filter(c=>c.status==="APPROVED_DEMO"||c.status==="PUBLIC_OFFICIAL_SUMMARY");
