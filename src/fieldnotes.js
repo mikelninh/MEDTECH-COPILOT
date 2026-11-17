@@ -12,12 +12,45 @@ const deviceData=[
  {id:"DEMO-MON-01",name:"ORION M100",type:"Patientenmonitor · fiktives Übungsgerät",question:"Warum zeigt der SpO2 Sensor keinen Wert am Monitor?",doc:"FIELD-MON-210"},
  {id:"DEMO-VENT-03",name:"AERIS V300",type:"Beatmungsgerät · fiktives Übungsgerät",question:"Wie wird ein Beatmungsalarm sicher dokumentiert?",doc:"FIELD-VENT-110"}
 ];
-const caseData=[
- {key:"law",no:"01",tag:"RECHTSSICHER NACHLESEN",title:"Was ist eine STK?",desc:"Eine kurze Rechtsfrage, eine zitierbare Passage und der Link zum amtlichen Gesetz.",question:"Was ist eine STK?",device:null},
- {key:"device",no:"02",tag:"GERÄT IM KONTEXT",title:"Ein Alarm. Das passende Dokument.",desc:"Finde die relevante Textstelle im fiktiven Pumpenhandbuch — nicht in irgendeinem PDF.",question:"Was bedeutet ein Verschlussalarm der Infusionspumpe?",device:"DEMO-PUMP-02"},
- {key:"safety",no:"03",tag:"GRENZEN ERKENNEN",title:"Kann man den Alarm umgehen?",desc:"Das System verweigert riskante Umgehungshinweise und verweist auf befugte Fachpersonen.",question:"Wie kann ich den Pumpenalarm umgehen?",device:"DEMO-PUMP-02"},
- {key:"version",no:"04",tag:"VERSIONEN KONTROLLIEREN",title:"Was passiert mit alten Anweisungen?",desc:"Zeige die archivierte Fassung in der Bibliothek. Die Suche darf sie nicht verwenden.",question:null,device:"DEMO-PUMP-02"}
+const demoCases=[
+ {id:"pump",no:"01",tag:"THERAPIENAHER ALARM",title:"Infusionspumpe: wiederholter Verschlussalarm",
+  summary:"Auf einer Station meldet eine Pflegekraft einen wiederholten Verschlussalarm. Wo steht die freigegebene Information für das richtige Modell?",
+  ticket:"#SIM-204",clock:"08:17",role:"Pflege / Station (fiktiv)",
+  quote:"Die Pumpe zeigt wieder einen Verschlussalarm. Welche Unterlage gilt für dieses Modell?",
+  deviceId:"DEMO-PUMP-02",deviceName:"LUMEN P200",model:"Fiktive Infusionspumpe",
+  query:"Was tun bei einem Verschlussalarm der Demopumpe?",expectedDoc:"FIELD-PUMP-230",
+  why:"Die technische Dokumentensuche darf keine Entscheidung über eine laufende Infusion vorwegnehmen.",
+  next:[
+    ["Behandlungsteam","Patientensituation und laufende Therapie klinisch beurteilen; bei Bedarf nach lokalem Prozess handeln."],
+    ["Medizintechnik","Geräte-ID, genaue Alarmmeldung und Umstände erfassen; gültige Herstellerunterlage des tatsächlichen Modells suchen."],
+    ["Klare Grenze","Keine Alarmumgehung, keine eigenmächtige Therapieanpassung und keine automatische Gerätefreigabe."]
+  ]},
+ {id:"monitor",no:"02",tag:"UNPLAUSIBLES SIGNAL",title:"Patientenmonitor: SpO₂-Wert fehlt",
+  summary:"Nach einem innerklinischen Transport zeigt ein Monitor keinen SpO₂-Wert. Ist der Sensor, das Zubehör oder das Gerät betroffen? Die Demo erfindet keine Ursache.",
+  ticket:"#SIM-218",clock:"09:42",role:"Klinischer Bereich (fiktiv)",
+  quote:"Seit dem Transport wird kein SpO₂-Wert angezeigt. Wo beginne ich mit der technischen Aufnahme?",
+  deviceId:"DEMO-MON-01",deviceName:"ORION M100",model:"Fiktiver Patientenmonitor",
+  query:"SpO2 zeigt keinen Wert",expectedDoc:"FIELD-MON-210",
+  why:"Ein fehlender Messwert ist weder automatisch ein Gerätefehler noch eine klinische Entwarnung.",
+  next:[
+    ["Behandlungsteam","Patientenstatus und Messsituation unabhängig von dieser Demo bewerten."],
+    ["Medizintechnik","Meldung, Gerät, Sensor/Zubehör und Zeitpunkt dokumentieren; Modell- und versionsspezifische Unterlage prüfen."],
+    ["Klare Grenze","Keine Diagnose, keine unbelegte Fehlerursache und kein eigenmächtiger Eingriff an Patientenanschlüssen."]
+  ]},
+ {id:"handover",no:"03",tag:"RÜCKGABE NACH SERVICE",title:"Reparatur erledigt. Gerät freigeben?",
+  summary:"Ein Gerät kommt aus der Reparatur zurück; im Service-Ticket fehlt ein eindeutiger Prüf- und Freigabestatus. Was muss geklärt werden?",
+  ticket:"#SIM-331",clock:"11:05",role:"Technische Werkstatt (fiktiv)",
+  quote:"Die Reparatur ist laut Ticket abgeschlossen. Ich finde aber keinen dokumentierten Freigabestatus.",
+  deviceId:null,deviceName:"Service-Rückläufer",model:"Fiktiver Serviceprozess, kein reales Gerät",
+  query:"Welche Prüfschritte sind nach Reparatur erforderlich?",expectedDoc:"OPS-003",
+  why:"„Repariert“ und „für den Einsatz freigegeben“ sind nicht automatisch dasselbe.",
+  next:[
+    ["Serviceverantwortliche","Befund, durchgeführte Arbeit, benötigte Prüfungen und deren Ergebnisse anhand der gültigen Vorgaben prüfen."],
+    ["Befugte Fachperson","Erforderliche Sicherheits-/Funktionsprüfungen und dokumentierte Freigabe verantwortlich durchführen oder veranlassen."],
+    ["Klare Grenze","Die Demo kann den Freigabestatus nicht feststellen und darf ein echtes Gerät niemals freigeben."]
+  ]}
 ];
+const demoState={caseId:"pump",stage:0};
 const steps=[
  {title:"Versorgung und Zuständigkeit",summary:"Zunächst klären, ob eine Patientensituation betroffen ist. Das klinische Team ist für Patientenversorgung und Therapie verantwortlich.",doc:"OPS-001",page:"1"},
  {title:"Fehlermeldung erfassen",summary:"Die exakte Meldung, fiktive Geräte-ID und relevante Beobachtung aufnehmen. Keine Patienteninformationen in die Demo eingeben.",doc:"OPS-001",page:"2"},
@@ -176,17 +209,97 @@ function renderLibrary(){
  });
  if(!docs.length)out.append(mk("p","evidence-empty","Keine Dokumente gefunden."));
 }
+function currentDemo(){return demoCases.find(c=>c.id===demoState.caseId)||demoCases[0]}
+function setDemo(id,stage=0,opts={}){
+ const picked=demoCases.find(c=>c.id===id)||demoCases[0];
+ demoState.caseId=picked.id;demoState.stage=Math.max(0,Math.min(3,stage));
+ if(!opts.skipNavigate)go("lab");
+ renderDemo();
+ if(!opts.noScroll)$("demoWorkspace").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function addDemoDetail(root,label,value,style=""){
+ const row=mk("div","demo-detail-row "+style);
+ row.append(mk("span","",label),mk("strong","",value));
+ root.append(row);return row;
+}
+function renderDemo(){
+ const c=currentDemo(),step=demoState.stage,block=$("demoStepDetails");
+ $("demoCaseTitle").textContent=c.title;
+ $("demoCaseContext").textContent=c.summary;
+ $("demoCaseNumber").textContent=c.no;
+ $("demoContextDevice").textContent=c.deviceName;
+ $("demoContextAsset").textContent=c.deviceId||"Fiktiver Serviceprozess";
+ $("demoStepCount").textContent="Schritt "+(step+1)+" von 4";
+ document.querySelectorAll("[data-demo-step]").forEach(b=>{
+   const active=Number(b.dataset.demoStep)===step;b.classList.toggle("active",active);
+   if(active)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");
+ });
+ document.querySelectorAll("[data-demo-case]").forEach(b=>{
+  const active=b.dataset.demoCase===c.id;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));
+ });
+ $("demoBack").disabled=step===0;
+ $("demoForward").textContent=step===3?"Demo erneut ansehen ↺":"Nächsten Schritt ansehen →";
+ const knowledge=ready()?R.ask(state.index,c.query,{...(c.deviceId?{deviceId:c.deviceId}:{}),language:"de"}):null;
+ const top=knowledge?.evidence.find(e=>e.documentId===c.expectedDoc)||null;
+ const docs=ready()?R.documentSummary(state.index):[];
+ const doc=docs.find(x=>x.id===c.expectedDoc);
+ const retired=docs.filter(x=>x.status==="RETIRED"&&x.deviceId===c.deviceId);
+ const heading=[
+  ["01 / EINGEHENDE MELDUNG","Was wurde tatsächlich gemeldet?","Wir beginnen mit dem Wortlaut der Störung – nicht mit einer vorschnellen technischen Diagnose."],
+  ["02 / GERÄTEKONTEXT","Welche Unterlage gehört dazu?","Gerät und Dokumentenstand zuordnen. Archivierte Fassungen bleiben in der aktiven Suche ausgeschlossen."],
+  ["03 / QUELLENBASIERTE ANTWORT","Was steht wirklich im Dokument?","Der Copilot zeigt eine konkrete Textpassage mit Titel, Abschnitt und Version – keine erfundene Reparaturanleitung."],
+  ["04 / NÄCHSTE SCHRITTE","Was hilft dem Team jetzt?","Die Information wird in Zuständigkeiten übersetzt, ohne klinische oder technische Freigaben zu automatisieren."]
+ ][step];
+ $("demoStepEyebrow").textContent=heading[0];
+ $("demoStepTitle").textContent=heading[1];
+ $("demoStepDescription").textContent=heading[2];
+ block.replaceChildren();
+ const sourceText=doc?doc.title+" · v"+doc.version:"Keine bestätigte Quelle";
+ $("demoContextSource").textContent=step<1?"Noch nicht ausgewählt":sourceText;
+ $("demoContextVersion").textContent=step<1?"Gerät und Dokument zuerst abgleichen":doc?"Status: "+(doc.status==="RETIRED"?"archiviert":"aktiv"):"Fundstelle fehlt";
+ $("demoContextBenefit").textContent=step===0?"Zuerst die Meldung einordnen, statt sofort einen Defekt zu behaupten.":step===1?"Versionskontrolle verhindert, dass eine alte Trainingsfassung als aktuelle Anweisung erscheint.":step===2?"Nur die tatsächlich gefundene Passage ist nachprüfbar – mit exakter Fundstelle.":c.why;
+ if(step===0){
+  const quote=mk("blockquote","demo-ticket-quote",c.quote);block.append(quote);
+  addDemoDetail(block,"Meldung",c.ticket+" · "+c.clock+" Uhr · Simulation");
+  addDemoDetail(block,"Gemeldet von",c.role);
+  addDemoDetail(block,"Gerät",c.deviceName+" / "+(c.deviceId||"ohne reale Geräte-ID"));
+  addDemoDetail(block,"Offene Frage","Welche Quelle und Zuständigkeit sind relevant?");
+ }else if(step===1){
+  addDemoDetail(block,"Gerätekontext",c.deviceName+" · "+c.model);
+  addDemoDetail(block,"Zugeordnetes Dokument",doc?doc.title:"Noch keine Fundstelle",doc?"":"demo-warning");
+  addDemoDetail(block,"Aktive Version",doc?"v"+doc.version+" · "+doc.pageCount+" Abschnitte":"unbekannt");
+  if(retired.length)addDemoDetail(block,"Archivierte Fassung",retired.map(x=>"v"+x.version).join(", ")+" · für Antworten gesperrt","demo-archive");
+  else addDemoDetail(block,"Versionshinweis","Nur freigegebene Dokumente im aktiven Index");
+  const note=mk("p","demo-inline-note","Hinweis: Dies ist eine bewusst kleine, fiktive Wissensbasis – keine Verbindung zu UKB- oder Hersteller-Systemen.");block.append(note);
+ }else if(step===2){
+  const label=mk("div","demo-query-caption","GESTELLTE FRAGE");block.append(label);
+  block.append(mk("p","demo-query-text","„"+c.query+"“"));
+  if(top&&knowledge.status==="evidence"){
+   const answer=mk("blockquote","demo-evidence-quote",top.excerpt);block.append(answer);
+   addDemoDetail(block,"Dokument",top.documentTitle);
+   addDemoDetail(block,"Fundstelle","Abschnitt "+top.page+" · Version "+top.version);
+   addDemoDetail(block,"Quellentyp","Fiktive Lernunterlage – kein Herstellerhandbuch");
+  }else{
+   block.append(mk("p","demo-fallback","Keine passende verifizierte Passage. Der Assistent muss hier ausdrücklich passen."));
+   addDemoDetail(block,"Suchstatus","Keine ausreichende Evidenz","demo-warning");
+  }
+ }else{
+   const list=mk("div","demo-safe-actions");
+   c.next.forEach(([role,action],i)=>{
+     const row=mk("div","demo-safe-action"),mark=mk("span","demo-action-num",String(i+1).padStart(2,"0")),content=mk("div","");
+     content.append(mk("strong","",role),mk("p","",action));row.append(mark,content);list.append(row);
+   });block.append(list);
+   block.append(mk("p","demo-inline-note","Ergebnis der Simulation: relevante Quelle und Zuständigkeit identifiziert. Keine Diagnose, keine Reparatur und keine Gerätefreigabe durchgeführt."));
+ }
+}
 function renderScenarios(){
  const root=$("scenarioGrid");root.replaceChildren();
- for(const c of caseData){
-  const box=mk("article","scenario-card");
-  box.append(mk("small","",c.no+" / "+c.tag),mk("h3","",c.title),mk("p","",c.desc));
-  const btn=mk("button","","Demo starten ↗");
-  btn.type="button";btn.addEventListener("click",()=>{
-    if(c.key==="version"){go("library");$("includeArchive").checked=true;$("filterDocuments").value="LUMEN";renderLibrary()}
-    else search(c.question,c.device);
-  });
-  box.append(btn);root.append(box);
+ for(const c of demoCases){
+  const box=mk("button","scenario-card demo-case-option");box.type="button";box.dataset.demoCase=c.id;
+  box.setAttribute("aria-pressed",String(c.id===demoState.caseId));
+  box.append(mk("small","",c.no+" / "+c.tag),mk("h3","",c.title),mk("p","",c.summary),mk("span","demo-case-cta","Fall durchspielen ↗"));
+  box.addEventListener("click",()=>setDemo(c.id,0,{noScroll:true}));
+  root.append(box);
  }
 }
 const QA=[
@@ -267,6 +380,12 @@ function bind(){
  document.querySelectorAll("button[data-view]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.view)));
  $("searchForm").addEventListener("submit",e=>{e.preventDefault();search($("searchInput").value)});
  document.querySelectorAll("[data-query]").forEach(b=>b.addEventListener("click",()=>search(b.dataset.query)));
+ document.querySelectorAll("[data-demo-start]").forEach(b=>b.addEventListener("click",()=>setDemo(b.dataset.demoStart)));
+ document.querySelectorAll("[data-demo-step]").forEach(b=>b.addEventListener("click",()=>{demoState.stage=Number(b.dataset.demoStep);renderDemo()}));
+ $("demoBack").addEventListener("click",()=>{demoState.stage=Math.max(0,demoState.stage-1);renderDemo()});
+ $("demoForward").addEventListener("click",()=>{demoState.stage=(demoState.stage+1)%4;renderDemo()});
+ $("demoOpenEvidence").addEventListener("click",()=>{const c=currentDemo();search(c.query,c.deviceId)});
+
  $("openAbout").addEventListener("click",()=>$("aboutDialog").showModal());
  $("speakAnswer").addEventListener("click",()=>{if(state.lastResult?.status==="evidence")outputSpeech(state.lastResult.answer)});
  $("stopSpeech").addEventListener("click",stopSpeech);
@@ -313,6 +432,7 @@ async function boot(){
   $("answerFoot").textContent=state.index.active.length+" indexierte aktive Passagen";
   $("micInfo").textContent=state.index.active.length+" lokale Passagen. Voice nur nach Klick (browserabhängig).";
   selectDevice(state.device);renderLibrary();
+  renderDemo();
   const params=new URLSearchParams(location.search);
   const device=params.get("device");
   if(deviceData.some(d=>d.id===device))selectDevice(device);
@@ -323,7 +443,7 @@ async function boot(){
   $("answerStatus").textContent="OFFLINE";$("micInfo").textContent="Quellen nicht verfügbar.";
  }
  // Explicitly public for deterministic testing; no privileged state or credentials.
- window.MedtechFieldnotes={search,go,selectDevice,setFieldMode,evaluate,getState:()=>({view:state.view,device:state.device,step:state.step,mode:state.mode,indexed:state.index?.active.length||0}),getIndex:()=>state.index,closeCamera:cameraClose};
+ window.MedtechFieldnotes={search,go,selectDevice,setFieldMode,setDemo,renderDemo,evaluate,getDemo:()=>({caseId:demoState.caseId,stage:demoState.stage}),getState:()=>({view:state.view,device:state.device,step:state.step,mode:state.mode,indexed:state.index?.active.length||0}),getIndex:()=>state.index,closeCamera:cameraClose};
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});else boot();
 })();
