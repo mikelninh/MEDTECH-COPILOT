@@ -33,7 +33,7 @@ TARGETS = [
         "title": "High ambient temperature",
         "summaryDe": "Das Addendum warnt bei den Modellen 6100/6300/6500 vor erhöhten Umgebungstemperaturen und möglichem Oberflächenkontakt.",
         "scope": "Philips 6100/6300/6500",
-        "terms": ["philips", "temperatur", "hitze", "heat", "temperature", "ambient", "surface", "transport"],
+        "terms": ["philips", "temperatur", "umgebungstemperatur", "hitze", "heat", "temperature", "ambient", "surface", "transport"],
     },
     {
         "id": "battery-deep-discharge", "pdfPage": 1,
@@ -65,7 +65,7 @@ TARGETS = [
         "title": "CO₂ measurement interference",
         "summaryDe": "Die Ergänzung enthält eine technische Spezifikation zum Einfluss störender Gase auf die CO₂-Messgenauigkeit.",
         "scope": "Philips 6100/6300/6500 with specified Microstream CO2 configuration",
-        "terms": ["philips", "co2", "gase", "interference", "gas", "dampf", "accuracy", "genauigkeit", "microstream"],
+        "terms": ["philips", "co2", "gase", "interferenz", "interferenzen", "interference", "gas", "dampf", "accuracy", "genauigkeit", "microstream"],
     },
 ]
 
