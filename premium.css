@@ -243,3 +243,16 @@ main{max-width:1530px;padding:25px clamp(24px,3.7vw,62px) 42px}
 }
 @media(hover:none){.mode-card:hover,.demo-card:hover{transform:none}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* Fast, quiet search entry point */
+.spotlight-trigger{display:flex;align-items:center;gap:13px;text-align:left;margin-top:18px;padding:11px 13px 11px 16px;min-height:49px;width:min(445px,100%);border:1px solid #e2eaec;border-radius:13px;background:rgba(255,255,255,.92);box-shadow:0 8px 26px rgba(20,60,65,.055);color:#99a9b0;font-size:12px;letter-spacing:-.005em}
+.spotlight-trigger:hover{border-color:#a9d6c8;box-shadow:0 8px 28px rgba(3,113,100,.09);transform:translateY(-1px);color:#6b8d91}
+.spotlight-glyph{font-size:21px;color:#199884;font-weight:350;line-height:1}
+.spotlight-trigger kbd{font-family:inherit;font-size:10px;font-weight:690;white-space:nowrap;margin-left:auto;border-radius:7px;color:#a0adb3;background:#f5f8f8;border:1px solid #ebf0f1;padding:5px 7px;box-shadow:0 1px 1px rgba(0,0,0,.025)}
+@media(max-width:650px){
+  .spotlight-trigger{min-height:52px;margin-top:22px}
+  .spotlight-trigger kbd{display:none}
+  .topbar .top-help{display:inline-flex!important;border:1px solid #e8eeee!important;border-radius:8px!important;padding:7px 8px!important;font-size:0!important;min-height:32px}
+  .topbar .top-help:before{content:"ⓘ";font-size:15px;color:#67848a}
+  .top-controls{gap:7px}
+}
