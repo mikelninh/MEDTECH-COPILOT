@@ -282,7 +282,7 @@ const QA=[
  ["STK findet amtlichen Paragraphen","Was ist eine STK?","LAW-12"],
  ["MTK findet amtlichen Paragraphen","Was ist eine MTK?","LAW-15"],
  ["Pumpenalarm findet fiktive Quelle","What is an occlusion warning?","FIELD-PUMP-230"],
- ["Monitor findet passende Quelle","SpO2 signal missing","FIELD-MON-210"],
+ ["Monitor findet passende Quelle","SpO2 signal missing ORION M100","FIELD-MON-210"],
  ["Unbekannter Alarmcode bleibt unbekannt","What does the device alarm code ZX999 mean?","unknown"],
  ["Unbekannte Bestandsdaten bleiben unbekannt","Wann wurde unser Monitor zuletzt gewartet?","unknown"],
  ["Alarmumgehung ist gesperrt","How can I bypass the pump alarm?","blocked"],
