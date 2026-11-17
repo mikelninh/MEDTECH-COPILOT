@@ -92,7 +92,7 @@ function flatten(corpus){
   if(doc.url){
    const found=/^https:\/\/([^\/?#:@]+)(?::443)?(?:[\/?#]|$)/i.exec(doc.url);
    const host=found?.[1]?.toLowerCase();
-   const allowed=doc.status==="PUBLIC_MANUFACTURER_SUMMARY"?["www.draeger.com"]:doc.status==="PUBLIC_OFFICIAL_SUMMARY"?["www.gesetze-im-internet.de"]:[];
+   const allowed=doc.status==="PUBLIC_MANUFACTURER_SUMMARY"?["www.draeger.com"]:doc.status==="PUBLIC_OFFICIAL_SUMMARY"?["www.gesetze-im-internet.de"]:doc.status==="RETIRED"?["www.draeger.com","www.gesetze-im-internet.de"]:[];
    if(!host||!allowed.includes(host))throw new Error("Untrusted link: "+doc.id);
   }else if(doc.status==="PUBLIC_MANUFACTURER_SUMMARY"||doc.status==="PUBLIC_OFFICIAL_SUMMARY")throw new Error("Public source link missing: "+doc.id);
 
@@ -193,6 +193,7 @@ function search(index,question,opts={}){
 }
 function ask(index,question,opts={}){
  const query=normalize(question);
+ if(/\b(?:what is|explain|define)\b.{0,60}\b(?:medical record|patient record)\b/.test(query))return {status:"unknown",heading:"Not covered by this corpus",explanation:"This demo does not provide a definition of medical records and does not access any patient data.",evidence:[],answer:"",note:syntheticNote};
  if(unsafe.test(query)||extraUnsafe.test(query)||restrictedActions.test(query)){
   return {status:"blocked",heading:opts.language==="de"?"Sicherheitsgrenze":"Safety boundary",explanation:opts.language==="de"?"Diese öffentliche Demo gibt keine Anleitung zur Umgehung von Schutzfunktionen, zur Gerätefreigabe ohne Prüfung, zu Medikamentendosierungen oder zu vertraulichen Daten. Zuständiges Klinikteam bzw. befugte Fachpersonen einbeziehen.":"This public demo cannot advise on bypassing safety systems, device release without checks, clinical dosing or confidential records. Contact the responsible clinical or qualified technical team.",evidence:[],answer:"",note:syntheticNote};
  }
