@@ -21,6 +21,19 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install PDF extraction dependency
+        run: python -m pip install --quiet pymupdf
+      - name: Download, validate and index original Philips PDF
+        run: python scripts/ingest_philips_pdf.py --out data/pdf_pages.json
+      - name: Verify 30 actual PDF-source questions
+        run: node tests/pdf_evidence.cjs
+      - name: Store tested public PDF index
+        uses: actions/upload-artifact@v4
+        with:
+          name: medtech-verified-pdf-index
+          path: data/pdf_pages.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Document ingestion sample tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: Retrieval, safety and version-control contract
@@ -39,11 +52,17 @@ jobs:
 
   browser:
     name: Chromium E2E desktop/mobile
+    needs: quality
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Use exact PDF index from verified source test
+        uses: actions/download-artifact@v4
+        with:
+          name: medtech-verified-pdf-index
+          path: data/
       - name: Node 22
         uses: actions/setup-node@v4
         with:
