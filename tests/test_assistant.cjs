@@ -44,6 +44,7 @@ const examples=[
  ["Ventilator simulated alarm","ventilator alarm triage","evidence","FIELD-VENT-110"],
  ["Safety procedures","electric shock safety equipment","evidence","OPS-003"],
  ["Service intake","required service intake fields","evidence","OPS-001"],
+ ["German service documentation","Wie werden Servicefälle dokumentiert?","evidence","OPS-001"],
  ["Version information","LUMEN P200 training card version","evidence","FIELD-PUMP-230"],
  ["No real maintenance history","Wann wurde unser Monitor zuletzt gewartet?","unknown",null],
  ["No real device history","When was our pump last serviced?","unknown",null],
@@ -76,6 +77,9 @@ console.log("PASS device-level relevance filter");
 const archive=R.ask(idx,"obsolete historical escalation route");
 assert.ok(!archive.evidence.some(x=>x.documentId==="FIELD-PUMP-100-RETIRED"));
 console.log("PASS archived document revocation");
+const legal=R.ask(idx,"Was ist eine STK?");
+assert.equal(legal.evidence.length,1,"Precise legal source must not have unrelated SOP evidence");
+console.log("PASS statutory source relevance");
 // Evidence is directly extractive: the output must be exactly one passage from source.
 const ex=R.ask(idx,"What is an occlusion warning?");
 assert.equal(ex.answer,idx.active.find(x=>x.id===ex.evidence[0].id).text);
