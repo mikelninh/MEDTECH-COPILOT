@@ -16,7 +16,9 @@ from build_source_catalog import fictional_manual
 LAWS=[
  ("mpbetreibv","MPBetreibV","Medizinprodukte-Betreiberverordnung","mpbetreibv_2025",["Was steht zum Medizinproduktebuch?","Was gilt für sicherheitstechnische Kontrollen?"]),
  ("mpdg","MPDG","Medizinprodukterecht-Durchführungsgesetz","mpdg",["Was ist der Zweck des MPDG?","Welche Aufgaben haben Behörden?"]),
- ("arbschg","ArbSchG","Arbeitsschutzgesetz","arbschg",["Was steht zur Gefährdungsbeurteilung?","Welche Pflichten hat der Arbeitgeber?"])
+ ("arbschg","ArbSchG","Arbeitsschutzgesetz","arbschg",["Was steht zur Gefährdungsbeurteilung?","Welche Pflichten hat der Arbeitgeber?"]),
+ ("mpamiv","MPAMIV","Medizinprodukte-Anwendermelde- und Informationsverordnung","mpamiv",["Was gilt als mutmaßliches schwerwiegendes Vorkommnis?","Wo werden Vorkommnisse gemeldet?"]),
+ ("mpav","MPAV","Medizinprodukte-Abgabeverordnung","mpav",["Was gilt für die Abgabe von Medizinprodukten?","Welche Sachkenntnis ist erforderlich?"])
 ]
 PHILIPS_SHA="a32a620f8374c6709961e95f8b3d6099a1fb2c5574db71fcd9f4b41cab3e656e"
 PHILIPS_URL="https://www.documents.philips.com/assets/Addendum/20250422/0be5036d5af74ece8a8fb2c70090cd18.pdf?feed=ifu_docs_feed"
@@ -118,5 +120,5 @@ def main():
             pdf,questions,url,sha(raw))
     target=Path(args.manifest);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("PASS FIVE curated sample sources (3 GitLaw reader books, 2 fictional manuals)",flush=True)
+    print("PASS SEVEN curated sample sources (5 GitLaw reader books, 2 fictional manuals)",flush=True)
 if __name__=="__main__":main()
