@@ -5,6 +5,25 @@
 import * as pdfjsLib from "../vendor/pdf.mjs";
 import "./upload_core.js";
 
+// PDF.js 6.5 uses the proposed Map#getOrInsertComputed API.
+// Headless Chromium versions used in CI may not implement it yet.
+if(typeof Map.prototype.getOrInsertComputed!=="function"){
+ Object.defineProperty(Map.prototype,"getOrInsertComputed",{
+  configurable:true,writable:true,value:function(key,callback){
+   if(this.has(key))return this.get(key);
+   const value=callback(key);this.set(key,value);return value;
+  }
+ });
+}
+if(typeof Map.prototype.getOrInsert!=="function"){
+ Object.defineProperty(Map.prototype,"getOrInsert",{
+  configurable:true,writable:true,value:function(key,value){
+   if(this.has(key))return this.get(key);
+   this.set(key,value);return value;
+  }
+ });
+}
+
 const Core=window.MedtechManualCore;
 if(!Core)throw new Error("Browser retrieval engine unavailable.");
 pdfjsLib.GlobalWorkerOptions.workerSrc=new URL("../vendor/pdf.worker.mjs",import.meta.url).toString();
