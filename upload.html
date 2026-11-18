@@ -22,19 +22,25 @@
     <section class="source-intro" aria-labelledby="mainTitle">
       <div><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
         <h1 id="mainTitle">Quelle wählen. <em>Frage stellen.</em></h1>
-        <p>Ein Gesetz, ein Handbuch oder dein PDF. Jede Antwort neben der <strong>sichtbaren Originalseite</strong> überprüfen.</p>
+        <p>Ein Gesetz, ein Handbuch oder dein PDF. <strong>Ohne Auswahl sucht der Copilot das passende Buch</strong> – und zeigt die Fundstelle rechts neben der Antwort.</p>
       </div>
       <a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a>
     </section>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
       <section class="source-chooser" aria-label="Quelle für diese Recherche auswählen">
-        <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help">Eine Quelle je Frage · kein Quellenmix</span></div>
+        <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help"><strong>Keine Auswahl nötig:</strong> Der Copilot schlägt ein Buch vor. Du kannst jederzeit selbst wählen.</span></div>
         <div class="source-tabs" role="group" aria-label="Quellenkategorie">
           <button type="button" class="active" data-source-group="medtech" aria-pressed="true">Handbücher</button>
           <button type="button" data-source-group="laws" aria-pressed="false">Deutsche Gesetze</button>
           <button type="button" data-source-group="own" aria-pressed="false">Mein PDF</button>
         </div>
         <div id="sourceCards" class="source-cards" aria-live="polite"><p>Beispielquellen werden geprüft …</p></div>
+        <div id="sourceAutoStatus" class="source-auto-status hidden" role="status" aria-live="polite">
+          <div class="auto-status-header"><span class="auto-status-star">✦</span><strong id="sourceAutoTitle">Quellen-Copilot</strong></div>
+          <p id="sourceAutoReason">Ich finde die passende Quelle für deine Frage.</p>
+          <div id="sourceAutoBooks" class="source-auto-books"></div>
+        </div>
+        <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
         <div id="sourceBanner" class="source-banner">
           <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
           <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
@@ -75,9 +81,9 @@
     <section class="search-section" id="askSection" aria-label="Frage an das Dokument">
       <div class="workspace-header"><div><span class="eyebrow">02 / FRAGEN</span><h2>Was möchtest du wissen?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
       <form id="questionForm" class="question-form">
-        <label for="questionInput" class="visually-hidden">Frage zum PDF</label>
-        <input id="questionInput" autocomplete="off" placeholder="Z. B. Was steht zu Batterie, Sensor oder Wartung?" maxlength="400" disabled>
-        <button type="submit" id="askButton" disabled>Quelle finden <span aria-hidden="true">→</span></button>
+        <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
+        <input id="questionInput" autocomplete="off" placeholder="Frag einfach – Quelle wird bei Bedarf sichtbar gewählt …" maxlength="400">
+        <button type="submit" id="askButton">Fragen <span aria-hidden="true">→</span></button>
       </form>
       <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Keine Therapieempfehlung oder Gerätefreigabe.</p>
     </section>
