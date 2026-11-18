@@ -6,8 +6,9 @@
 <meta name="theme-color" content="#142b24">
 <meta name="description" content="Eigenes PDF lokal durchsuchen: Belegte Originalpassagen und Seitenvorschau – ohne Upload an einen Server.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
-<title>Eigenes PDF · MEDTECH COPILOT V0.9</title>
+<title>Quellenrecherche · MEDTECH COPILOT V1.0</title>
 <link rel="stylesheet" href="./v9.css">
+<link rel="stylesheet" href="./source10.css">
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
 <body>
@@ -18,24 +19,32 @@
   </header>
   <main>
     <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
-    <section class="hero" aria-labelledby="mainTitle">
-      <div class="hero-copy">
-        <div class="eyebrow"><span class="accent-line"></span> V0.9 / BRING YOUR OWN MANUAL</div>
-        <h1 id="mainTitle">Dein PDF.<br><em>Deine Quelle.</em></h1>
-        <p class="hero-intro">Handbuch auswählen. Frage stellen. Die relevante Passage lesen – und <strong>direkt auf der Originalseite nachprüfen.</strong></p>
-        <div class="hero-trust"><span><span class="trust-symbol">✓</span> Verarbeitung im Browser</span><span><span class="trust-symbol">✓</span> Keine Anmeldung</span><span><span class="trust-symbol">✓</span> Keine erfundenen Antworten</span></div>
+    <section class="source-intro" aria-labelledby="mainTitle">
+      <div><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
+        <h1 id="mainTitle">Quelle wählen. <em>Frage stellen.</em></h1>
+        <p>Ein Gesetz, ein Handbuch oder dein PDF. Jede Antwort neben der <strong>sichtbaren Originalseite</strong> überprüfen.</p>
       </div>
-      <div class="hero-proof" aria-hidden="true">
-        <div class="proof-file">
-          <div class="proof-file-head"><span>IFU / 2025</span><span>PDF</span></div>
-          <div class="proof-lines"><i></i><i></i><i></i><i></i></div>
-          <div class="proof-highlight"><span>QUELLE GEFUNDEN</span><b>Seite 03</b><small>Originalstelle ansehen ↗</small></div>
-        </div>
-        <div class="proof-shadow"></div>
-      </div>
+      <a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a>
     </section>
-    <section class="workspace" aria-label="Eigenes Handbuch durchsuchen">
-      <div class="workspace-header"><div><span class="eyebrow">01 / DOKUMENT</span><h2>Starte mit deinem Handbuch.</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
+    <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
+      <section class="source-chooser" aria-label="Quelle für diese Recherche auswählen">
+        <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help">Eine Quelle je Frage · kein Quellenmix</span></div>
+        <div class="source-tabs" role="group" aria-label="Quellenkategorie">
+          <button type="button" class="active" data-source-group="medtech" aria-pressed="true">Handbücher</button>
+          <button type="button" data-source-group="laws" aria-pressed="false">Deutsche Gesetze</button>
+          <button type="button" data-source-group="own" aria-pressed="false">Mein PDF</button>
+        </div>
+        <div id="sourceCards" class="source-cards" aria-live="polite"><p>Beispielquellen werden geprüft …</p></div>
+        <div id="sourceBanner" class="source-banner">
+          <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
+          <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
+        </div>
+        <div id="allLawHint" class="all-law-hint hidden">
+          <span>Suchst du ein anderes Gesetz?</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
+        </div>
+      </section>
+    <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
+      <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
       <div class="upload-grid">
         <div class="dropzone" id="dropzone" role="group" aria-label="PDF-Datei auswählen">
           <input id="pdfFile" type="file" accept="application/pdf,.pdf" aria-label="PDF-Datei hochladen" class="file-input">
@@ -70,7 +79,7 @@
         <input id="questionInput" autocomplete="off" placeholder="Z. B. Was steht zu Batterie, Sensor oder Wartung?" maxlength="400" disabled>
         <button type="submit" id="askButton" disabled>Quelle finden <span aria-hidden="true">→</span></button>
       </form>
-      <p class="search-hint">Keine externen Recherchen. Keine Therapieempfehlungen. Frag nach Begriffen, Warnhinweisen oder Abschnitten im hochgeladenen Dokument.</p>
+      <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Keine Therapieempfehlung oder Gerätefreigabe.</p>
     </section>
     <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
       <div class="result-head"><span class="eyebrow">03 / NACHPRÜFEN</span><span class="answer-status" id="answerStatus"></span></div>
@@ -90,7 +99,7 @@
         <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
           <div class="viewer-head"><strong>ORIGINAL / PDF</strong><span id="viewerPageLabel">Noch kein PDF</span></div>
           <div class="viewer-stage" id="viewerStage">
-            <div class="viewer-empty" id="viewerEmpty"><span>▣</span><p>Nach dem Einlesen erscheint hier die Originalseite.</p></div>
+            <div class="viewer-empty" id="viewerEmpty"><span>▣</span><p>Wähle links eine Quelle. Das Original bleibt hier sichtbar.</p></div>
             <canvas id="pageCanvas" class="hidden" aria-label="Gerenderte Original-PDF-Seite"></canvas>
           </div>
           <div class="viewer-controls">
@@ -102,9 +111,10 @@
         </aside>
       </div>
     </section>
+      </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
     <section class="limit-foot"><div><span class="eyebrow">WAS V0.9 KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V0.9 / BYOM <span>Ein Portfolio-Experiment. Kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · V1.0 / SOURCE FIRST <span>Ein Portfolio-Experiment. Kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>
