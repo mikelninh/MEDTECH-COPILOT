@@ -55,6 +55,22 @@ function showSource(source){
  }else{
   link.removeAttribute("href");link.classList.add("hidden");
  }
+ const suggestions=$("suggestedQuestions");
+ suggestions.replaceChildren();
+ if(source?.questions?.length){
+  suggestions.classList.remove("hidden");
+  suggestions.append(mk("span","question-chip-label","FRAGEN ZU DIESER QUELLE"));
+  for(const query of source.questions.slice(0,2)){
+   const b=mk("button","question-chip",query+" ↗");
+   b.type="button";
+   b.addEventListener("click",()=>{
+    if(!state.index)return;
+    $("questionInput").value=query;
+    ask(query);
+   });
+   suggestions.append(b);
+  }
+ }else suggestions.classList.add("hidden");
  document.querySelectorAll("[data-source-id]").forEach(b=>{
   const chosen=!!source&&b.dataset.sourceId===source.id;
   b.classList.toggle("active",chosen);b.setAttribute("aria-pressed",String(chosen));
@@ -139,8 +155,8 @@ const status=(message,kind="neutral",percent="")=>{
  $("importStatus").className="import-status "+kind;
 };
 const controls=ready=>{
- $("askButton").disabled=!ready;
- $("questionInput").disabled=!ready;
+ $("askButton").disabled=false;
+ $("questionInput").disabled=false;
  $("prevPage").disabled=!ready;
  $("nextPage").disabled=!ready;
 };
@@ -358,6 +374,90 @@ function ask(question){
  showResult(result);
  return result;
 }
+
+function autoStatus(title,detail,kind="ready"){
+ const panel=$("sourceAutoStatus");
+ panel.className="source-auto-status "+kind;
+ panel.classList.remove("hidden");
+ $("sourceAutoTitle").textContent=title;
+ $("sourceAutoReason").textContent=detail;
+}
+async function animateBookChoice(selected){
+ const shelf=$("sourceAutoBooks");
+ shelf.replaceChildren();
+ const books=(state.catalog?.sources||[]).map(source=>{
+  const img=mk("img","auto-book");img.src=source.cover;img.alt="";
+  img.dataset.bookId=source.id;
+  shelf.append(img);return img;
+ });
+ if(!books.length)return;
+ const reduced=window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+ if(!reduced){
+  for(let i=0;i<10;i++){
+   books.forEach((b,j)=>b.classList.toggle("scanning",i%books.length===j));
+   await new Promise(resolve=>setTimeout(resolve,85));
+  }
+ }
+ books.forEach(b=>{
+  b.classList.toggle("selected",b.dataset.bookId===selected.id);
+  b.classList.remove("scanning");
+ });
+}
+async function handleQuestion(text){
+ const q=String(text||"").trim();
+ if(!q||state.routing)return null;
+ if(state.index)return ask(q);
+ if(Core.classify(q)==="blocked"){
+  autoStatus("Sicherheitsgrenze","Keine Quelle wird für riskante technische oder klinische Handlungsanweisungen ausgewählt.","warning");
+  const answer={status:"blocked",reason:"Der Copilot gibt keine Anleitung zur Umgehung von Schutzfunktionen oder zu klinischen Änderungen.",answer:"",evidence:[]};
+  showResult(answer);return answer;
+ }
+ if(!state.catalog?.sources?.length){
+  autoStatus("Quellenkatalog derzeit nicht verfügbar","Du kannst noch ein eigenes PDF auswählen.","warning");
+  return null;
+ }
+ const result=Router.route(q,state.catalog.sources);
+ if(result.status!=="selected"){
+  autoStatus("Welche Quelle meinst du?",result.reason,"clarify");
+  const shelf=$("sourceAutoBooks");shelf.replaceChildren();
+  const candidates=result.ranked.filter(x=>x.score>=2).slice(0,3);
+  if(!candidates.length)candidates.push(...result.ranked.slice(0,3));
+  const box=mk("div","auto-suggestions");
+  for(const candidate of candidates){
+   const source=state.catalog.sources.find(x=>x.id===candidate.id);
+   if(!source)continue;
+   const b=mk("button","auto-suggestion");
+   b.type="button";
+   const img=mk("img","auto-suggestion-cover");
+   img.src=source.cover;img.alt="";
+   b.append(img,mk("span","",source.title+" ↗"));
+   b.addEventListener("click",async()=>{
+    await selectGroup(source.group);
+    await loadExample(source);
+    if(state.index){$("questionInput").value=q;ask(q)}
+   });
+   box.append(b);
+  }
+  shelf.append(box);
+  return result;
+ }
+ const selected=state.catalog.sources.find(x=>x.id===result.id);
+ state.routing=true;
+ autoStatus("COPILOT SUCHT DAS PASSENDE BUCH","Vergleicht Begriffe und Fachgebiete. Keine automatische medizinische Entscheidung.","routing");
+ try{
+  await animateBookChoice(selected);
+  await selectGroup(selected.group);
+  autoStatus(selected.title+" gewählt",result.reason+". Erklärbare Begriffserkennung – kein generatives KI-Modell.","success");
+  await loadExample(selected);
+  if(!state.index){
+   autoStatus("Quelle momentan nicht verfügbar","Die Dokumentenprüfung ist fehlgeschlagen. Bitte andere Quelle wählen oder neu versuchen.","warning");
+   return null;
+  }
+  $("questionInput").value=q;
+  return ask(q);
+ }finally{state.routing=false}
+}
+
 function setup(){
  const viewer=$("viewer");
  $("sourceSide").append(viewer);
@@ -386,9 +486,8 @@ function setup(){
  $("removePdf").addEventListener("click",async()=>{await destroySource();status("Datei und temporärer Suchindex entfernt.","neutral")});
  $("questionForm").addEventListener("submit",e=>{
   e.preventDefault();
-  if(!state.index)return;
   const value=$("questionInput").value.trim();
-  if(value)ask(value);
+  if(value)void handleQuestion(value);
  });
  $("prevPage").addEventListener("click",()=>renderPage(state.page-1));
  $("nextPage").addEventListener("click",()=>renderPage(state.page+1));
@@ -398,6 +497,7 @@ function setup(){
  window.MedtechUploadDemo={
   status:()=>({loaded:!!state.index,pages:state.index?.pages||0,chunks:state.index?.chunks.length||0,fileName:state.file?.name||null,renderedPage:state.renderedPage,sourceId:state.source?.id||null,group:state.group}),
   selectSource:async id=>{const x=state.catalog?.sources?.find(y=>y.id===id);if(x){await selectGroup(x.group);await loadExample(x)}},
+  askWithAutoSource:handleQuestion,
   ask,remove:destroySource
  };
 }
