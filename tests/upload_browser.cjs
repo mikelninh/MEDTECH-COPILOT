@@ -20,7 +20,18 @@ async function ask(page,question,expected,pageNo){
   if(pageNo)assert.equal(await page.locator("#citationPage").innerText(),"PDF-SEITE "+pageNo);
   assert.ok((await page.locator("#citationText").innerText()).length>25);
   assert.equal(await page.locator("#viewerPageLabel").innerText(),"Seite "+pageNo+" von "+(await page.evaluate(()=>window.MedtechUploadDemo.status().pages)));
-  await page.waitForFunction(pageNumber=>window.MedtechUploadDemo?.status().renderedPage===pageNumber,pageNo,{timeout:15000});
+  try{
+   await page.waitForFunction(pageNumber=>window.MedtechUploadDemo?.status().renderedPage===pageNumber,pageNo,{timeout:15000});
+  }catch(e){
+   console.error("PDF_VIEWER_DIAGNOSTIC",JSON.stringify({
+    view:await page.locator("#viewerEmpty").innerText(),
+    page:await page.locator("#viewerPageLabel").innerText(),
+    source:await page.evaluate(()=>window.MedtechUploadDemo.status()),
+    canvasVisible:await page.locator("#pageCanvas").isVisible()
+   }));
+   await page.screenshot({path:"artifacts/v09-render-failure.png",fullPage:true});
+   throw e;
+  }
   assert.equal(await page.locator("#pageCanvas").isVisible(),true,"Source PDF canvas must be visible");
   assert.equal(await page.locator("#viewerEmpty").isVisible(),false,"PDF rendering error cannot count as a pass");
   assert.ok(await page.locator("#pageCanvas").evaluate(el=>el.width>100&&el.height>100));
@@ -33,6 +44,7 @@ async function ask(page,question,expected,pageNo){
  const ctx=await browser.newContext({viewport:{width:1440,height:900},acceptDownloads:true});
  const page=await ctx.newPage();
  page.on("pageerror",e=>browserErrors.push("desktop: "+e.message));
+ page.on("console",msg=>{if(msg.type()==="error")console.error("BROWSER_CONSOLE",msg.text())});
  const nav=await page.goto(BASE+"upload.html",{waitUntil:"networkidle"});
  assert.equal(nav.status(),200);
  await page.waitForFunction(()=>!!window.MedtechUploadDemo,{timeout:12000});
