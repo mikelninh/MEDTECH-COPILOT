@@ -46,10 +46,13 @@ async function question(page,q){
  assert.equal(await desktop.locator("#pageCanvas").isVisible(),true,"Original remains visible with no answer");
 
  await desktop.locator("[data-source-group='laws']").click();
- await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===3);
+ await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
  assert.equal(await desktop.locator("#questionInput").isDisabled(),true);
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/Bitte Quelle auswählen/);
  assert.ok((await desktop.locator(".all-law-hint a").getAttribute("href")).includes("gitlaw"));
+ for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"Every legal book must have a loaded cover");
+ }
  await desktop.locator("[data-source-id='mpbetreibv']").click();
  await ready(desktop,"mpbetreibv");
  assert.match(await desktop.locator("#sourceOfficialLink").getAttribute("href"),/gesetze-im-internet\.de\/mpbetreibv_2025\/MPBetreibV\.pdf/);
@@ -72,6 +75,16 @@ async function question(page,q){
  assert.equal(await desktop.locator("#citationCard").isVisible(),false);
  assert.equal(await desktop.locator("#viewer").isVisible(),true,"Selected law must remain visible when a question is blocked");
 
+ await desktop.locator("[data-source-id='mpamiv']").click();
+ await ready(desktop,"mpamiv");
+ assert.match(await desktop.locator("#sourceOfficialLink").getAttribute("href"),/gesetze-im-internet\.de\/mpamiv\/MPAMIV\.pdf/);
+ assert.equal(await desktop.locator("#resultSection").isVisible(),false,"Law switch must clear older citations");
+ await desktop.locator("[data-source-id='mpav']").click();
+ await ready(desktop,"mpav");
+ assert.match(await desktop.locator("#sourceOfficialLink").getAttribute("href"),/gesetze-im-internet\.de\/mpav\/MPAV\.pdf/);
+ assert.equal(await desktop.locator("#pageCanvas").isVisible(),true);
+ await desktop.screenshot({path:"artifacts/v11-05-five-law-library.png",fullPage:true});
+
  await desktop.locator("[data-source-group='own']").click();
  assert.equal(await desktop.locator("#ownPdfPanel").isVisible(),true);
  assert.equal(await desktop.locator("#ownCoverImage").isVisible(),true);
@@ -83,7 +96,7 @@ async function question(page,q){
  assert.match(await desktop.locator("#ownCoverTitle").innerText(),/fixture\.pdf/);
  assert.equal(await question(desktop,"Was misst das NanoPod Modul?"),"QUELLE GEFUNDEN");
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/fixture/);
- console.log("PASS SOURCE E2E desktop: handbook, 3 federal laws, custom PDF, source isolation, side by side");
+ console.log("PASS SOURCE E2E desktop: handbook, 5 federal law reader editions, custom PDF, source isolation, side by side");
 
  const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  mobile.on("pageerror",e=>errors.push("mobile "+e.message));
