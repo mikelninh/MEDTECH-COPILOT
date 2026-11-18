@@ -20,7 +20,7 @@ for(const src of manifest.sources){
  assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),src.sha256);
  if(src.group==="laws"){
   assert.equal(src.sourceKind,"gitlaw-reader-not-official");
-  assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/$/);
+  assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9_.-]+\.pdf$/);
   assert.match(src.gitlawUrl,/^https:\/\/raw\.githubusercontent\.com\/mikelninh\/gitlaw\/main\/laws\//);
   assert.match(src.gitlawTextSha256,/^[a-f0-9]{64}$/);
  }else{
