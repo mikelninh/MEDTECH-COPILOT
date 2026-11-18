@@ -34,6 +34,19 @@ jobs:
           path: data/pdf_pages.json
           if-no-files-found: error
           retention-days: 7
+      - name: Download official law PDFs and build fictional manual
+        run: python scripts/build_source_catalog.py --out-dir examples --manifest data/source_catalog.json
+      - name: Validate source catalog and PDF fingerprints
+        run: node tests/source_catalog.cjs
+      - name: Preserve exact checked PDF samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: medtech-source-examples
+          path: |
+            examples/
+            data/source_catalog.json
+          if-no-files-found: error
+          retention-days: 7
       - name: Document ingestion sample tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: V0.9 upload retrieval – 70+ case audit
@@ -66,6 +79,11 @@ jobs:
         with:
           name: medtech-verified-pdf-index
           path: data/
+      - name: Load verified law and demo-manual examples
+        uses: actions/download-artifact@v4
+        with:
+          name: medtech-source-examples
+          path: .
       - name: Node 22
         uses: actions/setup-node@v4
         with:
@@ -87,12 +105,13 @@ jobs:
           sleep 2
           node tests/browser_smoke.cjs
           node tests/upload_browser.cjs
+          node tests/source_browser.cjs
       - name: Simulated user journeys (7 personas, 28 fresh questions)
         run: node tests/simulated_users.cjs
       - name: Upload actual UI screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: medtech-fieldnotes-v09
+          name: medtech-fieldnotes-v10
           path: artifacts/
           if-no-files-found: ignore
