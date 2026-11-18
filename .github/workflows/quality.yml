@@ -36,6 +36,8 @@ jobs:
           retention-days: 7
       - name: Document ingestion sample tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - name: V0.9 upload retrieval – 70+ case audit
+        run: node tests/upload_core.cjs
       - name: Retrieval, safety and version-control contract
         run: node tests/test_assistant.cjs
       - name: Strict adversarial and provenance audit
@@ -48,6 +50,7 @@ jobs:
           path: |
             artifacts/strict_audit.json
             artifacts/strict_audit.md
+            artifacts/v09-core-audit.json
           if-no-files-found: warn
 
   browser:
@@ -69,21 +72,27 @@ jobs:
           node-version: '22'
       - name: Install Chromium and QR build requirements
         run: |
-          npm install --no-save playwright@1.56.1
+          npm install --no-save --ignore-scripts --no-audit --no-fund playwright@1.56.1 pdfjs-dist@6.5.438
           npx playwright install --with-deps chromium
-          python3 -m pip install --quiet qrcode
+          python3 -m pip install --quiet qrcode pymupdf
           python3 scripts/make_labels.py qr
+          mkdir -p vendor
+          cp node_modules/pdfjs-dist/build/pdf.mjs vendor/pdf.mjs
+          cp node_modules/pdfjs-dist/build/pdf.worker.mjs vendor/pdf.worker.mjs
+          python3 tests/make_upload_fixture.py /tmp/medtech_upload_fixture.pdf /tmp/medtech_upload_scanned.pdf
+          python3 scripts/ingest_philips_pdf.py --out /tmp/medtech_v09_test_index.json --save-pdf /tmp/medtech_philips_original.pdf
       - name: Run full browser journeys
         run: |
           python3 -m http.server 4173 >/tmp/medtech-server.log 2>&1 &
           sleep 2
           node tests/browser_smoke.cjs
+          node tests/upload_browser.cjs
       - name: Simulated user journeys (7 personas, 28 fresh questions)
         run: node tests/simulated_users.cjs
       - name: Upload actual UI screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: medtech-fieldnotes-v07
+          name: medtech-fieldnotes-v09
           path: artifacts/
           if-no-files-found: ignore
