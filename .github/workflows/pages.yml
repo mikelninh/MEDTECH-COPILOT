@@ -50,7 +50,7 @@ jobs:
           cp src/retrieval.js src/scenarios.js src/fieldnotes.js src/pdf_evidence.js src/pdf_demo.js src/upload_core.js src/upload_app.mjs src/source_router.js dist/src/
           cp data/corpus.json dist/data/
           mkdir -p dist/covers
-          cp covers/lumen.svg covers/orion.svg covers/mpbetreibv.svg covers/mpdg.svg covers/arbschg.svg covers/own.svg dist/covers/
+          cp covers/lumen.svg covers/orion.svg covers/mpbetreibv.svg covers/mpdg.svg covers/arbschg.svg covers/mpamiv.svg covers/mpav.svg covers/own.svg dist/covers/
           touch dist/.nojekyll
       - name: Download the PDF index from the successfully tested run
         uses: actions/download-artifact@v4
@@ -75,6 +75,8 @@ jobs:
           test -s dist/examples/MPBetreibV.pdf
           test -s dist/examples/MPDG.pdf
           test -s dist/examples/ArbSchG.pdf
+          test -s dist/examples/MPAMIV.pdf
+          test -s dist/examples/MPAV.pdf
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
       - name: Upload Pages artifact
