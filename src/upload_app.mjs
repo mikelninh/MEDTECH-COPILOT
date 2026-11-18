@@ -46,6 +46,10 @@ if(typeof WeakMap.prototype.getOrInsert!=="function"){
 
 const Core=window.MedtechManualCore;
 const Router=window.MedtechSourceRouter;
+const Learning=window.MedtechLearningLoop;
+let learningStore=null;
+try{learningStore=window.localStorage}catch(_){}
+const learning=Learning?.create(learningStore)??null;
 if(!Core)throw new Error("Browser retrieval engine unavailable.");
 pdfjsLib.GlobalWorkerOptions.workerSrc=new URL("../vendor/pdf.worker.mjs",import.meta.url).toString();
 
@@ -56,21 +60,30 @@ const mk=(tag,cls,txt)=>{
  if(txt!==undefined)n.textContent=String(txt);
  return n;
 };
-const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,group:"medtech",routing:false};
+const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,faqCatalog:null,group:"medtech",routing:false};
 function showSource(source){
  state.source=source||null;
  const name=source?.title||"Bitte Quelle auswählen";
- const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="gitlaw-reader-not-official"?"Nichtamtliche GitLaw-Lesefassung – aktuelles Recht separat prüfen":source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
+ const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="government-law-pdf"?"Bundesportal-PDF · Stand: "+(source.lastAmendedStatement||"Original prüfen")+" · Gesetzesänderungen separat prüfen":source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
  $("selectedSourceName").textContent=name;
  $("selectedSourceInfo").textContent=note;
  $("sourceBanner").classList.toggle("has-source",!!source);
  $("viewerSourceName").textContent=name;
  $("viewerSourceMeta").textContent=source?note:"Die Originalseite erscheint direkt nach der Quellenauswahl.";
+ const proof=$("viewerSourceProof");
+ if(proof){
+  const integrity=!!(source?.sha256&&state.hash===source.sha256);
+  proof.classList.toggle("verified",integrity);
+  proof.textContent=!source?"Noch keine Datei ausgewählt":integrity?
+   "DATEI-INTEGRITÄT ✓ · SHA-256 "+source.sha256.slice(0,12)+"… · "+source.pages+" Seiten":
+   "LOKALER QUELLENINDEX · Nicht extern auf Echtheit geprüft";
+ }
+
  const link=$("sourceOfficialLink");
  if(source?.originalUrl){
   link.href=source.originalUrl;
   link.classList.remove("hidden");
-  link.textContent=source.group==="laws"?"Amtliche Gesetzesfassung prüfen ↗":"Original beim Hersteller öffnen ↗";
+  link.textContent=source.group==="laws"?"Bundesportal: aktuelle Fassung prüfen ↗":"Original beim Hersteller öffnen ↗";
  }else{
   link.removeAttribute("href");link.classList.add("hidden");
  }
@@ -90,6 +103,7 @@ function showSource(source){
    suggestions.append(b);
   }
  }else suggestions.classList.add("hidden");
+ paintFaqs(source);
  document.querySelectorAll("[data-source-id]").forEach(b=>{
   const chosen=!!source&&b.dataset.sourceId===source.id;
   b.classList.toggle("active",chosen);b.setAttribute("aria-pressed",String(chosen));
@@ -100,11 +114,71 @@ function makeCard(source){
  b.setAttribute("aria-pressed",String(state.source?.id===source.id));
  const cover=mk("img","source-cover");cover.src=source.cover;cover.alt="Buchcover: "+source.title;cover.loading="lazy";
  const info=mk("div","source-book-info");
- info.append(mk("span","source-choice-kicker",source.sourceKind==="gitlaw-reader-not-official"?"GITLAW · LESEFASSUNG":source.sourceKind==="manufacturer-original"?"HERSTELLER · ORIGINAL":"TRAINING · FIKTIV"),
+ info.append(mk("span","source-choice-kicker",source.sourceKind==="government-law-pdf"?"BUNDESPORTAL · ORIGINAL-PDF":source.sourceKind==="manufacturer-original"?"HERSTELLER · ORIGINAL":"TRAINING · FIKTIV"),
   mk("strong","",source.title),mk("small","",source.subtitle+" · "+source.pages+" PDF-Seiten"));
- b.append(cover,info);
+ b.append(cover,info,mk("span","source-open-hint","Buch auswählen ↗"));
  b.addEventListener("click",()=>loadExample(source));
  return b;
+}
+function paintFaqs(source){
+ const panel=$("faqPanel"),list=$("faqList");
+ if(!panel||!list)return;
+ list.replaceChildren();
+ const faqs=source?.group==="laws"?state.faqCatalog?.faqs?.filter(q=>q.sourceId===source.id)||[]:[];
+ panel.classList.toggle("hidden",!faqs.length);
+ for(const faq of faqs){
+  const item=mk("details","faq-item");
+  const summary=mk("summary","faq-question",faq.question);
+  const body=mk("div","faq-answer");
+  body.append(mk("span","faq-reference",faq.answerReference),mk("p","",faq.answer));
+  const links=mk("div","faq-links");
+  const official=mk("a","faq-official","Norm im Bundesportal prüfen ↗");
+  official.href=faq.sourceUrl;official.target="_blank";official.rel="noopener noreferrer";
+  const askButton=mk("button","faq-ask","Frage in dieser Quelle suchen ↗");
+  askButton.type="button";
+  askButton.addEventListener("click",()=>{
+   if(!state.index)return;
+   $("questionInput").value=faq.question;
+   ask(faq.question);
+  });
+  links.append(official,askButton);
+  body.append(links);item.append(summary,body);
+  item.addEventListener("toggle",()=>{
+   if(item.open){learning?.faqOpen(source.id,faq.id);paintLearningCounts()}
+  });
+  list.append(item);
+ }
+}
+async function loadFaqs(){
+ try{
+  const response=await fetch("./data/legal_faq.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("FAQ file missing");
+  const data=await response.json();
+  if(data.schemaVersion!==1||!Array.isArray(data.faqs))throw new Error("FAQ schema invalid");
+  const sources=new Set(["mpbetreibv","mpdg","arbschg","mpamiv","mpav"]);
+  for(const f of data.faqs)
+   if(!/^[a-z0-9_-]{1,32}$/.test(f.id)||!sources.has(f.sourceId)||
+     !/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/(?:__\d+|anlage_\d+)\.html$/.test(f.sourceUrl)||
+     typeof f.answer!=="string"||f.answer.length<45)throw new Error("FAQ source not verified");
+  state.faqCatalog=data;paintFaqs(state.source);paintLearningCounts();
+ }catch(error){console.warn("Curated FAQ unavailable",error.message)}
+}
+function paintLearningCounts(){
+ const area=$("learningCounts");if(!area)return;
+ const enabled=!!learning?.enabled();
+ area.replaceChildren();
+ if(!enabled){area.append(mk("p","learning-off","Messung deaktiviert. Keine Nutzungsdaten werden erfasst."));return}
+ const c=learning.stats();
+ for(const [label,value] of [["Fragen",c.asked],["Ähnliche Folgefragen",c.reasked],["Mit Fundstelle",c.evidence],["Ohne Beleg",c.unknown],["Hilfreich",c.helpful],["Nicht hilfreich",c.unhelpful]]){
+  const cell=mk("div","learning-metric");cell.append(mk("strong","",value),mk("span","",label));area.append(cell);
+ }
+ const ranking=Object.entries(c.faqOpens).sort((a,b)=>b[1]-a[1]).slice(0,3);
+ if(ranking.length){
+  const container=mk("div","local-faq-ranking");
+  container.append(mk("small","","Meist geöffnet (nur dieser Browser)"));
+  for(const [id,num] of ranking){const row=mk("span","",""+num+" × "+(state.faqCatalog?.faqs?.find(f=>f.id===id)?.question||id));container.append(row)}
+  area.append(container);
+ }
 }
 function paintCards(){
  const list=$("sourceCards");list.replaceChildren();
@@ -158,10 +232,16 @@ async function loadCatalog(){
   for(const item of data.sources){
    if(!["medtech","laws"].includes(item.group)||ids.has(item.id)||typeof item.title!=="string"||!/^[a-f0-9]{64}$/.test(item.sha256)||!/^\.\/examples\/[a-zA-Z0-9_.-]+\.pdf$/.test(item.path))throw new Error("Quellenkatalog enthält unzulässige Einträge");
    if(item.group==="laws"&&!/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9_.-]+\.pdf$/.test(item.originalUrl))throw new Error("Amtliche Quelle nicht verifizierbar");
-   if(!/^\.\/covers\/(orion|lumen|mpbetreibv|mpdg|arbschg)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
+   if(!/^\.\/covers\/(orion|lumen|mpbetreibv|mpdg|arbschg|mpamiv|mpav)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
    ids.add(item.id);
   }
-  state.catalog=data;paintCards();
+  state.catalog=data;
+  for(const button of document.querySelectorAll("[data-source-group]")){
+   if(button.dataset.sourceGroup==="own")continue;
+   const count=data.sources.filter(source=>source.group===button.dataset.sourceGroup).length;
+   const badge=mk("span","tab-count",String(count));badge.setAttribute("aria-hidden","true");button.append(badge);
+  }
+  paintCards();
  }catch(err){
   $("sourceCards").replaceChildren(mk("p","source-missing","Öffentliche Beispielquellen konnten nicht geladen werden. Eigenes PDF bleibt verfügbar."));
   console.warn("Public example source catalog unavailable:",err.message);
@@ -400,6 +480,8 @@ function showResult(result){
  $("answerStatus").textContent=statusLabel;
  $("answerStatus").className="answer-status "+result.status;
  $("answerTitle").textContent=result.status==="evidence"?"Das steht tatsächlich im Dokument.":result.status==="blocked"?"Diese Anfrage beantworten wir nicht.":"Keine ausreichende Evidenz gefunden.";
+ $("feedbackAcknowledgement").textContent="";
+ $("answerHelpful").disabled=false;$("answerUnhelpful").disabled=false;
  $("answerLead").textContent=result.reason;
  const c=$("citationCard"),extra=$("additionalCitations");
  c.classList.add("hidden");extra.replaceChildren();
@@ -440,6 +522,8 @@ function showResult(result){
 function ask(question){
  const result=Core.search(state.index,question);
  showResult(result);
+ learning?.ask(state.source?.id||"other",question,result.status);
+ paintLearningCounts();
  return result;
 }
 
@@ -539,12 +623,14 @@ function setup(){
  const meta=mk("small","source-identity-meta","Handbuch · Gesetz · eigenes PDF");meta.id="viewerSourceMeta";
  const external=mk("a","source-official-link hidden","Offizielles PDF öffnen ↗");
  external.id="sourceOfficialLink";external.target="_blank";external.rel="noopener noreferrer";
- identity.append(kicker,title,meta,external);
+ const proof=mk("div","source-provenance","Noch keine Datei ausgewählt");proof.id="viewerSourceProof";
+ identity.append(kicker,title,meta,proof,external);
  viewer.prepend(identity);
  const viewerNote=mk("p","viewer-source-note","Quelle auswählen – anschließend bleibt die Originalseite ständig hier sichtbar.");
  viewerNote.id="viewerTrustNote";viewer.append(viewerNote);
  document.querySelectorAll("[data-source-group]").forEach(b=>b.addEventListener("click",()=>selectGroup(b.dataset.sourceGroup)));
- paintCards();loadCatalog();
+ paintCards();loadCatalog();loadFaqs();
+
 
  $("choosePdf").addEventListener("click",()=>$("pdfFile").click());
  $("pdfFile").addEventListener("change",e=>{if(e.target.files?.[0])chooseFile(e.target.files[0])});
@@ -556,6 +642,27 @@ function setup(){
   if(e.dataTransfer?.files?.length)chooseFile(e.dataTransfer.files[0]);
  });
  $("removePdf").addEventListener("click",async()=>{await destroySource();status("Datei und temporärer Suchindex entfernt.","neutral")});
+ $("learningConsent").checked=!!learning?.enabled();
+ $("learningConsent").addEventListener("change",e=>{learning?.consent(e.target.checked);paintLearningCounts()});
+ $("resetLearning").addEventListener("click",()=>{learning?.reset();$("learningConsent").checked=false;paintLearningCounts()});
+ $("exportLearning").addEventListener("click",()=>{
+  if(!learning?.enabled())return;
+  const blob=new Blob([learning.exportData()],{type:"application/json"});
+  const url=URL.createObjectURL(blob),anchor=document.createElement("a");
+  anchor.href=url;anchor.download="medtech-local-metrics.json";anchor.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+ });
+ for(const [button,helpful] of [["answerHelpful",true],["answerUnhelpful",false]]){
+  $(button).addEventListener("click",()=>{
+   if(learning?.enabled()){
+    learning.feedback(helpful);paintLearningCounts();
+    $("feedbackAcknowledgement").textContent="Danke! Bewertung nur in diesem Browser gezählt.";
+   }else $("feedbackAcknowledgement").textContent="Für lokales Qualitätsfeedback bitte zuerst oben die freiwillige Messung aktivieren.";
+   $("answerHelpful").disabled=true;$("answerUnhelpful").disabled=true;
+  });
+ }
+ paintLearningCounts();
+
  $("questionForm").addEventListener("submit",e=>{
   e.preventDefault();
   const value=$("questionInput").value.trim();

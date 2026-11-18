@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""GitLaw non-official PDF reader editions + pinned real Philips manufacturer PDF."""
+"""Exact federal portal PDF editions + original fictional training-manual PDFs."""
 import argparse,hashlib,json,re,urllib.request
 from pathlib import Path
 from io import BytesIO
@@ -16,7 +16,9 @@ from build_source_catalog import fictional_manual
 LAWS=[
  ("mpbetreibv","MPBetreibV","Medizinprodukte-Betreiberverordnung","mpbetreibv_2025",["Was steht zum Medizinproduktebuch?","Was gilt für sicherheitstechnische Kontrollen?"]),
  ("mpdg","MPDG","Medizinprodukterecht-Durchführungsgesetz","mpdg",["Was ist der Zweck des MPDG?","Welche Aufgaben haben Behörden?"]),
- ("arbschg","ArbSchG","Arbeitsschutzgesetz","arbschg",["Was steht zur Gefährdungsbeurteilung?","Welche Pflichten hat der Arbeitgeber?"])
+ ("arbschg","ArbSchG","Arbeitsschutzgesetz","arbschg",["Was steht zur Gefährdungsbeurteilung?","Welche Pflichten hat der Arbeitgeber?"]),
+ ("mpamiv","MPAMIV","Medizinprodukte-Anwendermelde- und Informationsverordnung","mpamiv",["Was gilt als mutmaßliches schwerwiegendes Vorkommnis?","Wo werden Vorkommnisse gemeldet?"]),
+ ("mpav","MPAV","Medizinprodukte-Abgabeverordnung","mpav",["Was gilt für die Abgabe von Medizinprodukten?","Welche Sachkenntnis ist erforderlich?"])
 ]
 PHILIPS_SHA="a32a620f8374c6709961e95f8b3d6099a1fb2c5574db71fcd9f4b41cab3e656e"
 PHILIPS_URL="https://www.documents.philips.com/assets/Addendum/20250422/0be5036d5af74ece8a8fb2c70090cd18.pdf?feed=ifu_docs_feed"
@@ -81,6 +83,33 @@ def orion_manual():
     book.close()
     return binary
 
+def fetch_government_law(slug,title):
+    """Download consolidated original PDF from BMJ/BfJ's public law portal.
+
+    Important: portal PDFs are government-hosted consolidated texts, NOT
+    promulgation in the Federal Law Gazette (Bundesgesetzblatt).
+    """
+    if not re.fullmatch(r"[a-z0-9_]+",slug):raise RuntimeError("Invalid legal source slug")
+    if not re.fullmatch(r"[A-Za-z0-9]+",title):raise RuntimeError("Invalid law abbreviation")
+    url="https://www.gesetze-im-internet.de/"+slug+"/"+title+".pdf"
+    req=urllib.request.Request(url,headers={"User-Agent":"MEDTECH-COPILOT-source-integrity/1.1","Accept":"application/pdf"})
+    with urllib.request.urlopen(req,timeout=70) as response:
+        from urllib.parse import urlparse
+        final=urlparse(response.geturl())
+        if final.scheme!="https" or final.hostname not in {"www.gesetze-im-internet.de","gesetze-im-internet.de"}:
+            raise RuntimeError("Government law PDF redirected outside official domain: "+str(final.hostname))
+        pdf=response.read(15*1024*1024+1)
+    if not pdf.startswith(b"%PDF-") or len(pdf)>15*1024*1024:
+        raise RuntimeError("Not a usable government PDF: "+url)
+    doc=fitz.open(stream=pdf,filetype="pdf")
+    first=(doc[0].get_text("text") if len(doc)>0 else "")
+    if title.lower() not in first.lower() or "gesetze-im-internet.de" not in first.lower():
+        raise RuntimeError("Government PDF identity/header mismatch: "+title)
+    amended=re.search(r"Stand:\\s*(.{8,180}?)\\n",first,re.IGNORECASE)
+    stamp=(amended.group(1).strip() if amended else "Änderungsstand im Original prüfen")
+    doc.close()
+    return pdf,url,stamp
+
 def pdf_pages(raw):
     if not raw.startswith(b"%PDF-") or len(raw)>15*1024*1024:raise RuntimeError("PDF too large or invalid")
     doc=fitz.open(stream=raw,filetype="pdf");n=len(doc)
@@ -94,7 +123,7 @@ def main():
     args=parser.parse_args()
     folder=Path(args.out_dir);folder.mkdir(parents=True,exist_ok=True)
     catalog={"schemaVersion":1,"retrievedAt":datetime.now(timezone.utc).date().isoformat(),
-             "scope":"GitLaw editions are non-official reader PDFs; always confirm legal text with official law website.","sources":[]}
+             "scope":"Legal PDFs are exact source snapshots from the BMJ/BfJ government legal portal, not the binding Federal Law Gazette. Always check current law and applicability in the official portal.","sources":[]}
     def add(id,group,title,subtitle,filename,kind,original,pdf,questions,gitlaw=None,source_sha=None):
         n=pdf_pages(pdf)
         (folder/filename).write_bytes(pdf)
@@ -102,6 +131,10 @@ def main():
               "cover":"./covers/"+id+".svg","sourceKind":kind,"originalUrl":original,
               "questions":questions,"path":"./examples/"+filename,"pages":n,"sha256":sha(pdf)}
         if gitlaw:item["gitlawUrl"]=gitlaw;item["gitlawTextSha256"]=source_sha
+        if kind=="government-law-pdf":
+            item["sourceAuthority"]="Government-hosted consolidated text; check Federal Law Gazette for promulgation"
+            item["fetchedFrom"]="www.gesetze-im-internet.de"
+            item["lastAmendedStatement"]=source_sha or "Änderungsstand im Original prüfen"
         catalog["sources"].append(item)
         print("VERIFIED",id,n,"pages; sha",sha(pdf)[:15],flush=True)
     add("lumen","medtech","LUMEN P200","Fiktives Trainingshandbuch","LUMEN-P200-demo.pdf",
@@ -111,12 +144,11 @@ def main():
         "fictional-training",None,orion_manual(),
         ["Was steht zum SpO2-Signal?","Was gehört zum Service-Ticket?"])
     for id,title,subtitle,slug,questions in LAWS:
-        raw,url=fetch_law(slug)
-        pdf=pdf_from_markdown(raw,title,subtitle)
-        add(id,"laws",title,subtitle+" · GitLaw-Lesefassung",title+".pdf",
-            "gitlaw-reader-not-official","https://www.gesetze-im-internet.de/"+slug+"/"+title+".pdf",
-            pdf,questions,url,sha(raw))
+        pdf,url,amendment=fetch_government_law(slug,title)
+        gitlaw="https://github.com/mikelninh/gitlaw/blob/main/laws/"+slug+".md"
+        add(id,"laws",title,subtitle+" · Bundesportal-PDF",title+".pdf",
+            "government-law-pdf",url,pdf,questions,None,amendment)
     target=Path(args.manifest);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("PASS FIVE curated sample sources (3 GitLaw reader books, 2 fictional manuals)",flush=True)
+    print("PASS SEVEN curated sample sources (5 government-hosted law PDFs, 2 fictional manuals)",flush=True)
 if __name__=="__main__":main()

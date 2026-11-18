@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-11-18",
+  "classification": "Editor-curated starter questions — NOT measured popularity",
+  "disclaimer": "Condensed orientation, not legal advice or a substitute for current norm text; check government portal before relying on any statement.",
+  "faqs": [
+    {
+      "id": "b01",
+      "sourceId": "mpbetreibv",
+      "question": "Wer gilt als Betreiber eines Medizinprodukts?",
+      "answerReference": "§ 2 Abs. 2 und § 3",
+      "answer": "Grundsätzlich ist der Betreiber die Person oder Organisation, die für den Betrieb der Gesundheitseinrichtung verantwortlich ist. Für bestimmte Bereitstellungs- und Mitbringfälle regeln § 2 und § 3 abweichende Zuständigkeiten; diese müssen im Einzelfall geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__2.html"
+    },
+    {
+      "id": "b02",
+      "sourceId": "mpbetreibv",
+      "question": "Wann ist eine Einweisung erforderlich?",
+      "answerReference": "§ 4 Abs. 2–3; § 11",
+      "answer": "Ein Produkt darf nur durch ausreichend qualifizierte Personen betrieben oder benutzt werden. Grundsätzlich ist eine Einweisung erforderlich; § 4 Abs. 3 enthält ausdrücklich Ausnahmen und Sonderregeln, etwa für bestimmte Softwareaktualisierungen. Für Produkte der Anlage 1 gelten ergänzende Vorgaben nach § 11.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__4.html"
+    },
+    {
+      "id": "b03",
+      "sourceId": "mpbetreibv",
+      "question": "Für welche Geräte braucht man ein Medizinproduktebuch?",
+      "answerReference": "§ 13 Abs. 1–2",
+      "answer": "Für die in Anlage 1 und Anlage 2 aufgeführten Produkte ist ein Medizinproduktebuch zu führen. § 13 Abs. 2 legt die erforderlichen Angaben fest. Vor der Anwendung müssen die konkrete Gerätezuordnung und die Ausnahmen geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__13.html"
+    },
+    {
+      "id": "b04",
+      "sourceId": "mpbetreibv",
+      "question": "Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?",
+      "answerReference": "§ 12 Abs. 1–4",
+      "answer": "Für Produkte nach Anlage 1 sind STK grundsätzlich spätestens alle zwei Jahre durchzuführen; bei risikoreichen Benutzungs- oder Umgebungsbedingungen kann ein früherer Termin erforderlich sein. Für bestimmte selbsttestende AEDs gelten Ausnahmen und zusätzliche Regeln. Herstellerangaben und die konkrete Produktkategorie sind mitzuprüfen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html"
+    },
+    {
+      "id": "b05",
+      "sourceId": "mpbetreibv",
+      "question": "Was zählt zur Instandhaltung nach MPBetreibV?",
+      "answerReference": "§ 7 Abs. 1–4",
+      "answer": "Instandhaltung umfasst insbesondere notwendige Wartungen, Inspektionen und Instandsetzungen. Herstellerangaben sind zu berücksichtigen. Nach einer Instandhaltung sind die möglicherweise beeinträchtigten sicherheits- und funktionsrelevanten Merkmale zu prüfen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__7.html"
+    },
+    {
+      "id": "b06",
+      "sourceId": "mpbetreibv",
+      "question": "Was muss ins Bestandsverzeichnis?",
+      "answerReference": "§ 14",
+      "answer": "§ 14 regelt das Bestandsverzeichnis aktiver nichtimplantierbarer Produkte einer Gesundheitseinrichtung. Welche Produkte und Angaben einzubeziehen sind, ergibt sich aus dem genauen Normtext. Die Pflichten dürfen nicht mit dem Medizinproduktebuch nach § 13 verwechselt werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__14.html"
+    },
+    {
+      "id": "b07",
+      "sourceId": "mpbetreibv",
+      "question": "Was gilt für Software und IT-Sicherheit?",
+      "answerReference": "§ 4 Abs. 3; § 17",
+      "answer": "Die MPBetreibV enthält besondere Anforderungen für Software. Eine relevante Änderung der Handhabung durch Softwareupdates kann eine erneute Einweisung erfordern. Für bestimmte in Gesundheitseinrichtungen betriebene Software sind angemessene IT-Sicherheitsüberprüfungen nach § 17 vorgesehen; Umfang und Zuständigkeit hängen vom Einzelfall ab.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__17.html"
+    },
+    {
+      "id": "b08",
+      "sourceId": "mpbetreibv",
+      "question": "Welche Geräte stehen in Anlage 1?",
+      "answerReference": "Anlage 1",
+      "answer": "Anlage 1 enthält bestimmte aktive Medizinprodukte, etwa ausgewählte Produkte für Energieanwendung, Defibrillation und die unmittelbare Infusion unter Druck. Ob ein konkretes Modell darunterfällt, muss anhand seiner Zweckbestimmung, technischen Funktion und der vollständigen Anlage geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/anlage_1.html"
+    },
+    {
+      "id": "d01",
+      "sourceId": "mpdg",
+      "question": "Worum geht es im MPDG?",
+      "answerReference": "§ 1 MPDG",
+      "answer": "Das MPDG ergänzt und vollzieht unionsrechtliche Vorgaben für Medizinprodukte in Deutschland. Für die richtige Einordnung müssen auch die einschlägigen EU-Verordnungen und die jeweilige konkrete Vorschrift herangezogen werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpdg/__1.html"
+    },
+    {
+      "id": "i01",
+      "sourceId": "mpamiv",
+      "question": "Wann muss ein mutmaßlich schwerwiegendes Vorkommnis gemeldet werden?",
+      "answerReference": "§ 3 MPAMIV",
+      "answer": "Wer Produkte beruflich oder gewerblich betreibt oder anwendet, muss dabei aufgetretene mutmaßlich schwerwiegende Vorkommnisse unverzüglich der zuständigen Bundesoberbehörde melden. Für die Bewertung und den Meldeweg sind die Definitionen und die weiteren Vorschriften der MPAMIV maßgeblich.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpamiv/__3.html"
+    },
+    {
+      "id": "a01",
+      "sourceId": "arbschg",
+      "question": "Wer muss eine Gefährdungsbeurteilung durchführen?",
+      "answerReference": "§ 5 ArbSchG",
+      "answer": "Der Arbeitgeber hat durch Beurteilung der mit der Arbeit verbundenen Gefährdungen zu ermitteln, welche Arbeitsschutzmaßnahmen erforderlich sind. Was im Einzelfall erfasst werden muss, hängt von Tätigkeit und Arbeitsplatz ab.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/arbschg/__5.html"
+    },
+    {
+      "id": "v01",
+      "sourceId": "mpav",
+      "question": "Welche Sachkenntnis ist bei der Abgabe erforderlich?",
+      "answerReference": "§ 4 MPAV",
+      "answer": "Die MPAV regelt Anforderungen an fachliche Beratung und Sachkenntnis bei der Abgabe bestimmter Medizinprodukte. Die konkreten Ausnahmen und vermuteten Qualifikationsnachweise stehen in § 4; die passende Produktgruppe muss im Einzelfall geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpav/__4.html"
+    }
+  ]
+}

@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#142b24">
+<meta name="theme-color" content="#15392e">
 <meta name="description" content="Eigenes PDF lokal durchsuchen: Belegte Originalpassagen und Seitenvorschau – ohne Upload an einen Server.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
-<title>Quellenrecherche · MEDTECH COPILOT V1.0</title>
+<title>Die Quellenbibliothek · MEDTECH COPILOT</title>
 <link rel="stylesheet" href="./v9.css">
 <link rel="stylesheet" href="./source10.css">
+<script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
 <body>
@@ -20,15 +21,21 @@
   <main>
     <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
     <section class="source-intro" aria-labelledby="mainTitle">
-      <div><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
+      <div class="intro-copy"><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
         <h1 id="mainTitle">Quelle wählen. <em>Frage stellen.</em></h1>
         <p>Wähle bewusst <strong>ein Handbuch, ein bestimmtes deutsches Gesetz oder dein eigenes PDF</strong>. Nur diese Quelle wird für die nächste Frage durchsucht – das Original bleibt daneben sichtbar.</p>
+        <div class="intro-principles"><span>01 · QUELLE WÄHLEN</span><span>02 · PASSAGE FINDEN</span><span>03 · ORIGINAL PRÜFEN</span></div>
       </div>
-      <a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a>
+      <div class="intro-visual"><div class="intro-library" aria-hidden="true">
+        <img class="intro-book intro-book-a" src="./covers/mpamiv.svg" alt="" width="340" height="482">
+        <img class="intro-book intro-book-b" src="./covers/lumen.svg" alt="" width="340" height="482">
+        <img class="intro-book intro-book-c" src="./covers/mpbetreibv.svg" alt="" width="340" height="482">
+        </div><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a></div>
     </section>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
       <section class="source-chooser" aria-label="Quelle für diese Recherche auswählen">
         <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help"><strong>Explizite Auswahl:</strong> Nur die aktivierte Quelle wird für deine Frage verwendet.</span></div>
+        <p class="source-library-intro">Deine Lesebibliothek <span>Original-PDF rechts · kontrollierbare Fundstellen</span></p>
         <div class="source-tabs" role="group" aria-label="Quellenkategorie">
           <button type="button" class="active" data-source-group="medtech" aria-pressed="true">Handbücher</button>
           <button type="button" data-source-group="laws" aria-pressed="false">Deutsche Gesetze</button>
@@ -41,12 +48,17 @@
           <div id="sourceAutoBooks" class="source-auto-books"></div>
         </div>
         <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
+        <section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
+          <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
+          <span class="faq-no-popularity">Keine echte Nutzungsrangliste · Redaktionelle Startauswahl</span></div>
+          <div id="faqList" class="faq-list"></div>
+        </section>
         <div id="sourceBanner" class="source-banner">
           <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
           <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
         </div>
         <div id="allLawHint" class="all-law-hint hidden">
-          <span>Hier: drei auswählbare GitLaw-Lesefassungen. Weitere Bundesgesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
+          <span>Hier: fünf konsolidierte PDF-Texte aus dem Bundesportal. Änderungen und Geltung dort prüfen. Weitere Gesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
         </div>
       </section>
     <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
@@ -95,6 +107,14 @@
         <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
       </form>
       <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
+      <div class="learning-panel" id="learningPanel">
+        <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
+        <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
+        <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
+        <p class="learning-privacy">Freiwillig · Nur Zähler in diesem Browser. Keine Fragen, Dokumente oder Kennungen werden gespeichert oder versendet. Keine besucherübergreifende Statistik.</p>
+        <div id="learningCounts" class="learning-counts" aria-live="polite"></div>
+        <div class="learning-actions"><button type="button" id="exportLearning">Zähler als JSON exportieren</button><button type="button" id="resetLearning">Lokale Zähler löschen</button></div>
+      </div>
     </section>
     <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
       <div class="result-head"><span class="eyebrow">03 / NACHPRÜFEN</span><span class="answer-status" id="answerStatus"></span></div>
@@ -110,6 +130,12 @@
           </div>
           <div id="additionalCitations" class="additional-citations"></div>
           <div class="answer-bottom">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+          <div class="answer-quality" id="answerQuality">
+            <span class="eyebrow">QUELLENQUALITÄT / FEEDBACK</span>
+            <p><strong>Automatisch geprüft:</strong> Auszug, PDF-Seite und Quellenbindung. <strong>Nicht automatisch geprüft:</strong> juristische Auslegung, vollständige Relevanz oder Aktualität.</p>
+            <div class="answer-feedback"><span>Hat dir diese Fundstelle geholfen?</span><button type="button" id="answerHelpful">Ja, hilfreich</button><button type="button" id="answerUnhelpful">Nein, unpassend</button></div>
+            <span id="feedbackAcknowledgement" class="feedback-ack" role="status"></span>
+          </div>
         </div>
         <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
           <div class="viewer-head"><strong>ORIGINAL / PDF</strong><span id="viewerPageLabel">Noch kein PDF</span></div>
@@ -127,9 +153,9 @@
       </div>
     </section>
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
-    <section class="limit-foot"><div><span class="eyebrow">WAS V0.9 KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+    <section class="limit-foot"><div><span class="eyebrow">WAS DIESE DEMO KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V1.0 / SOURCE FIRST <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · SOURCE FIRST / 07 BOOKS <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>

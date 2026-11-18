@@ -53,6 +53,12 @@ jobs:
             data/source_catalog.json
           if-no-files-found: error
           retention-days: 7
+      - name: Curated legal FAQ and privacy-only metric tests
+        run: |
+          node --check src/upload_app.mjs
+          node --check src/learning_loop.js
+          node tests/legal_faq.cjs
+          node tests/learning_loop.cjs
       - name: Document ingestion sample tests
         run: python -m unittest discover -s tests -p 'test_*.py' -v
       - name: V0.9 upload retrieval – 70+ case audit
