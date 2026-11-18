@@ -218,6 +218,18 @@ function showResult(result){
    extra.append(b);
   }
   renderPage(first.page);
+ }else{
+  // A refusal or non-answer must not visually inherit the previous citation.
+  state.renderVersion++;
+  state.renderedPage=0;
+  if(state.render){try{state.render.cancel()}catch(_){}}
+  $("pageCanvas").classList.add("hidden");
+  $("viewerEmpty").classList.remove("hidden");
+  $("viewerEmpty").querySelector("p").textContent="Für diese Frage liegt keine belegte Originalseite vor. Du kannst das PDF bei einer neuen belegten Frage wieder öffnen.";
+  $("viewerPageLabel").textContent="Keine zitierbare Fundstelle";
+  const link=$("openOriginal");
+  link.removeAttribute("href");link.classList.add("disabled");
+  link.setAttribute("aria-disabled","true");link.tabIndex=-1;
  }
  $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
 }
