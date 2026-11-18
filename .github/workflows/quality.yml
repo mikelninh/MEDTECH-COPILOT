@@ -24,8 +24,9 @@ jobs:
       - name: Install PDF extraction dependency
         run: python -m pip install --quiet pymupdf reportlab
       - name: Download, validate and index original Philips PDF
-        run: mkdir -p examples
-          python scripts/ingest_philips_pdf.py --out data/pdf_pages.json --save-pdf examples/Philips-IFU-Addendum.pdf
+        run: |
+          mkdir -p examples
+          python scripts/ingest_philips_pdf.py --out data/pdf_pages.json
       - name: Verify 30 actual PDF-source questions
         run: node tests/pdf_evidence.cjs
       - name: Store tested public PDF index
