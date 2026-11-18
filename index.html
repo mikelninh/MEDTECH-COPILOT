@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="./v6.css">
 <link rel="stylesheet" href="./v7.css">
 <link rel="stylesheet" href="./v8.css">
+<link rel="stylesheet" href="./entry9.css">
 <script defer src="./src/retrieval.js"></script>
 <script defer src="./src/scenarios.js"></script>
 <script defer src="./src/pdf_evidence.js"></script>
@@ -39,6 +40,17 @@
     <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Übungsgeräte plus eine kuratierte öffentliche Herstellerquelle. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
 
     <section id="view-desk" class="view">
+      <section class="byom-launch" aria-labelledby="byomLaunchTitle">
+        <div class="byom-launch-copy">
+          <span class="byom-launch-label"><span class="byom-spark"></span> NEU · V0.9 / BRING YOUR OWN MANUAL</span>
+          <h2 id="byomLaunchTitle">Ein neues PDF?<br><em>Frag die Quelle.</em></h2>
+          <p>Lade ein öffentliches Handbuch direkt in deinem Browser. Frage stellen, Originalpassage sehen und zur richtigen PDF-Seite springen.</p>
+          <a class="byom-launch-button" href="./upload.html">Eigenes PDF ausprobieren <span aria-hidden="true">↗</span></a>
+          <div class="byom-launch-privacy">Lokal verarbeitet · kein Konto · keine Dokumentenübertragung</div>
+        </div>
+        <div class="byom-launch-paper" aria-hidden="true"><div class="byom-paperhead"><span>DEIN HANDBUCH</span><span>PDF</span></div><div class="byom-paperline"></div><div class="byom-paperline short"></div><div class="byom-paperline"></div><div class="byom-paperquote"><small>BELEGTE TEXTSTELLE</small><strong>Seite 03</strong><span>Original ansehen ↗</span></div></div>
+      </section>
+
       <section class="pdf-proof" aria-label="V0.8 Original-PDF nachweisen">
         <div class="pdf-proof-top">
           <span class="pdf-kicker">V0.8 / VERIFIED EVIDENCE</span>
@@ -233,7 +245,7 @@
       </div>
       <div class="eval-board"><div><span class="eyebrow">QUALITY LAB</span><h2>Does it actually work?</h2><p>Automatisierte Fälle prüfen die Quellenwahl, den Umgang mit unbekannten Informationen und das Ausblenden alter Versionen. Kein medizinischer Abnahmetest.</p><button type="button" class="dark-button" id="runEvaluation">Tests ausführen <span>↗</span></button></div><div id="evaluationResult" class="eval-results"><span class="eval-idle">Awaiting evaluation<br><strong>— / —</strong></span></div></div>
     </section>
-    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.8</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
+    <footer class="footer"><span>MEDTECH COPILOT · FIELDNOTES / V0.9</span><span>Ein eigenständiges Demonstrationsprojekt. <a href="https://github.com/mikelninh/MEDTECH-COPILOT" target="_blank" rel="noopener noreferrer">Quellcode ↗</a></span></footer>
   </main>
   <nav class="mobile-nav" aria-label="Mobile Navigation"><button type="button" data-view="desk" class="active">⌕<small>Fragen</small></button><button type="button" data-view="field">▤<small>Gerät</small></button><button type="button" data-view="library">≡<small>Quellen</small></button><button type="button" data-view="lab">◇<small>Demo</small></button></nav>
 </div>
