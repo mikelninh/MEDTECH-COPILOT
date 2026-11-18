@@ -40,7 +40,7 @@ const mk=(tag,cls,txt)=>{
 const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,group:"medtech",routing:false};
 function showSource(source){
  state.source=source||null;
- const name=source?.title||"Noch keine Quelle ausgewählt";
+ const name=source?.title||"Bitte Quelle auswählen";
  const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="gitlaw-reader-not-official"?"Nichtamtliche GitLaw-Lesefassung – aktuelles Recht separat prüfen":source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
  $("selectedSourceName").textContent=name;
  $("selectedSourceInfo").textContent=note;
