@@ -26,6 +26,7 @@ async function question(page,q){
  await desktop.waitForFunction(()=>!!window.MedtechUploadDemo);
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length>0);
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
+ assert.equal(await desktop.locator("[data-source-id='orion']").count(),1);
  assert.equal(await desktop.locator("#viewer").isVisible(),true);
  await desktop.locator("[data-source-id='lumen']").click();
  await ready(desktop,"lumen");
