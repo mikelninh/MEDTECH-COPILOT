@@ -30,11 +30,10 @@
    [/arbeitsplatz\w*.{0,30}(?:gefahr|sicherheit|gesundheit)/,7,"Arbeitsplatzsicherheit"],
    [/\barbeitgeber\b/,2,"Arbeitgeber"]
   ],
-  philips:[
-   [/\bphilips\b|\bintellivue\b/,13,"Philips IntelliVue"],
-   [/\bnanopod\b|\bmicrostream\b/,11,"NanoPod/Microstream"],
-   [/kapnograph\w*|\bco2 mess/,9,"Kapnographie und CO₂-Messung"],
-   [/\b(?:6100|6300|6500)\b/,5,"Philips Gerätegruppe"]
+  orion:[
+   [/\borion\b|\bm100\b/,14,"Fiktiver ORION M100"],
+   [/\bekg\b.{0,30}rausch|signalrausch/,8,"EKG-Signalrauschen im Trainingshandbuch"],
+   [/\bspo2\b.{0,30}(?:signal|messung)/,6,"SpO₂-Signal im Trainingshandbuch"]
   ],
   lumen:[
    [/\blumen\b|\bp200\b/,14,"LUMEN-P200-Trainingsgerät"],
