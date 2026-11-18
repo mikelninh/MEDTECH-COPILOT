@@ -158,7 +158,7 @@ async function loadCatalog(){
   for(const item of data.sources){
    if(!["medtech","laws"].includes(item.group)||ids.has(item.id)||typeof item.title!=="string"||!/^[a-f0-9]{64}$/.test(item.sha256)||!/^\.\/examples\/[a-zA-Z0-9_.-]+\.pdf$/.test(item.path))throw new Error("Quellenkatalog enthält unzulässige Einträge");
    if(item.group==="laws"&&!/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9_.-]+\.pdf$/.test(item.originalUrl))throw new Error("Amtliche Quelle nicht verifizierbar");
-   if(!/^\.\/covers\/(orion|lumen|mpbetreibv|mpdg|arbschg)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
+   if(!/^\.\/covers\/(orion|lumen|mpbetreibv|mpdg|arbschg|mpamiv|mpav)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
    ids.add(item.id);
   }
   state.catalog=data;paintCards();
