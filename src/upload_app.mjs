@@ -4,6 +4,7 @@
  */
 import * as pdfjsLib from "../vendor/pdf.mjs";
 import "./upload_core.js";
+import "./source_router.js";
 
 // PDF.js 6.5 uses the proposed Map#getOrInsertComputed API.
 // Headless Chromium versions used in CI may not implement it yet.
@@ -25,6 +26,7 @@ if(typeof Map.prototype.getOrInsert!=="function"){
 }
 
 const Core=window.MedtechManualCore;
+const Router=window.MedtechSourceRouter;
 if(!Core)throw new Error("Browser retrieval engine unavailable.");
 pdfjsLib.GlobalWorkerOptions.workerSrc=new URL("../vendor/pdf.worker.mjs",import.meta.url).toString();
 
@@ -35,11 +37,11 @@ const mk=(tag,cls,txt)=>{
  if(txt!==undefined)n.textContent=String(txt);
  return n;
 };
-const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,group:"medtech"};
+const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,group:"medtech",routing:false};
 function showSource(source){
  state.source=source||null;
  const name=source?.title||"Noch keine Quelle ausgewählt";
- const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="official-federal-law"?"Offizielles Bundesrecht – Stand beim Abruf prüfen":source.sourceKind==="fictional-training"?"Fiktive Übungsquelle, keine echte Geräteanleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
+ const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="gitlaw-reader-not-official"?"Nichtamtliche GitLaw-Lesefassung – aktuelles Recht separat prüfen":source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
  $("selectedSourceName").textContent=name;
  $("selectedSourceInfo").textContent=note;
  $("sourceBanner").classList.toggle("has-source",!!source);
@@ -49,7 +51,7 @@ function showSource(source){
  if(source?.originalUrl){
   link.href=source.originalUrl;
   link.classList.remove("hidden");
-  link.textContent="Original bei "+(source.group==="laws"?"gesetze-im-internet.de":"der Quelle")+" ↗";
+  link.textContent=source.group==="laws"?"Amtliche Gesetzesfassung prüfen ↗":"Original beim Hersteller öffnen ↗";
  }else{
   link.removeAttribute("href");link.classList.add("hidden");
  }
@@ -61,9 +63,11 @@ function showSource(source){
 function makeCard(source){
  const b=mk("button","source-choice");b.type="button";b.dataset.sourceId=source.id;
  b.setAttribute("aria-pressed",String(state.source?.id===source.id));
- b.append(mk("span","source-choice-kicker",source.sourceKind==="official-federal-law"?"BUNDESRECHT · ORIGINAL-PDF":"FIKTIVES DEMO-HANDBUCH"));
- b.append(mk("strong","",source.title));
- b.append(mk("small","",source.subtitle+" · "+source.pages+" Seiten"));
+ const cover=mk("img","source-cover");cover.src=source.cover;cover.alt="Buchcover: "+source.title;cover.loading="lazy";
+ const info=mk("div","source-book-info");
+ info.append(mk("span","source-choice-kicker",source.sourceKind==="gitlaw-reader-not-official"?"GITLAW · LESEFASSUNG":source.sourceKind==="manufacturer-original"?"HERSTELLER · ORIGINAL":"TRAINING · FIKTIV"),
+  mk("strong","",source.title),mk("small","",source.subtitle+" · "+source.pages+" PDF-Seiten"));
+ b.append(cover,info);
  b.addEventListener("click",()=>loadExample(source));
  return b;
 }
@@ -118,7 +122,8 @@ async function loadCatalog(){
   const ids=new Set();
   for(const item of data.sources){
    if(!["medtech","laws"].includes(item.group)||ids.has(item.id)||typeof item.title!=="string"||!/^[a-f0-9]{64}$/.test(item.sha256)||!/^\.\/examples\/[a-zA-Z0-9_.-]+\.pdf$/.test(item.path))throw new Error("Quellenkatalog enthält unzulässige Einträge");
-   if(item.group==="laws"&&!/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9]+\.pdf$/.test(item.originalUrl))throw new Error("Amtliche Quelle nicht verifizierbar");
+   if(item.group==="laws"&&!/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/$/.test(item.originalUrl))throw new Error("Amtliche Quelle nicht verifizierbar");
+   if(!/^\.\/covers\/(philips|lumen|mpbetreibv|mpdg|arbschg)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
    ids.add(item.id);
   }
   state.catalog=data;paintCards();
