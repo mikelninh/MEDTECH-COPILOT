@@ -155,8 +155,8 @@ const status=(message,kind="neutral",percent="")=>{
  $("importStatus").className="import-status "+kind;
 };
 const controls=ready=>{
- $("askButton").disabled=false;
- $("questionInput").disabled=false;
+ $("askButton").disabled=!ready;
+ $("questionInput").disabled=!ready;
  $("prevPage").disabled=!ready;
  $("nextPage").disabled=!ready;
 };
@@ -406,7 +406,11 @@ async function animateBookChoice(selected){
 async function handleQuestion(text){
  const q=String(text||"").trim();
  if(!q||state.routing)return null;
- if(state.index)return ask(q);
+ if(!state.index){
+  autoStatus("Quelle auswählen","Bitte zuerst ausdrücklich eines der Beispielhandbücher, ein Gesetz oder dein eigenes PDF auswählen.","clarify");
+  return null;
+ }
+ return ask(q);
  if(Core.classify(q)==="blocked"){
   autoStatus("Sicherheitsgrenze","Keine Quelle wird für riskante technische oder klinische Handlungsanweisungen ausgewählt.","warning");
   const answer={status:"blocked",reason:"Der Copilot gibt keine Anleitung zur Umgehung von Schutzfunktionen oder zu klinischen Änderungen.",answer:"",evidence:[]};
