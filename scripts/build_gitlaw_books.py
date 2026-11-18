@@ -60,6 +60,27 @@ def pdf_from_markdown(raw,title,subtitle):
     SimpleDocTemplate(b,pagesize=A4,leftMargin=40,rightMargin=40,topMargin=40,bottomMargin=43,
                       title=title+" – GitLaw-Lesefassung").build(flow,onFirstPage=footer,onLaterPages=footer)
     return b.getvalue()
+def orion_manual():
+    """Original, wholly fictional and distributable training-manual PDF."""
+    book=fitz.open()
+    material=[
+      ("ORION M100 – FIKTIVER PATIENTENMONITOR","Dieses frei erfundene Trainingsgeraet dient nur der Demonstration von Suche und Quellenvergleich. Der Name ORION M100 bezeichnet kein reales Herstellerhandbuch. Der technische Aufnahmebogen nennt Geraetemodell, Softwarestand, Service-Ticket, Fehlerwortlaut und den uebernehmenden Fachbereich."),
+      ("SPO2-SIGNAL IM UEBUNGSFALL","Meldung SpO2 kein Signal: Im simulierten Fall kann die Sensorverbindung, die Messstelle oder eine externe Stoerung als moeglicher Faktor erfasst werden. Die Dokumentation darf keine klinische Interpretation der Sauerstoffsaettigung oder Versorgungsempfehlung liefern. Das Behandlungsteam entscheidet ueber patientenbezogene Massnahmen."),
+      ("EKG-SIGNALRAUSCHEN","Beim fiktiven ORION M100 wird ein verrauschtes EKG-Signal als gemeldete Beobachtung erfasst. In der technischen Aufnahme werden Elektrodenkontakt, Kabel, Bewegung und Umgebungseinfluesse als moegliche Beobachtungen aufgefuehrt, ohne eine definitive Ursache zu behaupten. Meldungen duerfen nicht als sichere Diagnose dargestellt werden."),
+      ("SERVICE UND FREIGABE","Nach einer angenommenen Reparatur sind dokumentierte Sicherheitspruefungen, Versionen, offene Punkte und autorisierte Freigaben getrennt zu protokollieren. Ein abgeschlossenes Service-Ticket bedeutet nicht automatisch, dass das Geraet wieder zur Benutzung freigegeben wurde. Alle Inhalte sind rein fiktiv.")
+    ]
+    for n,(title,body) in enumerate(material,1):
+      page=book.new_page(width=595,height=842)
+      page.draw_rect(fitz.Rect(32,32,563,810),color=(.77,.85,.82),fill=(.965,.985,.973))
+      page.draw_rect(fitz.Rect(32,32,563,84),color=(.1,.29,.25),fill=(.1,.29,.25))
+      page.insert_text((46,61),"MEDTECH COPILOT | FIKTIVES TRAININGSMATERIAL",fontsize=11,color=(.92,1,.94))
+      page.insert_textbox(fitz.Rect(45,124,545,202),title,fontsize=18)
+      page.insert_textbox(fitz.Rect(46,220,545,657),body,fontsize=13,lineheight=1.55)
+      page.insert_text((46,771),"NICHT REAL: TRAININGSTEXT | PDF-SEITE "+str(n),fontsize=9)
+    binary=book.tobytes(garbage=4,deflate=True)
+    book.close()
+    return binary
+
 def pdf_pages(raw):
     if not raw.startswith(b"%PDF-") or len(raw)>15*1024*1024:raise RuntimeError("PDF too large or invalid")
     doc=fitz.open(stream=raw,filetype="pdf");n=len(doc)
@@ -86,11 +107,9 @@ def main():
     add("lumen","medtech","LUMEN P200","Fiktives Trainingshandbuch","LUMEN-P200-demo.pdf",
         "fictional-training",None,fictional_manual(),
         ["Was steht zur Batteriehistorie?","Was gehört ins Service-Ticket?"])
-    philips=folder/"Philips-IFU-Addendum.pdf"
-    if not philips.exists() or sha(philips.read_bytes())!=PHILIPS_SHA:raise RuntimeError("Pinned Philips original missing")
-    add("philips","medtech","Philips IntelliVue","Hersteller-Addendum 2025",philips.name,
-        "manufacturer-original",PHILIPS_URL,philips.read_bytes(),
-        ["Was steht zur Batterie?","Wofür wird NanoPod genutzt?"])
+    add("orion","medtech","ORION M100","Fiktiver Patientenmonitor","ORION-M100-demo.pdf",
+        "fictional-training",None,orion_manual(),
+        ["Was steht zum SpO2-Signal?","Was gehört zum Service-Ticket?"])
     for id,title,subtitle,slug,questions in LAWS:
         raw,url=fetch_law(slug)
         pdf=pdf_from_markdown(raw,title,subtitle)
@@ -99,5 +118,5 @@ def main():
             pdf,questions,url,sha(raw))
     target=Path(args.manifest);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print("PASS FIVE selected books",flush=True)
+    print("PASS FIVE curated sample sources (3 GitLaw reader books, 2 fictional manuals)",flush=True)
 if __name__=="__main__":main()
