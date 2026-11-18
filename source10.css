@@ -145,3 +145,15 @@
  .source-auto-status.routing .auto-status-star{animation:none}
  .auto-book,.source-cover{transition:none!important;transform:none!important}
 }
+
+/* Own PDF book jacket: use the first locally rendered page when available. */
+.own-book-panel{display:flex;align-items:center;gap:23px;padding:17px 19px;margin:0 0 17px;border:1px solid #dbe9da;border-radius:15px;background:linear-gradient(115deg,#f1f7ee,#fafcf8)}
+.own-book-art{flex:0 0 102px;display:grid;place-items:center}
+.own-book-art img{display:block;width:102px;height:144px;object-fit:contain;object-position:center;background:#fff;border-radius:5px 8px 8px 5px;box-shadow:5px 9px 15px rgba(25,61,34,.17)}
+.own-book-copy{min-width:0}
+.own-book-copy strong{display:block;font-size:19px;letter-spacing:-.04em;line-height:1.18;color:#28583d;overflow-wrap:anywhere;margin:7px 0}
+.own-book-copy p{color:#65836c;font-size:11px;line-height:1.6;margin:0 0 10px}
+.own-book-hint{display:inline-flex;padding:7px 10px;color:#2f764a;background:#e3f2e2;border-radius:8px;font-size:10px;font-weight:760}
+.source-choice:focus-visible{outline:3px solid #2d8a58;outline-offset:3px}
+.source-choice .source-cover{aspect-ratio:340/482}
+@media(max-width:700px){.own-book-panel{gap:14px;padding:13px}.own-book-art{flex-basis:83px}.own-book-art img{width:83px;height:117px}.own-book-copy strong{font-size:16px}.own-book-copy p{font-size:10px}}
