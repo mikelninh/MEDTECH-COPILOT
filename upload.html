@@ -22,13 +22,13 @@
     <section class="source-intro" aria-labelledby="mainTitle">
       <div><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
         <h1 id="mainTitle">Quelle wählen. <em>Frage stellen.</em></h1>
-        <p>Ein Gesetz, ein Handbuch oder dein PDF. <strong>Ohne Auswahl sucht der Copilot das passende Buch</strong> – und zeigt die Fundstelle rechts neben der Antwort.</p>
+        <p>Wähle bewusst <strong>ein Handbuch, ein bestimmtes deutsches Gesetz oder dein eigenes PDF</strong>. Nur diese Quelle wird für die nächste Frage durchsucht – das Original bleibt daneben sichtbar.</p>
       </div>
       <a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a>
     </section>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
       <section class="source-chooser" aria-label="Quelle für diese Recherche auswählen">
-        <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help"><strong>Keine Auswahl nötig:</strong> Der Copilot schlägt ein Buch vor. Du kannst jederzeit selbst wählen.</span></div>
+        <div class="chooser-head"><span class="eyebrow">01 / AKTIVE QUELLE</span><span class="source-help"><strong>Explizite Auswahl:</strong> Nur die aktivierte Quelle wird für deine Frage verwendet.</span></div>
         <div class="source-tabs" role="group" aria-label="Quellenkategorie">
           <button type="button" class="active" data-source-group="medtech" aria-pressed="true">Handbücher</button>
           <button type="button" data-source-group="laws" aria-pressed="false">Deutsche Gesetze</button>
@@ -46,7 +46,7 @@
           <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
         </div>
         <div id="allLawHint" class="all-law-hint hidden">
-          <span>Suchst du ein anderes Gesetz?</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
+          <span>Hier: drei auswählbare GitLaw-Lesefassungen. Weitere Bundesgesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
         </div>
       </section>
     <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
@@ -82,10 +82,10 @@
       <div class="workspace-header"><div><span class="eyebrow">02 / FRAGEN</span><h2>Was möchtest du wissen?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
       <form id="questionForm" class="question-form">
         <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
-        <input id="questionInput" autocomplete="off" placeholder="Frag einfach – Quelle wird bei Bedarf sichtbar gewählt …" maxlength="400">
+        <input id="questionInput" autocomplete="off" placeholder="Erst Quelle auswählen, dann eine Frage stellen …" maxlength="400">
         <button type="submit" id="askButton">Fragen <span aria-hidden="true">→</span></button>
       </form>
-      <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Keine Therapieempfehlung oder Gerätefreigabe.</p>
+      <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
     </section>
     <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
       <div class="result-head"><span class="eyebrow">03 / NACHPRÜFEN</span><span class="answer-status" id="answerStatus"></span></div>
@@ -120,7 +120,7 @@
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
     <section class="limit-foot"><div><span class="eyebrow">WAS V0.9 KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V1.0 / SOURCE FIRST <span>Ein Portfolio-Experiment. Kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · V1.0 / SOURCE FIRST <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>
