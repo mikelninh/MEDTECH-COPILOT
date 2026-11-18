@@ -1,15 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="340" height="482" viewBox="0 0 340 482" role="img" aria-label="ORION M100, SIMULIERTES SERVICEHANDBUCH">
-<defs><linearGradient id="paper" x1="0" x2="1" y1="0" y2=".8"><stop offset="0" stop-color="#23492E"/><stop offset="1" stop-color="#23492E"/></linearGradient></defs>
-<rect width="340" height="482" rx="13" fill="url(#paper)"/>
-<rect width="17" height="482" fill="#102A1A" opacity=".73"/><path d="M25 11V468" stroke="#B5DE85" stroke-width="1" opacity=".45"/>
-<rect x="43" y="39" width="260" height="1.5" fill="#B5DE85" opacity=".8"/>
-<text x="44" y="68" font-size="12" font-family="Arial,sans-serif" font-weight="700" letter-spacing="2" fill="#CFDFDA">FIELDNOTES LIBRARY</text>
-<text x="44" y="105" font-size="38" font-family="Arial,sans-serif" font-weight="800" letter-spacing="-1.4" fill="#F9F6E7">ORION M100</text>
-<text x="44" y="126" font-size="10" font-family="Arial,sans-serif" font-weight="700" fill="#CFDFDA" textLength="260" lengthAdjust="spacingAndGlyphs">SIMULIERTES SERVICEHANDBUCH</text>
-<path d="M50 385h254" stroke="#B5DE85" stroke-width="1.5" opacity=".74"/>
-<rect x="93" y="141" width="150" height="182" rx="14" fill="#113A2A" stroke="#B5DE85" stroke-width="3"/><rect x="106" y="156" width="124" height="66" rx="5" fill="#315741"/><path d="M118 192h36l11-14 19 32 13-19h19" stroke="#B5DE85" stroke-width="3" fill="none"/><rect x="110" y="241" width="77" height="40" rx="5" fill="#436D4D"/><circle cx="212" cy="259" r="13" fill="none" stroke="#B5DE85" stroke-width="3"/><path d="M136 323v32" stroke="#B5DE85" stroke-width="4"/>
-<text x="45" y="415" font-size="10.5" font-family="Arial,sans-serif" letter-spacing="2" fill="#CFDFDA">TRAINING · FIKTIV</text>
-<path d="M45 446h248" stroke="#B5DE85" opacity=".4"/>
-<text x="44" y="464" font-size="9" font-family="Arial,sans-serif" letter-spacing="1.8" fill="#CFDFDA">MEDTECH COPILOT × GITLAW</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="482" viewBox="0 0 340 482" role="img" aria-label="ORION M100 · FIKTIVES MONITORHANDBUCH">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#263b60"/><stop offset="1" stop-color="#111d37"/></linearGradient><linearGradient id="screen" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#081a2a"/><stop offset="1" stop-color="#11354a"/></linearGradient></defs>
+<rect width="340" height="482" rx="13" fill="url(#bg)"/><rect width="18" height="482" fill="#0c192e"/><path d="M27 13V468" stroke="#b3c9fa" opacity=".55"/><path d="M43 39H299" stroke="#b3c9fa" stroke-width="2"/>
+<text x="43" y="66" fill="#b9cae5" font-size="12" letter-spacing="2" font-weight="700" font-family="Arial,sans-serif">FIELDNOTES · DEVICE 02</text>
+<text x="42" y="104" fill="#f7fbff" font-size="38" letter-spacing="-1.5" font-weight="800" font-family="Arial,sans-serif">ORION M100</text><text x="43" y="131" fill="#cbd7f0" font-size="11" font-weight="700" font-family="Arial,sans-serif">FIKTIVER PATIENTENMONITOR</text>
+<circle cx="170" cy="256" r="116" fill="#8bb4fa" opacity=".06"/>
+<rect x="59" y="176" width="235" height="155" rx="12" fill="#bed5e8" stroke="#d3eaf8" stroke-width="4"/>
+<rect x="71" y="187" width="211" height="130" rx="6" fill="url(#screen)"/>
+<path d="M78 238h38l9-16 13 31 19-57 19 63 13-25 10 4h68" fill="none" stroke="#8ff6c6" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+<path d="M80 290h199M80 210h199" stroke="#527d91" stroke-width="1" opacity=".5"/>
+<rect x="145" y="331" width="59" height="27" rx="3" fill="#8faccb"/><path d="M117 362h116" stroke="#bed5e8" stroke-width="9" stroke-linecap="round"/>
+<path d="M43 399H299" stroke="#9cb7e0" opacity=".7"/><text x="43" y="423" fill="#ccdaf4" font-size="11" font-weight="700" letter-spacing="1.4" font-family="Arial,sans-serif">TRAINING · KEIN REALES GERÄT</text>
+<path d="M43 448H299" stroke="#9cb7e0" opacity=".45"/><text x="43" y="465" fill="#cbd7f0" font-size="9" letter-spacing="1.5" font-family="Arial,sans-serif">MEDTECH COPILOT × GITLAW</text>
 </svg>
