@@ -57,7 +57,23 @@ async function question(page,q){
  await ready(desktop,"mpbetreibv");
  assert.match(await desktop.locator("#sourceOfficialLink").getAttribute("href"),/gesetze-im-internet\.de\/mpbetreibv_2025\/MPBetreibV\.pdf/);
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/MPBetreibV/);
+ assert.equal(await desktop.locator("#faqPanel").isVisible(),true,"Official-law FAQs should be visible on selection");
+ assert.ok(await desktop.locator(".faq-item").count()>=8,"MPBetreibV should have eight curated questions");
+ await desktop.locator("#learningConsent").check();
+ await desktop.locator(".faq-item summary").first().click();
+ assert.match(await desktop.locator(".faq-item").first().locator(".faq-official").getAttribute("href"),/gesetze-im-internet\.de\/mpbetreibv_2025\/__/);
+ assert.equal(await desktop.locator("#learningCounts").innerText().then(x=>x.includes("Fragen")),true);
+ const persisted=await desktop.evaluate(()=>localStorage.getItem("medtech_source_quality_aggregate_v1"));
+ assert.equal(persisted.includes("Wer gilt als Betreiber"),false,"Never persist raw FAQ text");
+
  assert.equal(await question(desktop,"Was steht zum Medizinproduktebuch?"),"QUELLE GEFUNDEN");
+ await desktop.locator("#answerHelpful").click();
+ const feedback=await desktop.evaluate(()=>JSON.parse(localStorage.getItem("medtech_source_quality_aggregate_v1")));
+ assert.equal(feedback.asked,1);
+ assert.equal(feedback.helpful,1);
+ assert.equal(feedback.evidence,1);
+ assert.equal(feedback.faqOpens.b01,1);
+
  await desktop.waitForFunction(()=>window.MedtechUploadDemo.status().renderedPage>0);
  assert.equal(await desktop.locator("#pageCanvas").isVisible(),true);
  await desktop.screenshot({path:"artifacts/v10-02-law-side-by-side.png",fullPage:true});
@@ -96,7 +112,7 @@ async function question(page,q){
  assert.match(await desktop.locator("#ownCoverTitle").innerText(),/fixture\.pdf/);
  assert.equal(await question(desktop,"Was misst das NanoPod Modul?"),"QUELLE GEFUNDEN");
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/fixture/);
- console.log("PASS SOURCE E2E desktop: handbook, 5 federal law reader editions, custom PDF, source isolation, side by side");
+ console.log("PASS SOURCE E2E desktop: handbook, 5 government-portal legal PDFs, custom PDF, source isolation, side by side");
 
  const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  mobile.on("pageerror",e=>errors.push("mobile "+e.message));
