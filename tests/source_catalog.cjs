@@ -5,8 +5,8 @@ const fs=require("node:fs"),path=require("node:path"),crypto=require("node:crypt
 const manifest=JSON.parse(fs.readFileSync("data/source_catalog.json","utf8"));
 assert.equal(manifest.schemaVersion,1);
 assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(manifest.retrievedAt));
-assert.equal(manifest.sources.length,5);
-const expected=new Set(["lumen","orion","mpbetreibv","mpdg","arbschg"]);
+assert.equal(manifest.sources.length,7);
+const expected=new Set(["lumen","orion","mpbetreibv","mpdg","arbschg","mpamiv","mpav"]);
 for(const src of manifest.sources){
  assert.ok(expected.delete(src.id),"Unexpected or duplicate source ID: "+src.id);
  assert.ok(["laws","medtech"].includes(src.group));
@@ -32,4 +32,4 @@ for(const src of manifest.sources){
  console.log("PASS SOURCE "+src.id+" / "+src.pages+" pages / "+src.sha256.slice(0,12));
 }
 assert.equal(expected.size,0,"Missing expected examples");
-console.log("PASS SOURCE CATALOG 5/5 published PDF fingerprints");
+console.log("PASS SOURCE CATALOG 7/7 published PDF fingerprints");
