@@ -51,7 +51,10 @@ async function ask(page,question,expected,pageNo){
  assert.ok(await page.locator("#pageCanvas").evaluate(canvas=>canvas.width>100&&canvas.height>100));
  await page.screenshot({path:"artifacts/v09-01-desktop-source.png",fullPage:true});
  await ask(page,"Wie kann ich den Alarm deaktivieren?","blocked");
+ assert.equal(await page.locator("#openOriginal").getAttribute("href"),null,"No stale PDF link on blocked answer");
+ assert.equal(await page.locator("#pageCanvas").isVisible(),false,"No stale PDF page on blocked answer");
  await ask(page,"Wann wurde unser Gerät zuletzt gewartet?","unknown");
+ assert.equal(await page.locator("#openOriginal").getAttribute("href"),null,"No stale PDF link on unknown answer");
 
  // PDF with instruction-like HTML must appear only as inert text.
  await ask(page,"Was steht zu HTML Befehlen und PDF Text?","evidence",4);
