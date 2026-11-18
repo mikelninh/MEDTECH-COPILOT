@@ -66,6 +66,15 @@ function showSource(source){
  $("sourceBanner").classList.toggle("has-source",!!source);
  $("viewerSourceName").textContent=name;
  $("viewerSourceMeta").textContent=source?note:"Die Originalseite erscheint direkt nach der Quellenauswahl.";
+ const proof=$("viewerSourceProof");
+ if(proof){
+  const integrity=!!(source?.sha256&&state.hash===source.sha256);
+  proof.classList.toggle("verified",integrity);
+  proof.textContent=!source?"Noch keine Datei ausgewählt":integrity?
+   "DATEI-INTEGRITÄT ✓ · SHA-256 "+source.sha256.slice(0,12)+"… · "+source.pages+" Seiten":
+   "LOKALER QUELLENINDEX · Nicht extern auf Echtheit geprüft";
+ }
+
  const link=$("sourceOfficialLink");
  if(source?.originalUrl){
   link.href=source.originalUrl;
@@ -102,7 +111,7 @@ function makeCard(source){
  const info=mk("div","source-book-info");
  info.append(mk("span","source-choice-kicker",source.sourceKind==="gitlaw-reader-not-official"?"GITLAW · LESEFASSUNG":source.sourceKind==="manufacturer-original"?"HERSTELLER · ORIGINAL":"TRAINING · FIKTIV"),
   mk("strong","",source.title),mk("small","",source.subtitle+" · "+source.pages+" PDF-Seiten"));
- b.append(cover,info);
+ b.append(cover,info,mk("span","source-open-hint","Buch auswählen ↗"));
  b.addEventListener("click",()=>loadExample(source));
  return b;
 }
@@ -161,7 +170,13 @@ async function loadCatalog(){
    if(!/^\.\/covers\/(orion|lumen|mpbetreibv|mpdg|arbschg|mpamiv|mpav)\.svg$/.test(item.cover))throw new Error("Ungültiges Quellen-Cover");
    ids.add(item.id);
   }
-  state.catalog=data;paintCards();
+  state.catalog=data;
+  for(const button of document.querySelectorAll("[data-source-group]")){
+   if(button.dataset.sourceGroup==="own")continue;
+   const count=data.sources.filter(source=>source.group===button.dataset.sourceGroup).length;
+   const badge=mk("span","tab-count",String(count));badge.setAttribute("aria-hidden","true");button.append(badge);
+  }
+  paintCards();
  }catch(err){
   $("sourceCards").replaceChildren(mk("p","source-missing","Öffentliche Beispielquellen konnten nicht geladen werden. Eigenes PDF bleibt verfügbar."));
   console.warn("Public example source catalog unavailable:",err.message);
@@ -539,7 +554,8 @@ function setup(){
  const meta=mk("small","source-identity-meta","Handbuch · Gesetz · eigenes PDF");meta.id="viewerSourceMeta";
  const external=mk("a","source-official-link hidden","Offizielles PDF öffnen ↗");
  external.id="sourceOfficialLink";external.target="_blank";external.rel="noopener noreferrer";
- identity.append(kicker,title,meta,external);
+ const proof=mk("div","source-provenance","Noch keine Datei ausgewählt");proof.id="viewerSourceProof";
+ identity.append(kicker,title,meta,proof,external);
  viewer.prepend(identity);
  const viewerNote=mk("p","viewer-source-note","Quelle auswählen – anschließend bleibt die Originalseite ständig hier sichtbar.");
  viewerNote.id="viewerTrustNote";viewer.append(viewerNote);
