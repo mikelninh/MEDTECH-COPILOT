@@ -5,8 +5,8 @@ const fs=require("node:fs"),path=require("node:path"),crypto=require("node:crypt
 const manifest=JSON.parse(fs.readFileSync("data/source_catalog.json","utf8"));
 assert.equal(manifest.schemaVersion,1);
 assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(manifest.retrievedAt));
-assert.equal(manifest.sources.length,4);
-const expected=new Set(["lumen","mpbetreibv","mpdg","arbschg"]);
+assert.equal(manifest.sources.length,5);
+const expected=new Set(["lumen","philips","mpbetreibv","mpdg","arbschg"]);
 for(const src of manifest.sources){
  assert.ok(expected.delete(src.id),"Unexpected or duplicate source ID: "+src.id);
  assert.ok(["laws","medtech"].includes(src.group));
@@ -19,14 +19,20 @@ for(const src of manifest.sources){
  assert.ok(bytes.byteLength<=15*1024*1024);
  assert.equal(crypto.createHash("sha256").update(bytes).digest("hex"),src.sha256);
  if(src.group==="laws"){
-  assert.equal(src.sourceKind,"official-federal-law");
-  assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9]+\.pdf$/);
+  assert.equal(src.sourceKind,"gitlaw-reader-not-official");
+  assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/$/);
+  assert.match(src.gitlawUrl,/^https:\/\/raw\.githubusercontent\.com\/mikelninh\/gitlaw\/main\/laws\//);
+  assert.match(src.gitlawTextSha256,/^[a-f0-9]{64}$/);
+ }else if(src.id==="philips"){
+  assert.equal(src.sourceKind,"manufacturer-original");
+  assert.match(src.originalUrl,/^https:\/\/www\.documents\.philips\.com\//);
  }else{
   assert.equal(src.sourceKind,"fictional-training");
   assert.equal(src.originalUrl,null);
  }
+ assert.equal(src.cover,"./covers/"+src.id+".svg");
  assert.ok(Array.isArray(src.questions)&&src.questions.length>=2);
  console.log("PASS SOURCE "+src.id+" / "+src.pages+" pages / "+src.sha256.slice(0,12));
 }
 assert.equal(expected.size,0,"Missing expected examples");
-console.log("PASS SOURCE CATALOG 4/4 published PDF fingerprints");
+console.log("PASS SOURCE CATALOG 5/5 published PDF fingerprints");
