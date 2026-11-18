@@ -13,7 +13,7 @@
  const legalSources=new Set(["mpbetreibv","mpdg","arbschg","mpamiv","mpav","lumen","orion","own"]);
  const schema=()=>({version:1,asked:0,reasked:0,evidence:0,unknown:0,blocked:0,helpful:0,unhelpful:0,faqOpens:{},sourceAsks:{}});
  const safeSource=x=>legalSources.has(x)?x:"other";
- const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
+ const norm=s=>String(s||"").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g," ").trim();
  function overlap(a,b){
   if(a===b&&a.length>=9)return 1;
   const x=new Set(a.split(" ").filter(v=>v.length>2)),y=new Set(b.split(" ").filter(v=>v.length>2));
@@ -51,7 +51,7 @@
   function ask(sourceId,question,resultStatus){
    if(!allowed)return {recorded:false,reask:false};
    const source=safeSource(sourceId),q=norm(question),at=now();
-   const reask=!!(last&&last.source===source&&at-last.time<=300000&&overlap(last.question,q)>=.67);
+   const reask=!!(last&&last.source===source&&at-last.time<=300000&&overlap(last.question,q)>=.6);
    last={source,question:q,time:at}; // volatile memory: NEVER persisted
    counts.asked++;counts.sourceAsks[source]=(counts.sourceAsks[source]||0)+1;
    if(reask)counts.reasked++;
