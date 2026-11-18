@@ -6,7 +6,7 @@ const manifest=JSON.parse(fs.readFileSync("data/source_catalog.json","utf8"));
 assert.equal(manifest.schemaVersion,1);
 assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(manifest.retrievedAt));
 assert.equal(manifest.sources.length,5);
-const expected=new Set(["lumen","philips","mpbetreibv","mpdg","arbschg"]);
+const expected=new Set(["lumen","orion","mpbetreibv","mpdg","arbschg"]);
 for(const src of manifest.sources){
  assert.ok(expected.delete(src.id),"Unexpected or duplicate source ID: "+src.id);
  assert.ok(["laws","medtech"].includes(src.group));
@@ -23,9 +23,6 @@ for(const src of manifest.sources){
   assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/$/);
   assert.match(src.gitlawUrl,/^https:\/\/raw\.githubusercontent\.com\/mikelninh\/gitlaw\/main\/laws\//);
   assert.match(src.gitlawTextSha256,/^[a-f0-9]{64}$/);
- }else if(src.id==="philips"){
-  assert.equal(src.sourceKind,"manufacturer-original");
-  assert.match(src.originalUrl,/^https:\/\/www\.documents\.philips\.com\//);
  }else{
   assert.equal(src.sourceKind,"fictional-training");
   assert.equal(src.originalUrl,null);
