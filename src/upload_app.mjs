@@ -16,7 +16,7 @@ const mk=(tag,cls,txt)=>{
  if(txt!==undefined)n.textContent=String(txt);
  return n;
 };
-const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderVersion:0,busy:false,loadVersion:0};
+const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0};
 const status=(message,kind="neutral",percent="")=>{
  $("importMessage").textContent=message;
  $("importPercent").textContent=percent;
@@ -48,7 +48,7 @@ async function destroySource(){
   state.pdf=null;
  }
  if(state.url){URL.revokeObjectURL(state.url);state.url=null}
- state.index=null;state.file=null;state.hash=null;state.page=1;
+ state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;
  controls(false);clearResults();
  $("loadedBar").classList.add("hidden");
  $("loadedName").textContent="";$("loadedDetail").textContent="";
@@ -144,7 +144,7 @@ async function renderPage(pageNumber){
   try{state.render.cancel();await state.render.promise}catch(_){}
   state.render=null;
  }
- state.page=target;
+ state.page=target;state.renderedPage=0;
  $("viewerPageLabel").textContent="Seite "+target+" von "+state.pdf.numPages;
  $("viewerCounter").textContent=target+" / "+state.pdf.numPages;
  $("prevPage").disabled=target<=1;
@@ -162,21 +162,31 @@ async function renderPage(pageNumber){
   const fit=Math.max(.28,Math.min(1.75,(stage.clientWidth-32)/viewport.width));
   const scaled=page.getViewport({scale:fit});
   const pixelRatio=Math.min(window.devicePixelRatio||1,2);
-  const canvas=$("pageCanvas"),ctx=canvas.getContext("2d",{alpha:false});
+  // A fresh canvas prevents PDF.js from inheriting a cancelled render's context.
+  const oldCanvas=$("pageCanvas");
+  const canvas=document.createElement("canvas");
+  canvas.id="pageCanvas";canvas.className="hidden";canvas.setAttribute("aria-label","Gerenderte Original-PDF-Seite");
+  oldCanvas.replaceWith(canvas);
+  canvas.getContext("2d",{alpha:false});
   canvas.width=Math.ceil(scaled.width*pixelRatio);
   canvas.height=Math.ceil(scaled.height*pixelRatio);
   canvas.style.width=Math.ceil(scaled.width)+"px";
   canvas.style.height=Math.ceil(scaled.height)+"px";
   canvas.classList.remove("hidden");
   $("viewerEmpty").classList.add("hidden");
-  state.render=page.render({canvasContext:ctx,viewport:scaled,transform:[pixelRatio,0,0,pixelRatio,0,0]});
+  state.render=page.render({canvas,viewport:scaled,transform:[pixelRatio,0,0,pixelRatio,0,0]});
   await state.render.promise;
-  if(version===state.renderVersion)state.render=null;
+  if(version===state.renderVersion){
+   state.render=null;
+   state.renderedPage=target;
+  }
   page.cleanup();
  }catch(err){
   if(version!==state.renderVersion||err?.name==="RenderingCancelledException")return;
+  state.renderedPage=0;
+  console.error("PDF page rendering failed",err);
   $("viewerEmpty").classList.remove("hidden");
-  $("viewerEmpty").querySelector("p").textContent="Seite konnte nicht dargestellt werden. Das Original-PDF lässt sich weiterhin separat öffnen.";
+  $("viewerEmpty").querySelector("p").textContent="PDF-Seite nicht darstellbar: "+String(err?.message||"Renderfehler").slice(0,130)+". Das PDF lässt sich separat öffnen.";
   $("pageCanvas").classList.add("hidden");
  }
 }
@@ -239,7 +249,7 @@ function setup(){
   if(state.pdf&&$("resultSection").classList.contains("hidden")===false&&state.page)renderPage(state.page);
  });
  window.MedtechUploadDemo={
-  status:()=>({loaded:!!state.index,pages:state.index?.pages||0,chunks:state.index?.chunks.length||0,fileName:state.file?.name||null}),
+  status:()=>({loaded:!!state.index,pages:state.index?.pages||0,chunks:state.index?.chunks.length||0,fileName:state.file?.name||null,renderedPage:state.renderedPage}),
   ask,remove:destroySource
  };
 }
