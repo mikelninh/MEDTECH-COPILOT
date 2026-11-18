@@ -20,6 +20,10 @@ async function ask(page,question,expected,pageNo){
   if(pageNo)assert.equal(await page.locator("#citationPage").innerText(),"PDF-SEITE "+pageNo);
   assert.ok((await page.locator("#citationText").innerText()).length>25);
   assert.equal(await page.locator("#viewerPageLabel").innerText(),"Seite "+pageNo+" von "+(await page.evaluate(()=>window.MedtechUploadDemo.status().pages)));
+  await page.waitForFunction(pageNumber=>window.MedtechUploadDemo?.status().renderedPage===pageNumber,pageNo,{timeout:15000});
+  assert.equal(await page.locator("#pageCanvas").isVisible(),true,"Source PDF canvas must be visible");
+  assert.equal(await page.locator("#viewerEmpty").isVisible(),false,"PDF rendering error cannot count as a pass");
+  assert.ok(await page.locator("#pageCanvas").evaluate(el=>el.width>100&&el.height>100));
  }else assert.equal(await page.locator("#citationCard").isVisible(),false);
 }
 (async()=>{
