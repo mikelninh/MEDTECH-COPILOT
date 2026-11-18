@@ -25,6 +25,25 @@ if(typeof Map.prototype.getOrInsert!=="function"){
  });
 }
 
+// PDF.js 6.5 also calls the proposal on WeakMap (for Path2D caches).
+// Chromium 141 does not yet provide it, despite supporting Map itself.
+if(typeof WeakMap.prototype.getOrInsertComputed!=="function"){
+ Object.defineProperty(WeakMap.prototype,"getOrInsertComputed",{
+  configurable:true,writable:true,value:function(key,callback){
+   if(this.has(key))return this.get(key);
+   const value=callback(key);this.set(key,value);return value;
+  }
+ });
+}
+if(typeof WeakMap.prototype.getOrInsert!=="function"){
+ Object.defineProperty(WeakMap.prototype,"getOrInsert",{
+  configurable:true,writable:true,value:function(key,value){
+   if(this.has(key))return this.get(key);
+   this.set(key,value);return value;
+  }
+ });
+}
+
 const Core=window.MedtechManualCore;
 const Router=window.MedtechSourceRouter;
 if(!Core)throw new Error("Browser retrieval engine unavailable.");
