@@ -10,14 +10,14 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(){
 "use strict";
 const MAX_PAGES=120,MAX_BYTES=15*1024*1024;
-const stop=new Set(("der die das dem den des ein eine einen einem einer ist sind im in auf an am aus bei mit und oder fuer für fur von zu zum zur was wie warum welche welcher welches welchen wozu wer wann wo wodurch kann soll muss darf ich mir wir uns unser unsere ihr ihre bitte zeigt zeige zeigen dokument handbuch manual document pdf gerat geraet geräte geraete modell version werden wird sein stehen steht hinweise hinweis passiert passieren angeleitung anleitung the a an of to on or for at is are be has have with by how what where when why which can should does do explain show please give me about this that from could would according available there these if then this").split(/\s+/));
+const stop=new Set(("der die das dem den des ein eine einen einem einer ist sind im in auf an am aus bei mit und oder fuer für fur von zu zum zur was wie warum welche welcher welches welchen wozu wer wann wo wodurch kann soll muss darf ich mir wir uns unser unsere ihr ihre bitte zeigt zeige zeigen dokument handbuch manual document pdf gerat geraet geräte geraete modell version werden wird sein stehen steht hinweise hinweis passiert passieren gibt angeleitung anleitung the a an of to on or for at is are be has have with by how what where when why which can should does do explain show please give me about this that from could would according available there these if then this").split(/\s+/));
 const SYN=[
  ["akku","batterie","battery","batteries","laden","charge","charging","entladung","discharge"],
  ["alarm","warnung","warning","alarmmeldung","warnsignal","alert","alarme"],
  ["wartung","service","maintenance","instandhaltung","inspection"],
  ["sensor","sonde","probe","messfuehler"],
  ["kapnographie","capnography","co2","kohlendioxid"],
- ["temperatur","temperature","heat","hitze","ambient"],
+ ["temperatur","umgebungstemperatur","temperature","heat","hitze","ambient"],
  ["stromversorgung","power","versorgung","netzteil","supply"],
  ["fehler","error","fault","malfunction","stoerung","störung"],
  ["sicherheit","safety","security","schutz"],
@@ -43,7 +43,7 @@ function classify(question){
  const q=normalize(question);
  const blocked=[
   /(?:alarm|alarme|warnsignal|schutzleiter|interlock|safety|sicherung).{0,105}(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|bypass|override|unterdruck|unterdrueck|uberbruck|ueberbruck|suppress|silence|aender|einstell|verschieb|ander|aender|verander|modifizier|adjust|change)/,
-  /(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|bypass|override|unterdruck|unterdrueck|uberbruck|ueberbruck|suppress|silence|aender|einstell|verschieb).{0,105}(?:alarm|alarme|warnsignal|schutzleiter|interlock)/,
+  /(?:deaktiv|umgeh|ausschalt|abschalt|stumm|mute|bypass|override|unterdruck|unterdrueck|uberbruck|ueberbruck|suppress|silence|aender|einstell|verschieb|ander|verander|modifizier|adjust|change).{0,105}(?:alarm|alarme|warnsignal|schutzleiter|interlock)/,
   /(?:beatmung|ventilation|therapie|dosierung|medikation|insulin|infusion).{0,95}(?:einstell|aender|verander|anpass|stop|dosier|increase|decrease)/,
   /(?:patient|patienten).{0,80}(?:diagnostiz|diagnose stellen|therapier|beurteil|dosier)/,
   /(?:passwort|password|patientenakte|patient record|patientenname|private patient|patientendaten)/
