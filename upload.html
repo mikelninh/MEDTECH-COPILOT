@@ -51,6 +51,15 @@
       </section>
     <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
       <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
+      <div class="own-book-panel" id="ownBookPanel" aria-label="Cover für dein eigenes PDF">
+        <div class="own-book-art"><img id="ownCoverImage" src="./covers/own.svg" alt="Cover für dein eigenes PDF" width="340" height="482"></div>
+        <div class="own-book-copy">
+          <span class="eyebrow">DEIN BUCH · NUR LOKAL</span>
+          <strong id="ownCoverTitle">Dein PDF</strong>
+          <p id="ownCoverMeta">Sobald du ein PDF auswählst, zeigen wir hier eine Vorschau seiner ersten Seite. Das Bild bleibt in diesem Browser-Tab.</p>
+          <span class="own-book-hint">PDF auswählen ↓</span>
+        </div>
+      </div>
       <div class="upload-grid">
         <div class="dropzone" id="dropzone" role="group" aria-label="PDF-Datei auswählen">
           <input id="pdfFile" type="file" accept="application/pdf,.pdf" aria-label="PDF-Datei hochladen" class="file-input">
@@ -82,8 +91,8 @@
       <div class="workspace-header"><div><span class="eyebrow">02 / FRAGEN</span><h2>Was möchtest du wissen?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
       <form id="questionForm" class="question-form">
         <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
-        <input id="questionInput" autocomplete="off" placeholder="Erst Quelle auswählen, dann eine Frage stellen …" maxlength="400">
-        <button type="submit" id="askButton">Fragen <span aria-hidden="true">→</span></button>
+        <input id="questionInput" disabled autocomplete="off" placeholder="Erst Quelle auswählen, dann eine Frage stellen …" maxlength="400">
+        <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
       </form>
       <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
     </section>

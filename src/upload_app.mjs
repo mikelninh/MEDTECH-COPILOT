@@ -182,6 +182,7 @@ async function destroySource(){
  if(state.url){URL.revokeObjectURL(state.url);state.url=null}
  state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;
  showSource(null);
+ resetOwnCover();
  controls(false);clearResults();
  $("loadedBar").classList.add("hidden");
  $("loadedName").textContent="";$("loadedDetail").textContent="";
@@ -211,6 +212,40 @@ function docText(textContent){
   if(item.hasEOL)output+="\n";
  }
  return output.replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n");
+}
+function resetOwnCover(){
+ const cover=$("ownCoverImage");
+ if(!cover)return;
+ cover.src="./covers/own.svg";
+ cover.alt="Cover für dein eigenes PDF";
+ $("ownCoverTitle").textContent="Dein PDF";
+ $("ownCoverMeta").textContent="Sobald du ein PDF auswählst, zeigen wir hier eine Vorschau seiner ersten Seite. Das Bild bleibt in diesem Browser-Tab.";
+}
+async function updateOwnCover(version){
+ const cover=$("ownCoverImage");
+ if(!cover||!state.pdf||version!==state.loadVersion)return;
+ let page=null;
+ try{
+  page=await state.pdf.getPage(1);
+  if(version!==state.loadVersion)return;
+  const natural=page.getViewport({scale:1});
+  const viewport=page.getViewport({scale:Math.min(.65,260/natural.width)});
+  const canvas=document.createElement("canvas");
+  canvas.width=Math.max(1,Math.ceil(viewport.width));
+  canvas.height=Math.max(1,Math.ceil(viewport.height));
+  await page.render({canvas,viewport}).promise;
+  if(version!==state.loadVersion||!state.file)return;
+  cover.src=canvas.toDataURL("image/png");
+  cover.alt="Lokale Vorschau der ersten Seite: "+state.file.name;
+  $("ownCoverTitle").textContent=state.file.name;
+  $("ownCoverMeta").textContent=state.pdf.numPages+" Seiten · Vorschau aus der ersten PDF-Seite · nicht hochgeladen";
+ }catch(_){
+  // Thumbnail failures must never block the source search or PDF viewer.
+  if(version===state.loadVersion&&state.file){
+   $("ownCoverTitle").textContent=state.file.name;
+   $("ownCoverMeta").textContent="Covervorschau nicht verfügbar. Die PDF-Recherche funktioniert weiterhin.";
+  }
+ }finally{if(page)page.cleanup()}
 }
 async function chooseFile(file,sourceMeta=null){
  await destroySource();
@@ -261,6 +296,7 @@ async function chooseFile(file,sourceMeta=null){
   status("Dokument lokal indexiert. Bereit für deine Fragen.","success",index.pages+" Seiten");
   $("viewerEmpty").classList.add("hidden");
   await renderPage(1);
+  if(!sourceMeta)await updateOwnCover(version);
   $("questionInput").focus({preventScroll:true});
  }catch(err){
   status("Nicht eingelesen: "+(err?.name==="PasswordException"?"PDF ist passwortgeschützt.":"")+String(err?.message||"Unbekannter PDF-Fehler").slice(0,155),"error");

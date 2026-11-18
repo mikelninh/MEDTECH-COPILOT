@@ -27,6 +27,9 @@ async function question(page,q){
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length>0);
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
  assert.equal(await desktop.locator("[data-source-id='orion']").count(),1);
+ for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"All listed books need visible cover images");
+ }
  assert.equal(await desktop.locator("#viewer").isVisible(),true);
  await desktop.locator("[data-source-id='lumen']").click();
  await ready(desktop,"lumen");
@@ -71,9 +74,13 @@ async function question(page,q){
 
  await desktop.locator("[data-source-group='own']").click();
  assert.equal(await desktop.locator("#ownPdfPanel").isVisible(),true);
+ assert.equal(await desktop.locator("#ownCoverImage").isVisible(),true);
+ assert.match(await desktop.locator("#ownCoverImage").getAttribute("src"),/covers\/own\.svg/);
  assert.equal(await desktop.locator("#questionInput").isDisabled(),true);
  await desktop.locator("#pdfFile").setInputFiles("/tmp/medtech_upload_fixture.pdf");
  await ready(desktop,"own");
+ await desktop.waitForFunction(()=>document.getElementById("ownCoverImage").getAttribute("src").startsWith("data:image/png;"),null,{timeout:15000});
+ assert.match(await desktop.locator("#ownCoverTitle").innerText(),/fixture\.pdf/);
  assert.equal(await question(desktop,"Was misst das NanoPod Modul?"),"QUELLE GEFUNDEN");
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/fixture/);
  console.log("PASS SOURCE E2E desktop: handbook, 3 federal laws, custom PDF, source isolation, side by side");

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="482" viewBox="0 0 340 482" role="img" aria-label="DEIN PDF · LOKALE VORSCHAU">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#eaf2dd"/><stop offset="1" stop-color="#cee7ce"/></linearGradient><linearGradient id="sheet" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fffef7"/><stop offset="1" stop-color="#eaf5e7"/></linearGradient></defs>
+<rect width="340" height="482" rx="13" fill="url(#bg)"/><rect width="19" height="482" fill="#719b79"/><path d="M31 20V463" stroke="#87ae8d"/>
+<text x="43" y="65" fill="#41654e" font-size="12" font-weight="700" letter-spacing="2" font-family="Arial,sans-serif">FIELDNOTES / EIGENE QUELLE</text>
+<text x="43" y="110" fill="#214c35" font-size="41" font-weight="800" letter-spacing="-1.5" font-family="Arial,sans-serif">DEIN PDF</text><text x="43" y="134" fill="#5b8263" font-size="12" font-weight="700" font-family="Arial,sans-serif">LOKAL · PRIVAT · SICHTBAR</text>
+<rect x="79" y="174" width="192" height="214" rx="9" fill="#729d7b" opacity=".16"/>
+<path d="M92 173h109l42 42v165H92z" fill="url(#sheet)" stroke="#78a785" stroke-width="3"/><path d="M201 173v42h42" fill="#dcecdc" stroke="#78a785" stroke-width="3"/>
+<rect x="116" y="250" width="93" height="9" rx="4.5" fill="#9ab69c"/><rect x="116" y="272" width="109" height="7" rx="3.5" fill="#cadfca"/><rect x="116" y="291" width="85" height="7" rx="3.5" fill="#cadfca"/><rect x="116" y="314" width="54" height="25" rx="5" fill="#d5e9d1"/>
+<text x="44" y="420" fill="#396849" font-size="11" font-weight="700" letter-spacing="1.6" font-family="Arial,sans-serif">DEIN DOKUMENT. DEINE WAHL.</text>
+<path d="M43 446h258" stroke="#8caf8f"/><text x="43" y="466" fill="#507a58" font-size="9" letter-spacing="1.4" font-family="Arial,sans-serif">MEDTECH COPILOT × GITLAW</text>
+</svg>

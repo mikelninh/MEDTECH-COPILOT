@@ -21,3 +21,24 @@
 @media(max-width:790px){.byom-launch{grid-template-columns:1fr}.byom-launch-copy{padding:28px 25px 15px}.byom-launch h2{font-size:47px}.byom-launch-paper{margin:0 0 27px 30px;max-width:225px;min-height:0;transform:rotate(1deg)}.byom-paperhead{margin-bottom:13px}.byom-paperquote{margin-top:13px}}
 @media(max-width:480px){.byom-launch h2{font-size:clamp(39px,10.6vw,52px)}.byom-launch{border-radius:19px}.byom-launch-button{width:100%;justify-content:space-between}.byom-launch-label{font-size:8px}.byom-launch p{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.byom-launch-paper{transform:none}}
+
+/* Source-first visual entry: book jackets replace the old generic PDF drawing. */
+.byom-launch{grid-template-columns:minmax(0,1.04fr) minmax(290px,.84fr);gap:12px}
+.byom-launch-shelf{position:relative;display:flex;flex-direction:column;gap:18px;justify-content:center;min-width:0;text-decoration:none;color:#ecf8e9;border:1px solid rgba(211,242,219,.17);border-radius:18px;background:radial-gradient(circle at 60% 24%,rgba(179,232,176,.17),transparent 58%),rgba(255,255,255,.045);padding:23px 18px 17px;margin:25px 23px 25px 0;transition:background .2s,transform .2s}
+.byom-launch-shelf:hover{background:rgba(255,255,255,.075);transform:translateY(-2px)}
+.byom-launch-shelf:focus-visible{outline:3px solid #c3f1c8;outline-offset:4px}
+.byom-shelf-kicker{font:700 10px ui-monospace,monospace;letter-spacing:.12em;color:#b4dfbe;text-align:center}
+.byom-shelf-books{display:flex;align-items:center;justify-content:center;min-height:204px;padding:9px 8px}
+.byom-shelf-books img{display:block;flex:0 0 auto;width:92px;height:132px;object-fit:cover;border-radius:5px 7px 7px 4px;box-shadow:4px 10px 20px rgba(2,19,10,.42),-2px 0 1px rgba(0,0,0,.17);margin-left:-43px;transform:rotate(-7deg);transition:transform .23s}
+.byom-shelf-books img:first-child{margin-left:0;transform:rotate(-12deg) translateY(8px)}
+.byom-shelf-books img:nth-child(2){transform:rotate(-5deg) translateY(-7px)}
+.byom-shelf-books img:nth-child(3){transform:rotate(1deg) translateY(-13px)}
+.byom-shelf-books img:nth-child(4){transform:rotate(6deg) translateY(-5px)}
+.byom-shelf-books img:nth-child(5){transform:rotate(12deg) translateY(8px)}
+.byom-launch-shelf:hover img{transform:rotate(0) translateY(-6px)}
+.byom-shelf-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;color:#bddec6;font-size:11px}
+.byom-shelf-footer strong{font-weight:750}
+.byom-shelf-footer>span{color:#b3f8bd;font-weight:750}
+@media(max-width:790px){.byom-launch{grid-template-columns:1fr;gap:0}.byom-launch-shelf{margin:0 24px 26px;padding:19px 16px 14px}.byom-shelf-books{min-height:150px}.byom-shelf-books img{width:81px;height:116px;margin-left:-37px}}
+@media(max-width:480px){.byom-shelf-books img{width:69px;height:99px;margin-left:-30px}.byom-shelf-books{min-height:129px}}
+@media(prefers-reduced-motion:reduce){.byom-launch-shelf,.byom-shelf-books img{transition:none!important;transform:none!important}}
