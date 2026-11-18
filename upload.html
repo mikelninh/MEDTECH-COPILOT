@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b24">
+<meta name="description" content="Eigenes PDF lokal durchsuchen: Belegte Originalpassagen und Seitenvorschau – ohne Upload an einen Server.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>Eigenes PDF · MEDTECH COPILOT V0.9</title>
+<link rel="stylesheet" href="./v9.css">
+<script type="module" src="./src/upload_app.mjs"></script>
+</head>
+<body>
+<div class="site">
+  <header class="topbar">
+    <a href="./" class="brand" aria-label="MEDTECH COPILOT Startseite"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M2 18h9l5-9 5 18 4-9h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>medtech<b>.</b><small>COPILOT / BYOM</small></span></a>
+    <nav aria-label="Navigation"><a href="./">← Alle Demos</a><span class="status"><span class="status-light"></span> LOCAL FIRST</span></nav>
+  </header>
+  <main>
+    <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
+    <section class="hero" aria-labelledby="mainTitle">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="accent-line"></span> V0.9 / BRING YOUR OWN MANUAL</div>
+        <h1 id="mainTitle">Dein PDF.<br><em>Deine Quelle.</em></h1>
+        <p class="hero-intro">Handbuch auswählen. Frage stellen. Die relevante Passage lesen – und <strong>direkt auf der Originalseite nachprüfen.</strong></p>
+        <div class="hero-trust"><span><span class="trust-symbol">✓</span> Verarbeitung im Browser</span><span><span class="trust-symbol">✓</span> Keine Anmeldung</span><span><span class="trust-symbol">✓</span> Keine erfundenen Antworten</span></div>
+      </div>
+      <div class="hero-proof" aria-hidden="true">
+        <div class="proof-file">
+          <div class="proof-file-head"><span>IFU / 2025</span><span>PDF</span></div>
+          <div class="proof-lines"><i></i><i></i><i></i><i></i></div>
+          <div class="proof-highlight"><span>QUELLE GEFUNDEN</span><b>Seite 03</b><small>Originalstelle ansehen ↗</small></div>
+        </div>
+        <div class="proof-shadow"></div>
+      </div>
+    </section>
+    <section class="workspace" aria-label="Eigenes Handbuch durchsuchen">
+      <div class="workspace-header"><div><span class="eyebrow">01 / DOKUMENT</span><h2>Starte mit deinem Handbuch.</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
+      <div class="upload-grid">
+        <div class="dropzone" id="dropzone" role="group" aria-label="PDF-Datei auswählen">
+          <input id="pdfFile" type="file" accept="application/pdf,.pdf" aria-label="PDF-Datei hochladen" class="file-input">
+          <div class="drop-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M11 8h18l8 8v25H11V8Z" stroke="currentColor" stroke-width="2"/><path d="M29 8v8h8M24 32V20m-5 5 5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>PDF hier ablegen</strong>
+          <p>Oder ein öffentliches, nicht vertrauliches Handbuch auswählen.</p>
+          <button id="choosePdf" class="choose-button" type="button">PDF auswählen <span aria-hidden="true">↗</span></button>
+          <span class="drop-caption">Kein Upload an einen Server. Text wird nur in diesem Tab verarbeitet.</span>
+        </div>
+        <aside class="upload-aside">
+          <span class="eyebrow">PRIVATSPHÄRE · KLAR ERKLÄRT</span>
+          <h3>Was passiert mit deinem PDF?</h3>
+          <div class="privacy-point"><span class="point-icon">01</span><p>Die Datei wird im Browser geöffnet. Der Inhalt wird nicht an unsere Server geschickt.</p></div>
+          <div class="privacy-point"><span class="point-icon">02</span><p>PDF.js wird von dieser Website ausgeliefert. Text und Fragen werden nicht gespeichert.</p></div>
+          <div class="privacy-point"><span class="point-icon">03</span><p>Schließt du den Tab oder entfernst das PDF, ist der temporäre Index weg.</p></div>
+          <p class="privacy-note">Der Webseitenaufruf selbst kann beim Hostinganbieter technische Zugriffslogs erzeugen. Keine Sprachaufnahme oder KI-API im Upload-Modus.</p>
+        </aside>
+      </div>
+      <div class="import-status" id="importStatus" role="status" aria-live="polite">
+        <span class="import-led"></span><span id="importMessage">Noch kein PDF ausgewählt.</span><span id="importPercent"></span>
+      </div>
+      <div class="loaded-bar hidden" id="loadedBar">
+        <div><span class="loaded-icon" aria-hidden="true">✓</span><span><strong id="loadedName"></strong><small id="loadedDetail"></small></span></div>
+        <button id="removePdf" type="button">Datei entfernen <span aria-hidden="true">×</span></button>
+      </div>
+    </section>
+    <section class="search-section" id="askSection" aria-label="Frage an das Dokument">
+      <div class="workspace-header"><div><span class="eyebrow">02 / FRAGEN</span><h2>Was möchtest du wissen?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
+      <form id="questionForm" class="question-form">
+        <label for="questionInput" class="visually-hidden">Frage zum PDF</label>
+        <input id="questionInput" autocomplete="off" placeholder="Z. B. Was steht zu Batterie, Sensor oder Wartung?" maxlength="400" disabled>
+        <button type="submit" id="askButton" disabled>Quelle finden <span aria-hidden="true">→</span></button>
+      </form>
+      <p class="search-hint">Keine externen Recherchen. Keine Therapieempfehlungen. Frag nach Begriffen, Warnhinweisen oder Abschnitten im hochgeladenen Dokument.</p>
+    </section>
+    <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
+      <div class="result-head"><span class="eyebrow">03 / NACHPRÜFEN</span><span class="answer-status" id="answerStatus"></span></div>
+      <div class="result-grid">
+        <div class="answer-side">
+          <h2 id="answerTitle">Fundstelle</h2>
+          <p id="answerLead"></p>
+          <div class="citation-card hidden" id="citationCard">
+            <div class="citation-top"><span>BELEGTE PASSAGE</span><span id="citationPage"></span></div>
+            <blockquote id="citationText"></blockquote>
+            <div class="citation-meta" id="citationMeta"></div>
+            <button class="jump-button" id="goToPage" type="button">Originalseite anzeigen <span aria-hidden="true">↗</span></button>
+          </div>
+          <div id="additionalCitations" class="additional-citations"></div>
+          <div class="answer-bottom">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+        </div>
+        <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
+          <div class="viewer-head"><strong>ORIGINAL / PDF</strong><span id="viewerPageLabel">Noch kein PDF</span></div>
+          <div class="viewer-stage" id="viewerStage">
+            <div class="viewer-empty" id="viewerEmpty"><span>▣</span><p>Nach dem Einlesen erscheint hier die Originalseite.</p></div>
+            <canvas id="pageCanvas" class="hidden" aria-label="Gerenderte Original-PDF-Seite"></canvas>
+          </div>
+          <div class="viewer-controls">
+            <button id="prevPage" type="button" disabled aria-label="Vorherige Seite">←</button>
+            <span id="viewerCounter">– / –</span>
+            <button id="nextPage" type="button" disabled aria-label="Nächste Seite">→</button>
+            <a id="openOriginal" class="open-original disabled" aria-disabled="true" tabindex="-1">PDF öffnen ↗</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <section class="limit-foot"><div><span class="eyebrow">WAS V0.9 KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+  </main>
+  <footer>MEDTECH COPILOT · V0.9 / BYOM <span>Ein Portfolio-Experiment. Kein Medizinprodukt.</span></footer>
+</div>
+</body>
+</html>
