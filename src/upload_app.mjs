@@ -269,6 +269,19 @@ async function updateOwnCover(version){
 async function chooseFile(file,sourceMeta=null){
  await destroySource();
  if(!file)return;
+ // Direct file selection should reveal the own-PDF workspace even when the
+ // visitor has not first clicked the "Mein PDF" tab.
+ if(!sourceMeta){
+  state.group="own";
+  $("ownPdfPanel").classList.remove("hidden");
+  $("allLawHint").classList.add("hidden");
+  document.querySelectorAll("[data-source-group]").forEach(button=>{
+   const active=button.dataset.sourceGroup==="own";
+   button.classList.toggle("active",active);
+   button.setAttribute("aria-pressed",String(active));
+  });
+  paintCards();
+ }
  if(!/\.pdf$/i.test(file.name)&&file.type!=="application/pdf"){
   status("Bitte eine PDF-Datei auswählen.","error");return;
  }
