@@ -1,0 +1,23 @@
+/* V0.9 homepage invitation — distinct from the existing v0.8 research panel. */
+.byom-launch{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(225px,.58fr);gap:30px;align-items:center;background:#17362a;border-radius:25px;color:#f5fdf4;min-height:355px;overflow:hidden;position:relative;margin:10px 0 28px}
+.byom-launch:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 75% 25%,rgba(126,216,147,.15),transparent 45%)}
+.byom-launch-copy{position:relative;padding:clamp(26px,4.5vw,55px);min-width:0}
+.byom-launch-label{display:flex;align-items:center;gap:8px;color:#b0e1bb;font:770 9px ui-monospace,monospace;letter-spacing:.12em}
+.byom-spark{width:8px;height:8px;background:#a7e9b9;border-radius:50%}
+.byom-launch h2{font-size:clamp(37px,4.5vw,61px);font-weight:700;line-height:1.04;letter-spacing:-.075em;margin:21px 0 14px}
+.byom-launch h2 em{font-style:normal;color:#afe9c0}
+.byom-launch p{max-width:510px;color:#b9cebd;font-size:13px;line-height:1.7;margin-bottom:24px}
+.byom-launch-button{display:inline-flex;align-items:center;gap:31px;padding:14px 18px;border-radius:11px;background:#baf2c9;color:#185239;text-decoration:none;font-weight:780;font-size:12px}
+.byom-launch-button:hover{background:#d1ffdb}
+.byom-launch-privacy{font-size:10px;color:#86aa94;margin-top:17px;letter-spacing:.015em}
+.byom-launch-paper{position:relative;transform:rotate(4deg);width:calc(100% - 31px);max-width:280px;min-height:251px;border-radius:13px;background:#f7fdf5;box-shadow:0 28px 45px rgba(0,9,0,.28);padding:18px;color:#315640}
+.byom-paperhead{display:flex;justify-content:space-between;font:750 9px ui-monospace,monospace;color:#6d9278;letter-spacing:.1em;margin-bottom:28px}
+.byom-paperline{width:100%;height:8px;border-radius:5px;background:#dceadd;margin:9px 0}
+.byom-paperline.short{width:68%}
+.byom-paperquote{background:#dcefe0;border-radius:9px;display:flex;flex-direction:column;gap:8px;padding:13px;margin-top:26px}
+.byom-paperquote small{color:#628e6e;font-size:9px;font-weight:760;letter-spacing:.11em}
+.byom-paperquote strong{font-size:27px;letter-spacing:-.06em}
+.byom-paperquote span{color:#46815b;font-size:10px}
+@media(max-width:790px){.byom-launch{grid-template-columns:1fr}.byom-launch-copy{padding:28px 25px 15px}.byom-launch h2{font-size:47px}.byom-launch-paper{margin:0 0 27px 30px;max-width:225px;min-height:0;transform:rotate(1deg)}.byom-paperhead{margin-bottom:13px}.byom-paperquote{margin-top:13px}}
+@media(max-width:480px){.byom-launch h2{font-size:clamp(39px,10.6vw,52px)}.byom-launch{border-radius:19px}.byom-launch-button{width:100%;justify-content:space-between}.byom-launch-label{font-size:8px}.byom-launch p{font-size:12px}}
+@media(prefers-reduced-motion:reduce){.byom-launch-paper{transform:none}}
