@@ -114,7 +114,7 @@ def main():
         raw,url=fetch_law(slug)
         pdf=pdf_from_markdown(raw,title,subtitle)
         add(id,"laws",title,subtitle+" · GitLaw-Lesefassung",title+".pdf",
-            "gitlaw-reader-not-official","https://www.gesetze-im-internet.de/"+slug+"/",
+            "gitlaw-reader-not-official","https://www.gesetze-im-internet.de/"+slug+"/"+title+".pdf",
             pdf,questions,url,sha(raw))
     target=Path(args.manifest);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
