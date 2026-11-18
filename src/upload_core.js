@@ -10,9 +10,9 @@
 })(typeof globalThis!=="undefined"?globalThis:this,function(){
 "use strict";
 const MAX_PAGES=120,MAX_BYTES=15*1024*1024;
-const stop=new Set(("der die das dem den des ein eine einen einem einer ist sind im in auf an am aus bei mit und oder fuer für fur von zu zum zur was wie warum welche welcher welches welchen wozu wer wann wo wodurch kann soll muss darf ich mir wir uns unser unsere ihr ihre bitte zeigt zeige zeigen dokument handbuch manual document pdf gerat geraet geräte geraete modell version werden wird sein stehen steht hinweise hinweis passiert passieren gibt angeleitung anleitung the a an of to on or for at is are be has have with by how what where when why which can should does do explain show please give me about this that from could would according available there these if then this").split(/\s+/));
+const stop=new Set(("der die das dem den des ein eine einen einem einer ist sind im in auf an am aus bei mit und oder fuer für fur von zu zum zur was wie warum welche welcher welches welchen wozu wer wann wo wodurch kann soll muss darf ich mir wir uns unser unsere ihr ihre bitte zeigt zeige zeigen dokument handbuch manual document pdf gerat geraet geräte geraete modell version werden wird sein stehen steht hinweise hinweis passiert passieren gibt angeleitung anleitung uber man beschrieben beschreibung beschreibt trifft the a an of to on or for at is are be has have with by how what where when why which can should does do explain show please give me about this that from could would according available there these if then this").split(/\s+/));
 const SYN=[
- ["akku","batterie","battery","batteries","laden","charge","charging","entladung","discharge"],
+ ["akku","batterie","battery","batteries","batteriehinweise","ladung","laden","charge","charging","entladung","discharge"],
  ["alarm","warnung","warning","alarmmeldung","warnsignal","alert","alarme"],
  ["wartung","service","maintenance","instandhaltung","inspection"],
  ["sensor","sonde","probe","messfuehler"],
@@ -23,12 +23,14 @@ const SYN=[
  ["sicherheit","safety","security","schutz"],
  ["reinigen","cleaning","clean","pflege","desinfektion","disinfection"],
  ["monitor","anzeige","angezeigt","anzeigen","display","bildschirm"],
- ["messung","messen","misst","messwerte","measuring","measure","measures","measurement"]
+ ["messung","messen","misst","messwerte","measuring","measure","measures","measurement"],
+ ["druck","ausdruck","drucken","ausdrucken","gedruckt","print","printing"]
 ];
 function normalize(v){
  return String(v==null?"":v).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/ß/g,"ss").replace(/ä/g,"a").replace(/ö/g,"o").replace(/ü/g,"u").replace(/[^a-z0-9]+/g," ").trim().replace(/\s+/g," ");
 }
 function stem(t){
+ if(t.length>7&&/ischen$/.test(t))return t.replace(/ischen$/,"isch");
  if(t.length>7)return t.replace(/(?:ungen|lichkeit|heiten|keiten|ischen|endes|ender|ation|ations|ments|mente|ernen|erei|heit|keit|lich|ungen|innen|ern|ers|ing|ung|en|es|er|em|e|s)$/,"");
  if(t.length>4)return t.replace(/(?:en|er|es|em|e|s)$/,"");
  return t;
