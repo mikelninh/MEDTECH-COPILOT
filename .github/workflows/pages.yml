@@ -33,11 +33,21 @@ jobs:
         run: |
           python3 -m pip install --quiet qrcode
           python3 scripts/make_labels.py dist/qr
+      - name: Install pinned Mozilla PDF.js locally
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Stage self-hosted PDF.js browser library
+        run: |
+          npm install --no-save --ignore-scripts --no-audit --no-fund pdfjs-dist@6.5.438
+          mkdir -p dist/vendor
+          cp node_modules/pdfjs-dist/build/pdf.mjs dist/vendor/pdf.mjs
+          cp node_modules/pdfjs-dist/build/pdf.worker.mjs dist/vendor/pdf.worker.mjs
       - name: Assemble public-only files
         run: |
           mkdir -p dist/src dist/data
-          cp index.html v4.css v5.css v6.css v7.css v8.css dist/
-          cp src/retrieval.js src/scenarios.js src/fieldnotes.js src/pdf_evidence.js src/pdf_demo.js dist/src/
+          cp index.html upload.html v4.css v5.css v6.css v7.css v8.css v9.css entry9.css dist/
+          cp src/retrieval.js src/scenarios.js src/fieldnotes.js src/pdf_evidence.js src/pdf_demo.js src/upload_core.js src/upload_app.mjs dist/src/
           cp data/corpus.json dist/data/
           touch dist/.nojekyll
       - name: Download the PDF index from the successfully tested run
