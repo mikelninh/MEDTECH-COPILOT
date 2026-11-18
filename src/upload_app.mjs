@@ -35,7 +35,99 @@ const mk=(tag,cls,txt)=>{
  if(txt!==undefined)n.textContent=String(txt);
  return n;
 };
-const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0};
+const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,group:"medtech"};
+function showSource(source){
+ state.source=source||null;
+ const name=source?.title||"Noch keine Quelle ausgewählt";
+ const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="official-federal-law"?"Offizielles Bundesrecht – Stand beim Abruf prüfen":source.sourceKind==="fictional-training"?"Fiktive Übungsquelle, keine echte Geräteanleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
+ $("selectedSourceName").textContent=name;
+ $("selectedSourceInfo").textContent=note;
+ $("sourceBanner").classList.toggle("has-source",!!source);
+ $("viewerSourceName").textContent=name;
+ $("viewerSourceMeta").textContent=source?note:"Die Originalseite erscheint direkt nach der Quellenauswahl.";
+ const link=$("sourceOfficialLink");
+ if(source?.originalUrl){
+  link.href=source.originalUrl;
+  link.classList.remove("hidden");
+  link.textContent="Original bei "+(source.group==="laws"?"gesetze-im-internet.de":"der Quelle")+" ↗";
+ }else{
+  link.removeAttribute("href");link.classList.add("hidden");
+ }
+ document.querySelectorAll("[data-source-id]").forEach(b=>{
+  const chosen=!!source&&b.dataset.sourceId===source.id;
+  b.classList.toggle("active",chosen);b.setAttribute("aria-pressed",String(chosen));
+ });
+}
+function makeCard(source){
+ const b=mk("button","source-choice");b.type="button";b.dataset.sourceId=source.id;
+ b.setAttribute("aria-pressed",String(state.source?.id===source.id));
+ b.append(mk("span","source-choice-kicker",source.sourceKind==="official-federal-law"?"BUNDESRECHT · ORIGINAL-PDF":"FIKTIVES DEMO-HANDBUCH"));
+ b.append(mk("strong","",source.title));
+ b.append(mk("small","",source.subtitle+" · "+source.pages+" Seiten"));
+ b.addEventListener("click",()=>loadExample(source));
+ return b;
+}
+function paintCards(){
+ const list=$("sourceCards");list.replaceChildren();
+ const sources=state.catalog?.sources?.filter(x=>x.group===state.group)||[];
+ if(state.group==="own"){list.classList.add("hidden");return}
+ list.classList.remove("hidden");
+ if(!sources.length){
+  list.append(mk("p","source-missing","Beispielquellen nicht verfügbar. Ein eigenes PDF kannst du weiterhin lokal öffnen."));
+  return;
+ }
+ for(const item of sources)list.append(makeCard(item));
+ $("allLawHint").classList.toggle("hidden",state.group!=="laws");
+}
+async function selectGroup(group){
+ if(!["medtech","laws","own"].includes(group))return;
+ state.group=group;
+ await destroySource();
+ $("ownPdfPanel").classList.toggle("hidden",group!=="own");
+ $("allLawHint").classList.toggle("hidden",group!=="laws");
+ document.querySelectorAll("[data-source-group]").forEach(b=>{
+  const chosen=b.dataset.sourceGroup===group;
+  b.classList.toggle("active",chosen);b.setAttribute("aria-pressed",String(chosen));
+ });
+ paintCards();
+}
+async function loadExample(source){
+ if(!state.catalog?.sources?.some(x=>x.id===source.id))return;
+ await destroySource();
+ const version=state.loadVersion;
+ status("Beispielquelle wird geladen und anhand ihres Fingerprints geprüft …","loading");
+ try{
+  if(!/^\.\/examples\/[a-zA-Z0-9_.-]+\.pdf$/.test(source.path)||!/^[a-f0-9]{64}$/.test(source.sha256))throw new Error("Ungültige oder nicht geprüfte Quellenangaben.");
+  const response=await fetch(source.path,{cache:"no-store"});
+  if(!response.ok)throw new Error("Original-PDF ist nicht abrufbar ("+response.status+").");
+  const data=await response.arrayBuffer();
+  if(version!==state.loadVersion)return;
+  if(data.byteLength>Core.MAX_BYTES)throw new Error("Beispieldokument überschreitet 15 MB.");
+  const hash=await digest(data);
+  if(hash!==source.sha256)throw new Error("Quellenversion hat sich geändert. Fingerprint stimmt nicht.");
+  const file=new File([data],source.filename,{type:"application/pdf"});
+  await chooseFile(file,source);
+ }catch(err){if(version===state.loadVersion)status("Beispielquelle nicht geladen: "+String(err.message||err).slice(0,145),"error")}
+}
+async function loadCatalog(){
+ try{
+  const response=await fetch("./data/source_catalog.json",{cache:"no-store"});
+  if(!response.ok)throw new Error("Katalog fehlt");
+  const data=await response.json();
+  if(data.schemaVersion!==1||!Array.isArray(data.sources))throw new Error("Katalog ungültig");
+  const ids=new Set();
+  for(const item of data.sources){
+   if(!["medtech","laws"].includes(item.group)||ids.has(item.id)||typeof item.title!=="string"||!/^[a-f0-9]{64}$/.test(item.sha256)||!/^\.\/examples\/[a-zA-Z0-9_.-]+\.pdf$/.test(item.path))throw new Error("Quellenkatalog enthält unzulässige Einträge");
+   if(item.group==="laws"&&!/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9]+\.pdf$/.test(item.originalUrl))throw new Error("Amtliche Quelle nicht verifizierbar");
+   ids.add(item.id);
+  }
+  state.catalog=data;paintCards();
+ }catch(err){
+  $("sourceCards").replaceChildren(mk("p","source-missing","Öffentliche Beispielquellen konnten nicht geladen werden. Eigenes PDF bleibt verfügbar."));
+  console.warn("Public example source catalog unavailable:",err.message);
+ }
+}
+
 const status=(message,kind="neutral",percent="")=>{
  $("importMessage").textContent=message;
  $("importPercent").textContent=percent;
@@ -68,6 +160,7 @@ async function destroySource(){
  }
  if(state.url){URL.revokeObjectURL(state.url);state.url=null}
  state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;
+ showSource(null);
  controls(false);clearResults();
  $("loadedBar").classList.add("hidden");
  $("loadedName").textContent="";$("loadedDetail").textContent="";
@@ -98,7 +191,7 @@ function docText(textContent){
  }
  return output.replace(/[ \t]+/g," ").replace(/\n{3,}/g,"\n\n");
 }
-async function chooseFile(file){
+async function chooseFile(file,sourceMeta=null){
  await destroySource();
  if(!file)return;
  if(!/\.pdf$/i.test(file.name)&&file.type!=="application/pdf"){
@@ -139,6 +232,7 @@ async function chooseFile(file){
   state.pdf=working;working=null;
   state.url=sourceUrl;sourceUrl=null;
   state.file=file;state.index=index;state.hash=hash;state.page=1;
+  showSource(sourceMeta||{id:"own",group:"own",title:file.name,subtitle:"Eigenes lokales PDF",originalUrl:null,sourceKind:"local-user"});
   $("loadedName").textContent=file.name;
   $("loadedDetail").textContent=index.pages+" Seiten · "+index.chunks.length+" Suchpassagen · SHA-256 "+hash.slice(0,12)+"…";
   $("loadedBar").classList.remove("hidden");
@@ -258,6 +352,21 @@ function ask(question){
  return result;
 }
 function setup(){
+ const viewer=$("viewer");
+ $("sourceSide").append(viewer);
+ const identity=mk("div","source-identity");
+ const kicker=mk("span","eyebrow","AKTIVE ORIGINALQUELLE");
+ const title=mk("strong","source-identity-name","Bitte Quelle auswählen");title.id="viewerSourceName";
+ const meta=mk("small","source-identity-meta","Handbuch · Gesetz · eigenes PDF");meta.id="viewerSourceMeta";
+ const external=mk("a","source-official-link hidden","Offizielles PDF öffnen ↗");
+ external.id="sourceOfficialLink";external.target="_blank";external.rel="noopener noreferrer";
+ identity.append(kicker,title,meta,external);
+ viewer.prepend(identity);
+ const viewerNote=mk("p","viewer-source-note","Quelle auswählen – anschließend bleibt die Originalseite ständig hier sichtbar.");
+ viewerNote.id="viewerTrustNote";viewer.append(viewerNote);
+ document.querySelectorAll("[data-source-group]").forEach(b=>b.addEventListener("click",()=>selectGroup(b.dataset.sourceGroup)));
+ paintCards();loadCatalog();
+
  $("choosePdf").addEventListener("click",()=>$("pdfFile").click());
  $("pdfFile").addEventListener("change",e=>{if(e.target.files?.[0])chooseFile(e.target.files[0])});
  const zone=$("dropzone");
@@ -280,7 +389,8 @@ function setup(){
   if(state.pdf&&$("resultSection").classList.contains("hidden")===false&&state.page)renderPage(state.page);
  });
  window.MedtechUploadDemo={
-  status:()=>({loaded:!!state.index,pages:state.index?.pages||0,chunks:state.index?.chunks.length||0,fileName:state.file?.name||null,renderedPage:state.renderedPage}),
+  status:()=>({loaded:!!state.index,pages:state.index?.pages||0,chunks:state.index?.chunks.length||0,fileName:state.file?.name||null,renderedPage:state.renderedPage,sourceId:state.source?.id||null,group:state.group}),
+  selectSource:async id=>{const x=state.catalog?.sources?.find(y=>y.id===id);if(x){await selectGroup(x.group);await loadExample(x)}},
   ask,remove:destroySource
  };
 }
