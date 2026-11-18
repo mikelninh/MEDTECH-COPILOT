@@ -142,8 +142,12 @@ def build(pdf_bytes: bytes):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="data/pdf_pages.json")
+    parser.add_argument("--save-pdf", help="Optional local copy for browser tests only; never publish")
     args = parser.parse_args()
-    result = build(download_pdf())
+    raw = download_pdf()
+    result = build(raw)
+    if args.save_pdf:
+        Path(args.save_pdf).write_bytes(raw)
     target = Path(args.out)
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
