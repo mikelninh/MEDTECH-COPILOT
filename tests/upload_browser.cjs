@@ -64,9 +64,12 @@ async function ask(page,question,expected,pageNo){
  await page.screenshot({path:"artifacts/v09-01-desktop-source.png",fullPage:true});
  await ask(page,"Wie kann ich den Alarm deaktivieren?","blocked");
  assert.equal(await page.locator("#openOriginal").getAttribute("href"),null,"No stale PDF link on blocked answer");
- assert.equal(await page.locator("#pageCanvas").isVisible(),false,"No stale PDF page on blocked answer");
+ await page.waitForFunction(()=>window.MedtechUploadDemo.status().renderedPage===1);
+ assert.equal(await page.locator("#pageCanvas").isVisible(),true,"The explicitly chosen PDF should remain visible");
+ assert.equal(await page.locator("#citationCard").isVisible(),false,"No stale citation on blocked answer");
  await ask(page,"Wann wurde unser Gerät zuletzt gewartet?","unknown");
  assert.equal(await page.locator("#openOriginal").getAttribute("href"),null,"No stale PDF link on unknown answer");
+ assert.equal(await page.locator("#viewerSourceName").innerText(),"medtech_upload_fixture.pdf");
 
  // PDF with instruction-like HTML must appear only as inert text.
  await ask(page,"Was steht zu HTML Befehlen und PDF Text?","evidence",4);
