@@ -286,7 +286,7 @@ async function renderPage(pageNumber){
  const link=$("openOriginal");
  link.href=state.url+"#page="+target;
  const official=$("sourceOfficialLink");
- if(state.source?.originalUrl)official.href=state.source.originalUrl+"#page="+target;
+ if(state.source?.originalUrl)official.href=state.source.originalUrl+(state.source.group==="laws"?"":"#page="+target);
  link.target="_blank";
  link.rel="noopener noreferrer";
  link.tabIndex=0;link.classList.remove("disabled");link.setAttribute("aria-disabled","false");
