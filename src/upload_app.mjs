@@ -264,6 +264,8 @@ async function renderPage(pageNumber){
  $("nextPage").disabled=target>=state.pdf.numPages;
  const link=$("openOriginal");
  link.href=state.url+"#page="+target;
+ const official=$("sourceOfficialLink");
+ if(state.source?.originalUrl)official.href=state.source.originalUrl+"#page="+target;
  link.target="_blank";
  link.rel="noopener noreferrer";
  link.tabIndex=0;link.classList.remove("disabled");link.setAttribute("aria-disabled","false");
@@ -330,16 +332,16 @@ function showResult(result){
    });
    extra.append(b);
   }
+  $("viewerTrustNote").textContent="Originalseite zur gefundenen Passage. Gedruckte Seitenzahlen können abweichen.";
   renderPage(first.page);
  }else{
   // A refusal or non-answer must not visually inherit the previous citation.
   state.renderVersion++;
   state.renderedPage=0;
   if(state.render){try{state.render.cancel()}catch(_){}}
-  $("pageCanvas").classList.add("hidden");
-  $("viewerEmpty").classList.remove("hidden");
-  $("viewerEmpty").querySelector("p").textContent="Für diese Frage liegt keine belegte Originalseite vor. Du kannst das PDF bei einer neuen belegten Frage wieder öffnen.";
-  $("viewerPageLabel").textContent="Keine zitierbare Fundstelle";
+  // Keep the expressly chosen PDF visible, but reset the prior citation context.
+  if(state.pdf)renderPage(1);
+  $("viewerTrustNote").textContent="Originalquelle ist weiter sichtbar, aber zu dieser Frage gibt es keine belegte Fundstelle.";
   const link=$("openOriginal");
   link.removeAttribute("href");link.classList.add("disabled");
   link.setAttribute("aria-disabled","true");link.tabIndex=-1;
