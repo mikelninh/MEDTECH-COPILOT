@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="340" height="482" viewBox="0 0 340 482" role="img" aria-label="MPDG, MEDIZINPRODUKTERECHT">
+<defs><linearGradient id="paper" x1="0" x2="1" y1="0" y2=".8"><stop offset="0" stop-color="#EEE4D8"/><stop offset="1" stop-color="#EEE4D8"/></linearGradient></defs>
+<rect width="340" height="482" rx="13" fill="url(#paper)"/>
+<rect width="17" height="482" fill="#9D7462" opacity=".73"/><path d="M25 11V468" stroke="#9E5E49" stroke-width="1" opacity=".45"/>
+<rect x="43" y="39" width="260" height="1.5" fill="#9E5E49" opacity=".8"/>
+<text x="44" y="68" font-size="12" font-family="Arial,sans-serif" font-weight="700" letter-spacing="2" fill="#746D5E">FIELDNOTES LIBRARY</text>
+<text x="44" y="105" font-size="38" font-family="Arial,sans-serif" font-weight="800" letter-spacing="-1.4" fill="#483E32">MPDG</text>
+<text x="44" y="126" font-size="10" font-family="Arial,sans-serif" font-weight="700" fill="#746D5E" textLength="260" lengthAdjust="spacingAndGlyphs">MEDIZINPRODUKTERECHT</text>
+<path d="M50 385h254" stroke="#9E5E49" stroke-width="1.5" opacity=".74"/>
+<path d="M172 148v186m-69 0h138M116 191h112m-56-35v-15" stroke="#9E5E49" stroke-width="6" stroke-linecap="round"/><path d="M115 193l-39 80h78zm113 0l-39 80h78z" fill="none" stroke="#9E5E49" stroke-width="4"/><path d="M75 276a40 17 0 0 0 80 0M187 276a40 17 0 0 0 80 0" stroke="#9E5E49" stroke-width="4" fill="none"/>
+<text x="45" y="415" font-size="10.5" font-family="Arial,sans-serif" letter-spacing="2" fill="#746D5E">GITLAW · LESEFASSUNG</text>
+<path d="M45 446h248" stroke="#9E5E49" opacity=".4"/>
+<text x="44" y="464" font-size="9" font-family="Arial,sans-serif" letter-spacing="1.8" fill="#746D5E">MEDTECH COPILOT × GITLAW</text>
+</svg>
