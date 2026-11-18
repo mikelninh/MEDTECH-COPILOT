@@ -9,6 +9,7 @@
 <title>Die Quellenbibliothek · MEDTECH COPILOT</title>
 <link rel="stylesheet" href="./v9.css">
 <link rel="stylesheet" href="./source10.css">
+<script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
 <body>
@@ -47,6 +48,11 @@
           <div id="sourceAutoBooks" class="source-auto-books"></div>
         </div>
         <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
+        <section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
+          <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
+          <span class="faq-no-popularity">Keine echte Nutzungsrangliste · Redaktionelle Startauswahl</span></div>
+          <div id="faqList" class="faq-list"></div>
+        </section>
         <div id="sourceBanner" class="source-banner">
           <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
           <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
@@ -101,6 +107,14 @@
         <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
       </form>
       <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
+      <div class="learning-panel" id="learningPanel">
+        <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
+        <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
+        <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
+        <p class="learning-privacy">Freiwillig · Nur Zähler in diesem Browser. Keine Fragen, Dokumente oder Kennungen werden gespeichert oder versendet. Keine besucherübergreifende Statistik.</p>
+        <div id="learningCounts" class="learning-counts" aria-live="polite"></div>
+        <div class="learning-actions"><button type="button" id="exportLearning">Zähler als JSON exportieren</button><button type="button" id="resetLearning">Lokale Zähler löschen</button></div>
+      </div>
     </section>
     <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
       <div class="result-head"><span class="eyebrow">03 / NACHPRÜFEN</span><span class="answer-status" id="answerStatus"></span></div>
@@ -116,6 +130,12 @@
           </div>
           <div id="additionalCitations" class="additional-citations"></div>
           <div class="answer-bottom">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+          <div class="answer-quality" id="answerQuality">
+            <span class="eyebrow">QUELLENQUALITÄT / FEEDBACK</span>
+            <p><strong>Automatisch geprüft:</strong> Auszug, PDF-Seite und Quellenbindung. <strong>Nicht automatisch geprüft:</strong> juristische Auslegung, vollständige Relevanz oder Aktualität.</p>
+            <div class="answer-feedback"><span>Hat dir diese Fundstelle geholfen?</span><button type="button" id="answerHelpful">Ja, hilfreich</button><button type="button" id="answerUnhelpful">Nein, unpassend</button></div>
+            <span id="feedbackAcknowledgement" class="feedback-ack" role="status"></span>
+          </div>
         </div>
         <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
           <div class="viewer-head"><strong>ORIGINAL / PDF</strong><span id="viewerPageLabel">Noch kein PDF</span></div>
