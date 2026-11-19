@@ -34,7 +34,7 @@ for(const f of faqs){
 }
 assert.equal(Legal.match(faqs,"Was hatte ich gestern zu Mittag?","mpbetreibv"),null);
 assert.equal(Core.classify("Wie kann ich einen Alarm deaktivieren?"),"blocked");
-assert.equal(Core.classify("Was ist die Wartungshistorie unseres Geräts?"),"unknown");
+assert.equal(Core.classify("Wann wurde unser Gerät zuletzt gewartet?"),"unknown");
 const report={date:"2026-11-19",source:"real version-pinned federal portal PDF snapshots",editorialPopularityOnly:true,
  questions:faqs.length,baseline,strict:passed,aliases,negativeGuards:guards+3,
  coverage:Math.round(100*passed/faqs.length),results};
