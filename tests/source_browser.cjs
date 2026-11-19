@@ -29,8 +29,8 @@ async function question(page,q){
  assert.equal(await desktop.locator("#heroAskButton").isEnabled(),true);
  assert.match(await desktop.locator("#mainTitle").innerText(),/Stelle deine Frage/);
  assert.equal(await desktop.locator("#heroSourceSelect").isVisible(),true);
- assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),true);
- assert.equal(await desktop.locator("#sourceSide").isVisible(),true);
+ assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),false,"Empty answer mockup must not crowd first paint");
+ assert.equal(await desktop.locator("#sourceSide").isVisible(),false,"Empty PDF mockup must not crowd first paint");
  assert.equal(await desktop.locator("#sourceLibraryDisclosure").evaluate(el=>el.open),false,"Source shelf must start collapsed");
  assert.equal(await desktop.locator("#practiceLab").evaluate(el=>el.open),false,"Question catalogue must start collapsed");
  assert.equal(await desktop.locator(".v3-quickbar").count(),0,"No duplicate chip bar");
@@ -44,9 +44,11 @@ async function question(page,q){
   await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"All listed books need visible cover images");
  }
- assert.equal(await desktop.locator("#viewer").isVisible(),true);
+ assert.equal(await desktop.locator("#viewer").isVisible(),false,"Viewer remains hidden until a source is loaded");
  await desktop.locator("[data-source-id='lumen']").click();
  await ready(desktop,"lumen");
+ assert.equal(await desktop.locator("#sourceSide").isVisible(),true,"Original becomes visible after source load");
+ assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),true,"Answer placeholder may appear after source load");
  const boxes=await Promise.all(["#workspaceWelcome","#sourceSide"].map(x=>desktop.locator(x).boundingBox()));
  assert.ok(boxes[1].x>boxes[0].x+boxes[0].width-10,"Answer panel and original PDF must be side-by-side on desktop");
  const sourcesRect=await desktop.locator("#sourceChooser").boundingBox();
@@ -142,7 +144,7 @@ async function question(page,q){
  await start.locator("#heroAskButton").click();
  assert.equal(await start.locator("#heroRecommendations").isVisible(),true,"Question must produce an explicit source confirmation");
  assert.equal(await start.locator("#heroSourceSelect").inputValue(),"auto");
- assert.equal(await start.locator("#workspaceWelcome").isVisible(),true);
+ assert.equal(await start.locator("#workspaceWelcome").isVisible(),false,"Start with a single question input, not empty workspace");
  assert.equal(await start.locator("#resultSection").isVisible(),false,"Question must not silently choose a law");
  assert.equal(await start.locator("[data-recommend-source='mpbetreibv']").count(),1);
  await start.locator("[data-recommend-source='mpbetreibv']").click();
