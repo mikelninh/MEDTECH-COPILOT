@@ -274,3 +274,7 @@ footer{max-width:1350px;margin:auto;color:#93a597;border-top:1px solid #e7eee7;f
  html{scroll-behavior:auto}
  .hero-query-line button,.source-choice,.v3-source-pills button{transition:none!important;transform:none!important}
 }
+
+.v3-current-question{display:flex;flex-direction:column;gap:8px;padding-bottom:17px;margin-bottom:20px;border-bottom:1px solid #eff2ef}
+.v3-current-question span{font:730 10px ui-monospace,monospace;letter-spacing:.08em;color:#9bae9f}
+.v3-current-question strong{font-size:13px;font-weight:750;color:#3b6148;line-height:1.45}
