@@ -44,7 +44,7 @@ jobs:
         run: python scripts/build_gitlaw_books.py --out-dir examples --manifest data/source_catalog.json
       - name: Validate source catalog and PDF fingerprints
         run: node tests/source_catalog.cjs
-      - name: Baseline legal FAQ retrieval on original fingerprint-pinned PDFs
+      - name: Gate all 19 curated law questions against the fingerprint-pinned PDFs
         run: |
           python scripts/extract_gold_legal_pages.py /tmp/medtech-gold-pdf-pages.json
           node tests/legal_functional.cjs /tmp/medtech-gold-pdf-pages.json
@@ -62,6 +62,7 @@ jobs:
           node --check src/upload_app.mjs
           node --check src/learning_loop.js
           node --check src/evidence_highlight.js
+          node --check src/legal_evidence.js
           node tests/evidence_highlight.cjs
           node tests/legal_faq.cjs
           node tests/learning_loop.cjs
@@ -82,6 +83,7 @@ jobs:
             artifacts/strict_audit.json
             artifacts/strict_audit.md
             artifacts/v09-core-audit.json
+            artifacts/legal_eval.json
           if-no-files-found: warn
 
   browser:
