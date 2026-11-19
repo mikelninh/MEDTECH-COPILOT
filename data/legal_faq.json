@@ -1,24 +1,25 @@
 {
   "schemaVersion": 1,
-  "createdAt": "2026-11-18",
-  "classification": "Editor-curated starter questions — NOT measured popularity",
+  "createdAt": "2026-11-19",
+  "classification": "Redaktionelle Auswahl typischer Praxisfragen; KEINE gemessene Häufigkeit. Normtexte manuell gegengeprüft, nicht rechtsgutachterlich freigegeben.",
   "disclaimer": "Condensed orientation, not legal advice or a substitute for current norm text; check government portal before relying on any statement.",
   "faqs": [
     {
-      "id": "b01",
+      "id": "b04",
       "sourceId": "mpbetreibv",
-      "question": "Wer gilt als Betreiber eines Medizinprodukts?",
-      "answerReference": "§ 2 Abs. 2 und § 3",
-      "answer": "Grundsätzlich ist der Betreiber die Person oder Organisation, die für den Betrieb der Gesundheitseinrichtung verantwortlich ist. Für bestimmte Bereitstellungs- und Mitbringfälle regeln § 2 und § 3 abweichende Zuständigkeiten; diese müssen im Einzelfall geprüft werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__2.html"
-    },
-    {
-      "id": "b02",
-      "sourceId": "mpbetreibv",
-      "question": "Wann ist eine Einweisung erforderlich?",
-      "answerReference": "§ 4 Abs. 2–3; § 11",
-      "answer": "Ein Produkt darf nur durch ausreichend qualifizierte Personen betrieben oder benutzt werden. Grundsätzlich ist eine Einweisung erforderlich; § 4 Abs. 3 enthält ausdrücklich Ausnahmen und Sonderregeln, etwa für bestimmte Softwareaktualisierungen. Für Produkte der Anlage 1 gelten ergänzende Vorgaben nach § 11.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__4.html"
+      "question": "Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?",
+      "answerReference": "§ 12 Abs. 1–4",
+      "answer": "Für Produkte nach Anlage 1 sind STK grundsätzlich spätestens alle zwei Jahre durchzuführen; bei risikoreichen Benutzungs- oder Umgebungsbedingungen kann ein früherer Termin erforderlich sein. Für bestimmte selbsttestende AEDs gelten Ausnahmen und zusätzliche Regeln. Herstellerangaben und die konkrete Produktkategorie sind mitzuprüfen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html",
+      "sectionMarker": "§ 12 Sicherheitstechnische Kontrollen",
+      "proofPhrase": "spätestens alle zwei Jahre",
+      "quickLabel": "STK-Fristen",
+      "priority": 1,
+      "aliases": [
+        "Wann ist eine STK fällig?",
+        "Wie oft muss eine STK durchgeführt werden?",
+        "Wann ist eine sicherheitstechnische Kontrolle vorgeschrieben?"
+      ]
     },
     {
       "id": "b03",
@@ -26,23 +27,60 @@
       "question": "Für welche Geräte braucht man ein Medizinproduktebuch?",
       "answerReference": "§ 13 Abs. 1–2",
       "answer": "Für die in Anlage 1 und Anlage 2 aufgeführten Produkte ist ein Medizinproduktebuch zu führen. § 13 Abs. 2 legt die erforderlichen Angaben fest. Vor der Anwendung müssen die konkrete Gerätezuordnung und die Ausnahmen geprüft werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__13.html"
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__13.html",
+      "sectionMarker": "§ 13 Medizinproduktebuch",
+      "proofPhrase": "Anlagen 1 und 2 aufgeführten Produkte",
+      "quickLabel": "Medizinproduktebuch",
+      "priority": 2,
+      "aliases": [
+        "Welche Geräte brauchen ein Medizinproduktebuch?",
+        "Was steht zum Medizinproduktebuch?"
+      ]
     },
     {
-      "id": "b04",
+      "id": "b02",
       "sourceId": "mpbetreibv",
-      "question": "Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?",
-      "answerReference": "§ 12 Abs. 1–4",
-      "answer": "Für Produkte nach Anlage 1 sind STK grundsätzlich spätestens alle zwei Jahre durchzuführen; bei risikoreichen Benutzungs- oder Umgebungsbedingungen kann ein früherer Termin erforderlich sein. Für bestimmte selbsttestende AEDs gelten Ausnahmen und zusätzliche Regeln. Herstellerangaben und die konkrete Produktkategorie sind mitzuprüfen.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html"
+      "question": "Wann ist eine Einweisung erforderlich?",
+      "answerReference": "§ 4 Abs. 2–3; § 11",
+      "answer": "Ein Produkt darf nur durch ausreichend qualifizierte Personen betrieben oder benutzt werden. Grundsätzlich ist eine Einweisung erforderlich; § 4 Abs. 3 enthält ausdrücklich Ausnahmen und Sonderregeln, etwa für bestimmte Softwareaktualisierungen. Für Produkte der Anlage 1 gelten ergänzende Vorgaben nach § 11.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__4.html",
+      "sectionMarker": "§ 11 Betreiben und Benutzen von ausgewählten aktiven Produkten",
+      "proofPhrase": "eingewiesen worden sind",
+      "quickLabel": "Einweisung",
+      "priority": 3,
+      "aliases": [
+        "Wann brauche ich eine Einweisung?"
+      ]
     },
     {
-      "id": "b05",
       "sourceId": "mpbetreibv",
-      "question": "Was zählt zur Instandhaltung nach MPBetreibV?",
-      "answerReference": "§ 7 Abs. 1–4",
-      "answer": "Instandhaltung umfasst insbesondere notwendige Wartungen, Inspektionen und Instandsetzungen. Herstellerangaben sind zu berücksichtigen. Nach einer Instandhaltung sind die möglicherweise beeinträchtigten sicherheits- und funktionsrelevanten Merkmale zu prüfen.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__7.html"
+      "id": "b09",
+      "question": "Wie lange muss das Medizinproduktebuch aufbewahrt werden?",
+      "answerReference": "§ 13 Abs. 3",
+      "answer": "Das Medizinproduktebuch muss während der Arbeitszeit für die Benutzer zugänglich sein und nach der Außerbetriebnahme des Produkts fünf Jahre aufbewahrt werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__13.html",
+      "sectionMarker": "§ 13 Medizinproduktebuch",
+      "proofPhrase": "fünf Jahre aufzubewahren",
+      "quickLabel": "Aufbewahrungsfrist",
+      "priority": 4,
+      "aliases": [
+        "Wie lange muss ich ein Medizinproduktebuch aufheben?"
+      ]
+    },
+    {
+      "id": "b01",
+      "sourceId": "mpbetreibv",
+      "question": "Wer gilt als Betreiber eines Medizinprodukts?",
+      "answerReference": "§ 2 Abs. 2 und § 3",
+      "answer": "Grundsätzlich ist der Betreiber die Person oder Organisation, die für den Betrieb der Gesundheitseinrichtung verantwortlich ist. Für bestimmte Bereitstellungs- und Mitbringfälle regeln § 2 und § 3 abweichende Zuständigkeiten; diese müssen im Einzelfall geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__2.html",
+      "sectionMarker": "§ 2 Begriffsbestimmungen",
+      "proofPhrase": "Betreiber eines Produktes",
+      "quickLabel": "Wer ist Betreiber?",
+      "priority": 5,
+      "aliases": [
+        "Wer ist Betreiber eines Medizinprodukts?"
+      ]
     },
     {
       "id": "b06",
@@ -50,31 +88,45 @@
       "question": "Was muss ins Bestandsverzeichnis?",
       "answerReference": "§ 14",
       "answer": "§ 14 regelt das Bestandsverzeichnis aktiver nichtimplantierbarer Produkte einer Gesundheitseinrichtung. Welche Produkte und Angaben einzubeziehen sind, ergibt sich aus dem genauen Normtext. Die Pflichten dürfen nicht mit dem Medizinproduktebuch nach § 13 verwechselt werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__14.html"
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__14.html",
+      "sectionMarker": "§ 14 Bestandsverzeichnis",
+      "proofPhrase": "aktiven nichtimplantierbaren Produkte",
+      "quickLabel": "Bestandsverzeichnis",
+      "priority": 6,
+      "aliases": [
+        "Welche Geräte kommen ins Bestandsverzeichnis?"
+      ]
     },
     {
-      "id": "b07",
       "sourceId": "mpbetreibv",
-      "question": "Was gilt für Software und IT-Sicherheit?",
-      "answerReference": "§ 4 Abs. 3; § 17",
-      "answer": "Die MPBetreibV enthält besondere Anforderungen für Software. Eine relevante Änderung der Handhabung durch Softwareupdates kann eine erneute Einweisung erfordern. Für bestimmte in Gesundheitseinrichtungen betriebene Software sind angemessene IT-Sicherheitsüberprüfungen nach § 17 vorgesehen; Umfang und Zuständigkeit hängen vom Einzelfall ab.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__17.html"
+      "id": "b10",
+      "question": "Wann sind messtechnische Kontrollen (MTK) erforderlich?",
+      "answerReference": "§ 15 Abs. 1 und 5; Anlage 2",
+      "answer": "Für in Anlage 2 aufgeführte Produkte sind messtechnische Kontrollen nach den dort festgelegten Fristen durchzuführen. Bei Anzeichen für unzulässige Messabweichungen oder potenziell beeinträchtigten Messeigenschaften können sie unverzüglich erforderlich werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__15.html",
+      "sectionMarker": "§ 15 Messtechnische Kontrollen",
+      "proofPhrase": "in Anlage 2",
+      "quickLabel": "MTK-Fristen",
+      "priority": 7,
+      "aliases": [
+        "Wie oft ist eine MTK vorgeschrieben?",
+        "Wann ist eine messtechnische Kontrolle fällig?"
+      ]
     },
     {
-      "id": "b08",
+      "id": "b05",
       "sourceId": "mpbetreibv",
-      "question": "Welche Geräte stehen in Anlage 1?",
-      "answerReference": "Anlage 1",
-      "answer": "Anlage 1 enthält bestimmte aktive Medizinprodukte, etwa ausgewählte Produkte für Energieanwendung, Defibrillation und die unmittelbare Infusion unter Druck. Ob ein konkretes Modell darunterfällt, muss anhand seiner Zweckbestimmung, technischen Funktion und der vollständigen Anlage geprüft werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/anlage_1.html"
-    },
-    {
-      "id": "d01",
-      "sourceId": "mpdg",
-      "question": "Worum geht es im MPDG?",
-      "answerReference": "§ 1 MPDG",
-      "answer": "Das MPDG ergänzt und vollzieht unionsrechtliche Vorgaben für Medizinprodukte in Deutschland. Für die richtige Einordnung müssen auch die einschlägigen EU-Verordnungen und die jeweilige konkrete Vorschrift herangezogen werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpdg/__1.html"
+      "question": "Was zählt zur Instandhaltung nach MPBetreibV?",
+      "answerReference": "§ 7 Abs. 1–4",
+      "answer": "Instandhaltung umfasst insbesondere notwendige Wartungen, Inspektionen und Instandsetzungen. Herstellerangaben sind zu berücksichtigen. Nach einer Instandhaltung sind die möglicherweise beeinträchtigten sicherheits- und funktionsrelevanten Merkmale zu prüfen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__7.html",
+      "sectionMarker": "§ 7 Instandhaltung von Produkten",
+      "proofPhrase": "Wartungen und Inspektionen",
+      "quickLabel": "Wartung & Instandhaltung",
+      "priority": 8,
+      "aliases": [
+        "Was gehört zur Instandhaltung?"
+      ]
     },
     {
       "id": "i01",
@@ -82,7 +134,74 @@
       "question": "Wann muss ein mutmaßlich schwerwiegendes Vorkommnis gemeldet werden?",
       "answerReference": "§ 3 MPAMIV",
       "answer": "Wer Produkte beruflich oder gewerblich betreibt oder anwendet, muss dabei aufgetretene mutmaßlich schwerwiegende Vorkommnisse unverzüglich der zuständigen Bundesoberbehörde melden. Für die Bewertung und den Meldeweg sind die Definitionen und die weiteren Vorschriften der MPAMIV maßgeblich.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpamiv/__3.html"
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpamiv/__3.html",
+      "sectionMarker": "§ 3 Meldepflicht",
+      "proofPhrase": "mutmaßlich schwerwiegende Vorkommnisse",
+      "quickLabel": "Vorkommnis melden",
+      "priority": 9,
+      "aliases": [
+        "Wann muss ich ein Vorkommnis melden?"
+      ]
+    },
+    {
+      "id": "b07",
+      "sourceId": "mpbetreibv",
+      "question": "Was gilt für Software und IT-Sicherheit?",
+      "answerReference": "§ 4 Abs. 3; § 17",
+      "answer": "Die MPBetreibV enthält besondere Anforderungen für Software. Eine relevante Änderung der Handhabung durch Softwareupdates kann eine erneute Einweisung erfordern. Für bestimmte in Gesundheitseinrichtungen betriebene Software sind angemessene IT-Sicherheitsüberprüfungen nach § 17 vorgesehen; Umfang und Zuständigkeit hängen vom Einzelfall ab.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__17.html",
+      "sectionMarker": "§ 17 Besondere Pflichten bei bestimmter Software",
+      "proofPhrase": "IT-Sicherheitsüberprüfungen",
+      "quickLabel": "Software & IT-Sicherheit",
+      "priority": 10,
+      "aliases": [
+        "Welche IT-Sicherheitsprüfungen gelten für Medizinproduktesoftware?"
+      ]
+    },
+    {
+      "sourceId": "mpbetreibv",
+      "id": "b11",
+      "question": "Was muss im Protokoll einer STK stehen?",
+      "answerReference": "§ 12 Abs. 3",
+      "answer": "Das STK-Protokoll muss insbesondere Datum und Ergebnisse der Kontrolle mit Messwerten, Messverfahren und weiteren Beurteilungsergebnissen dokumentieren. Nach erfolgreicher Kontrolle ist das Produkt entsprechend zu kennzeichnen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html",
+      "sectionMarker": "§ 12 Sicherheitstechnische Kontrollen",
+      "proofPhrase": "ein Protokoll anzufertigen",
+      "quickLabel": "STK-Protokoll",
+      "priority": 11,
+      "aliases": [
+        "Was gehört ins STK-Protokoll?"
+      ]
+    },
+    {
+      "id": "b08",
+      "sourceId": "mpbetreibv",
+      "question": "Welche Geräte stehen in Anlage 1?",
+      "answerReference": "Anlage 1",
+      "answer": "Anlage 1 enthält bestimmte aktive Medizinprodukte, etwa ausgewählte Produkte für Energieanwendung, Defibrillation und die unmittelbare Infusion unter Druck. Ob ein konkretes Modell darunterfällt, muss anhand seiner Zweckbestimmung, technischen Funktion und der vollständigen Anlage geprüft werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/anlage_1.html",
+      "sectionMarker": "Anlage 1",
+      "proofPhrase": "Nichtimplantierbare aktive Produkte",
+      "quickLabel": "Welche Geräte in Anlage 1?",
+      "priority": 12,
+      "aliases": [
+        "Welche Geräte fallen unter Anlage 1?"
+      ]
+    },
+    {
+      "sourceId": "mpbetreibv",
+      "id": "b12",
+      "question": "Wer darf eine sicherheitstechnische Kontrolle durchführen?",
+      "answerReference": "§ 12 Abs. 4 i. V. m. § 5",
+      "answer": "Der Betreiber darf STK nur Personen, Betrieben oder Einrichtungen übertragen, deren ausführende Beschäftigte die Anforderungen des § 5 für die jeweilige Kontrolle und das jeweilige Produkt erfüllen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html",
+      "sectionMarker": "§ 12 Sicherheitstechnische Kontrollen",
+      "proofPhrase": "nur Personen, Betriebe oder Einrichtungen beauftragen",
+      "quickLabel": "Wer darf STK prüfen?",
+      "priority": 13,
+      "aliases": [
+        "Wer ist zur STK berechtigt?"
+      ]
     },
     {
       "id": "a01",
@@ -90,7 +209,44 @@
       "question": "Wer muss eine Gefährdungsbeurteilung durchführen?",
       "answerReference": "§ 5 ArbSchG",
       "answer": "Der Arbeitgeber hat durch Beurteilung der mit der Arbeit verbundenen Gefährdungen zu ermitteln, welche Arbeitsschutzmaßnahmen erforderlich sind. Was im Einzelfall erfasst werden muss, hängt von Tätigkeit und Arbeitsplatz ab.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/arbschg/__5.html"
+      "sourceUrl": "https://www.gesetze-im-internet.de/arbschg/__5.html",
+      "sectionMarker": "§ 5 Beurteilung der Arbeitsbedingungen",
+      "proofPhrase": "Gefährdung",
+      "quickLabel": "Gefährdungsbeurteilung",
+      "priority": 14,
+      "aliases": [
+        "Wer ist für die Gefährdungsbeurteilung verantwortlich?"
+      ]
+    },
+    {
+      "sourceId": "mpbetreibv",
+      "id": "b13",
+      "question": "Welche Angaben gehören ins Bestandsverzeichnis?",
+      "answerReference": "§ 14 Abs. 2",
+      "answer": "Erforderlich sind unter anderem Bezeichnung, Art und Typ, Loscode oder Seriennummer, Anschaffungsjahr, Hersteller- beziehungsweise Importeurangaben sowie Standort und betriebliche Zuordnung.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__14.html",
+      "sectionMarker": "§ 14 Bestandsverzeichnis",
+      "proofPhrase": "Bezeichnung, Art und Typ",
+      "quickLabel": "Bestandsdaten",
+      "priority": 15,
+      "aliases": [
+        "Was muss ich im Bestandsverzeichnis dokumentieren?"
+      ]
+    },
+    {
+      "id": "d01",
+      "sourceId": "mpdg",
+      "question": "Worum geht es im MPDG?",
+      "answerReference": "§ 1 MPDG",
+      "answer": "Das MPDG ergänzt und vollzieht unionsrechtliche Vorgaben für Medizinprodukte in Deutschland. Für die richtige Einordnung müssen auch die einschlägigen EU-Verordnungen und die jeweilige konkrete Vorschrift herangezogen werden.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpdg/__1.html",
+      "sectionMarker": "§ 1 Zweck des Gesetzes",
+      "proofPhrase": "unionsrechtlichen",
+      "quickLabel": "Wozu dient das MPDG?",
+      "priority": 16,
+      "aliases": [
+        "Was ist das MPDG?"
+      ]
     },
     {
       "id": "v01",
@@ -98,7 +254,44 @@
       "question": "Welche Sachkenntnis ist bei der Abgabe erforderlich?",
       "answerReference": "§ 4 MPAV",
       "answer": "Die MPAV regelt Anforderungen an fachliche Beratung und Sachkenntnis bei der Abgabe bestimmter Medizinprodukte. Die konkreten Ausnahmen und vermuteten Qualifikationsnachweise stehen in § 4; die passende Produktgruppe muss im Einzelfall geprüft werden.",
-      "sourceUrl": "https://www.gesetze-im-internet.de/mpav/__4.html"
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpav/__4.html",
+      "sectionMarker": "§ 4 Sonstige Abgabebeschränkungen",
+      "proofPhrase": "Sachkenntnis zur fachlichen Beratung",
+      "quickLabel": "Sachkenntnis bei Abgabe",
+      "priority": 17,
+      "aliases": [
+        "Wer braucht Sachkenntnis zur Abgabe von Medizinprodukten?"
+      ]
+    },
+    {
+      "sourceId": "mpbetreibv",
+      "id": "b14",
+      "question": "Welche Aufgaben hat der Beauftragte für Medizinproduktesicherheit?",
+      "answerReference": "§ 6 Abs. 2",
+      "answer": "Der Beauftragte ist in der Gesundheitseinrichtung zentrale Kontaktstelle für Behörden, Hersteller und Vertreiber, unter anderem bei Risikomeldungen und Sicherheitskorrekturmaßnahmen. Die weiteren Aufgaben stehen in § 6.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__6.html",
+      "sectionMarker": "§ 6 Beauftragter für Medizinproduktesicherheit",
+      "proofPhrase": "Beauftragte für Medizinproduktesicherheit",
+      "quickLabel": "Beauftragter",
+      "priority": 18,
+      "aliases": [
+        "Was macht ein Medizinproduktesicherheitsbeauftragter?"
+      ]
+    },
+    {
+      "sourceId": "mpbetreibv",
+      "id": "b15",
+      "question": "Wann können STK für selbsttestende AED entfallen?",
+      "answerReference": "§ 12 Abs. 2",
+      "answer": "Für bestimmte selbsttestende, zur Laienbenutzung vorgesehene AED können STK unter den Bedingungen des § 12 Abs. 2 entfallen. Der Normtext enthält zusätzliche, teilweise ab 2027 relevante Anforderungen.",
+      "sourceUrl": "https://www.gesetze-im-internet.de/mpbetreibv_2025/__12.html",
+      "sectionMarker": "§ 12 Sicherheitstechnische Kontrollen",
+      "proofPhrase": "sicherheitstechnische Kontrollen entfallen",
+      "quickLabel": "AED-Ausnahme",
+      "priority": 19,
+      "aliases": [
+        "Brauchen selbsttestende Defibrillatoren eine STK?"
+      ]
     }
   ]
 }
