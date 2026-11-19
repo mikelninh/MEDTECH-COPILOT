@@ -31,11 +31,17 @@ async function question(page,q){
  assert.equal(await desktop.locator("#heroSourceSelect").isVisible(),true);
  assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),true);
  assert.equal(await desktop.locator("#sourceSide").isVisible(),true);
+ assert.equal(await desktop.locator("#sourceLibraryDisclosure").evaluate(el=>el.open),false,"Source shelf must start collapsed");
+ assert.equal(await desktop.locator("#practiceLab").evaluate(el=>el.open),false,"Question catalogue must start collapsed");
+ assert.equal(await desktop.locator(".v3-quickbar").count(),0,"No duplicate chip bar");
+ await desktop.locator("#sourceLibraryDisclosure > summary").click();
  await desktop.locator("[data-source-group='medtech']").click();
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===2);
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
  assert.equal(await desktop.locator("[data-source-id='orion']").count(),1);
  for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  await img.scrollIntoViewIfNeeded();
+  await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"All listed books need visible cover images");
  }
  assert.equal(await desktop.locator("#viewer").isVisible(),true);
@@ -61,6 +67,8 @@ async function question(page,q){
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/Bitte Quelle auswählen/);
  assert.ok((await desktop.locator(".all-law-hint a").getAttribute("href")).includes("gitlaw"));
  for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  await img.scrollIntoViewIfNeeded();
+  await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"Every legal book must have a loaded cover");
  }
  await desktop.locator("[data-source-id='mpbetreibv']").click();
@@ -167,7 +175,7 @@ async function question(page,q){
  directly.on("pageerror",e=>errors.push("direct-source: "+e.message));
  await directly.goto(url,{waitUntil:"networkidle"});
  await directly.waitForFunction(()=>document.querySelectorAll("#heroSourceSelect option").length===9);
- await directly.locator("[data-quick-source='mpbetreibv']").click();
+ await directly.locator("#heroSourceSelect").selectOption("mpbetreibv");
  assert.equal(await directly.locator("#heroSourceSelect").inputValue(),"mpbetreibv");
  await directly.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
  await directly.locator("#heroAskButton").click();
@@ -191,6 +199,7 @@ async function question(page,q){
  mobile.on("pageerror",e=>errors.push("mobile "+e.message));
  await mobile.goto(url,{waitUntil:"networkidle"});
  await mobile.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ await mobile.locator("#sourceLibraryDisclosure > summary").click();
  await mobile.locator("[data-source-group='medtech']").click();
  await mobile.locator("[data-source-id='lumen']").click();
  await ready(mobile,"lumen");
@@ -231,6 +240,8 @@ async function question(page,q){
  fast.on("pageerror",e=>errors.push("practice-lab: "+e.message));
  await fast.goto(url,{waitUntil:"networkidle"});
  await fast.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8,null,{timeout:15000});
+ assert.equal(await fast.locator("#practiceLab").evaluate(el=>el.open),false,"Shortcuts should not crowd the home view");
+ await fast.locator("#practiceLab > summary").click();
  assert.match(await fast.locator("#practiceLab").innerText(),/keine gemessene Nutzungsrangliste/i);
  async function tryShortcut(id,law,needle){
   const element=fast.locator('[data-practice-id="'+id+'"]');
@@ -269,6 +280,7 @@ async function question(page,q){
  mobileQuick.on("pageerror",e=>errors.push("practice-mobile: "+e.message));
  await mobileQuick.goto(url,{waitUntil:"networkidle"});
  await mobileQuick.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8);
+ await mobileQuick.locator("#practiceLab > summary").click();
  await mobileQuick.locator('[data-practice-id="b04"]').click();
  await mobileQuick.waitForFunction(()=>document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&
   window.MedtechUploadDemo?.status()?.sourceId==="mpbetreibv",null,{timeout:90000});

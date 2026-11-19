@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="./v12.css">
 <link rel="stylesheet" href="./v3.css">
 <link rel="stylesheet" href="./v31.css">
+<link rel="stylesheet" href="./v32.css">
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
@@ -23,8 +24,8 @@
       <span class="brand-wordmark">MEDTECH <strong>COPILOT</strong></span>
     </a>
     <nav aria-label="Hauptnavigation">
-      <a href="#sourceChooser">Quellen</a>
-      <a href="#faqDisclosure">FAQs</a>
+      <a href="#sourceLibraryDisclosure">Quellen</a>
+      <a href="#practiceLab">Beispielfragen</a>
       <a href="./" class="nav-demos">Weitere Demos <span aria-hidden="true">↗</span></a>
     </nav>
   </header>
@@ -32,9 +33,8 @@
 
     <section class="source-intro" aria-labelledby="mainTitle">
       <div class="intro-copy">
-        <span class="hero-overline">MEDIZINTECHNIK &amp; MEDIZINPRODUKTERECHT</span>
         <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
-        <p>Finde belegbare Textstellen in Gesetzen und Handbüchern – und lies sie direkt im Original-PDF. Ohne Blackbox.</p>
+        <p>Fragen. Fundstelle finden. Im PDF selbst nachlesen.</p>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
           <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
           <div class="hero-query-line">
@@ -47,56 +47,24 @@
             <button id="heroAskButton" type="submit">Antwort finden <span aria-hidden="true">→</span></button>
           </div>
         </form>
-        <div class="v3-quickbar" aria-label="Quellen und Beispiele">
-          <div class="v3-source-pills" aria-label="Quelle schnell auswählen">
-            <button type="button" data-quick-source="mpbetreibv" aria-pressed="false">MPBetreibV</button>
-            <button type="button" data-quick-source="mpdg" aria-pressed="false">MPDG</button>
-            <button type="button" data-quick-source="own" aria-pressed="false">＋ Eigenes PDF</button>
-          </div>
-          <div class="hero-examples" aria-label="Beispielfragen">
-            <span>Zum Beispiel:</span>
-            <button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">STK-Fristen</button>
-            <button type="button" data-starter-question="Für welche Geräte braucht man ein Medizinproduktebuch?">Medizinproduktebuch</button>
-            <button type="button" data-starter-question="Wann muss ein mutmaßlich schwerwiegendes Vorkommnis gemeldet werden?">Vorkommnisse</button>
-          </div>
-        </div>
-        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Wähle eine Quelle bewusst aus oder lass dir passende Quellen vorschlagen.</p>
+        <div class="minimal-example-line"><button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">Beispiel ausprobieren: STK-Fristen <span aria-hidden="true">↗</span></button></div>
+        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Quelle bewusst wählen oder nach der Frage bestätigen.</p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
       </div>
     </section>
-    <section id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
-      <div class="practice-head">
-        <div><span class="practice-eyebrow">RECHERCHE · PRAXISBEISPIELE</span><h2 id="practiceHeading">Häufige Praxisfragen – direkt ausprobieren.</h2>
-        <p>Redaktionell priorisierte Fragen, <strong>keine gemessene Nutzungsrangliste</strong>. Jede Antwort muss ihre Fundstelle im jeweiligen Original-PDF nachweisen.</p></div>
-        <span class="practice-provenance">Originalquelle wählen · 1 Klick</span>
-      </div>
-      <div class="practice-toolbar" role="group" aria-label="Praxisfragen filtern">
-        <button type="button" class="active" data-practice-filter="all" aria-pressed="true">Highlights</button>
-        <button type="button" data-practice-filter="mpbetreibv" aria-pressed="false">MPBetreibV</button>
-        <button type="button" data-practice-filter="other" aria-pressed="false">Andere Gesetze</button>
-        <button type="button" data-practice-filter="everything" aria-pressed="false">Alle Fragen</button>
-      </div>
-      <div id="practiceChoices" class="practice-choices" aria-live="polite">
-        <p class="practice-placeholder">Praxisfragen und gesetzliche Fundstellen werden geladen …</p>
-      </div>
-      <p id="practiceStatus" class="practice-status" role="status" aria-live="polite">Frage auswählen → Quellen-PDF wird geprüft → Antwort und Original ansehen.</p>
-    </section>
-    <div class="v3-proof-line" id="howItWorks" aria-label="So funktioniert MEDTECH COPILOT">
-      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Quellengebundene Recherche</span>
-      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="m5 4 14 0v16H5zM9 9h6m-6 4h6m-6 4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Original-PDF daneben</span>
-      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M12 3 5 6v6c0 5 3 7.7 7 9 4-1.3 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Unbelegte Antworten werden abgelehnt</span>
-    </div>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
       <section id="workspaceWelcome" class="v3-welcome" aria-label="Antwortbereich">
         <div class="v3-pane-top"><span><span class="v3-pane-dot"></span> Antwort</span><span class="v3-pane-meta">Bereit für deine Frage</span></div>
         <div class="v3-welcome-content">
           <div class="v3-welcome-symbol" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M20 2 24.8 15.2 38 20 24.8 24.8 20 38 15.2 24.8 2 20 15.2 15.2 20 2Z" fill="currentColor"/></svg></div>
-          <h2>Wissen, das du<br><em>überprüfen kannst.</em></h2>
-          <p>Stelle oben deine Frage. Wir suchen eine passende Textstelle – und zeigen dir genau, wo sie im Dokument steht.</p>
-          <button type="button" id="welcomeExample" class="v3-try-example">Beispiel: STK-Fristen ansehen <span aria-hidden="true">↗</span></button>
+          <h2>Deine Antwort erscheint hier.</h2>
+          <p>Mit einem Klick zur belegten Passage und ihrer Originalseite.</p>
+          <button type="button" id="welcomeExample" class="v3-try-example">STK-Beispiel starten <span aria-hidden="true">↗</span></button>
         </div>
         <div class="v3-welcome-foot"><span>FRAGE</span><span>FUNDSTELLE</span><span>ORIGINAL</span></div>
       </section>
+      <details id="sourceLibraryDisclosure" class="source-library-disclosure">
+        <summary class="minimal-disclosure-summary"><span>Quellenbibliothek <small>Gesetze, Handbücher oder eigenes PDF</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
       <section class="source-chooser" id="sourceChooser" aria-label="Quelle für diese Recherche auswählen">
         <div class="chooser-head"><span class="eyebrow">QUELLEN</span><span class="source-help">Eine Quelle pro Frage. Keine Vermischung.</span></div>
         <p class="source-library-intro">Deine Quellen <span>Originaldokumente ansehen und bewusst auswählen</span></p>
@@ -125,6 +93,7 @@
           <span>Hier: fünf konsolidierte PDF-Texte aus dem Bundesportal. Änderungen und Geltung dort prüfen. Weitere Gesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
         </div>
       </section>
+      </details>
     <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
       <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
       <div class="own-book-panel" id="ownBookPanel" aria-label="Cover für dein eigenes PDF">
@@ -219,10 +188,31 @@
       </div>
     </section>
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
+    <details id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
+      <summary class="minimal-disclosure-summary"><span>Beispielfragen entdecken <small>19 geprüfte Praxisfragen · MPBetreibV &amp; mehr</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="practice-expanded">
+      <div class="practice-head">
+        <div><span class="practice-eyebrow">RECHERCHE · PRAXISBEISPIELE</span><h2 id="practiceHeading">Häufige Praxisfragen – direkt ausprobieren.</h2>
+        <p>Redaktionell priorisierte Fragen, <strong>keine gemessene Nutzungsrangliste</strong>. Jede Antwort muss ihre Fundstelle im jeweiligen Original-PDF nachweisen.</p></div>
+        <span class="practice-provenance">Originalquelle wählen · 1 Klick</span>
+      </div>
+      <div class="practice-toolbar" role="group" aria-label="Praxisfragen filtern">
+        <button type="button" class="active" data-practice-filter="all" aria-pressed="true">Highlights</button>
+        <button type="button" data-practice-filter="mpbetreibv" aria-pressed="false">MPBetreibV</button>
+        <button type="button" data-practice-filter="other" aria-pressed="false">Andere Gesetze</button>
+        <button type="button" data-practice-filter="everything" aria-pressed="false">Alle Fragen</button>
+      </div>
+      <div id="practiceChoices" class="practice-choices" aria-live="polite">
+        <p class="practice-placeholder">Praxisfragen und gesetzliche Fundstellen werden geladen …</p>
+      </div>
+      <p id="practiceStatus" class="practice-status" role="status" aria-live="polite">Frage auswählen → Quellen-PDF wird geprüft → Antwort und Original ansehen.</p>
+      </div>
+    </details>
+
     <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
     <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V3 / MINIMAL PRODUCT <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · V3.2 / MINIMAL FOCUS <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>
