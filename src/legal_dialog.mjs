@@ -96,20 +96,6 @@ function selectAnswer(q, topic, faqId) {
   return [null, faqTopics[faqId] || null, carry];
 }
 
-export function exactCitation(index, claim, legal){
-  const citation = legal.locate(index, claim);
-  if (!citation || !claim.endPhrase) return citation;
-  const page = index.pageTexts.find(item => item.number === citation.page);
-  const original = page.text.replace(/\s+/g, " ");
-  const lower = original.toLowerCase();
-  const start = lower.indexOf(claim.proofPhrase.toLowerCase());
-  const end = lower.indexOf(claim.endPhrase.toLowerCase(), start + claim.proofPhrase.length);
-  if (start < 0 || end < 0 || end - start > 900) return null;
-  const endOffset = end + claim.endPhrase.length;
-  const excerpt = original.slice(start, /[.?!]/.test(original[endOffset] || "") ? endOffset + 1 : endOffset);
-  return { ...citation, excerpt };
-}
-
 export function resolveDialog(index, sourceId, question, prior, faqId, legal) {
   if (sourceId !== "mpbetreibv") return null;
   const query = legal.norm(question);
@@ -122,7 +108,7 @@ export function resolveDialog(index, sourceId, question, prior, faqId, legal) {
     return context ? { context } : null;
   }
   const claims = answers[id].map(claim => {
-    const evidence = exactCitation(index, claim, legal);
+    const evidence = legal.locate(index, claim);
     return evidence && { text: claim.text, evidence: { ...evidence, reference: claim.reference } };
   });
   if (claims.some(claim => !claim)) return { context, result: {

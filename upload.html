@@ -37,10 +37,6 @@
       <div class="intro-copy">
         <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
         <p>Fragen. Fundstelle finden. Im PDF selbst nachlesen.</p>
-        <div class="case-entry" aria-label="In der Fallwerkstatt arbeiten">
-          <a id="caseEntry" href="#caseWorkspace">Fallwerkstatt öffnen <span aria-hidden="true">↓</span></a>
-          <button id="caseExample" type="button">AED-Beispielfall ausprobieren</button>
-        </div>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
           <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
           <div class="hero-query-line">
@@ -53,11 +49,24 @@
             <button id="heroAskButton" type="submit">Antwort finden <span aria-hidden="true">→</span></button>
           </div>
         </form>
-        <div class="minimal-example-line"><button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">Beispiel ausprobieren: STK-Fristen <span aria-hidden="true">↗</span></button></div>
         <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Quelle bewusst wählen oder nach der Frage bestätigen.</p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
       </div>
     </section>
+    <details id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
+      <summary class="minimal-disclosure-summary"><span id="practiceHeading">Beispielfragen <small>10 Fragen pro Rolle oder Situation</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="practice-expanded">
+        <div class="practice-context">
+          <label for="practiceContext">Rolle oder Situation</label>
+          <select id="practiceContext" aria-describedby="practiceNote" disabled><option>Wird geladen …</option></select>
+        </div>
+        <div id="practiceChoices" class="practice-choices">
+          <p class="practice-placeholder">Fragen werden geladen …</p>
+        </div>
+        <p id="practiceNote" class="practice-note">Redaktionelle Auswahl nach Praxisrelevanz.</p>
+        <p id="practiceStatus" class="practice-status" role="status"></p>
+      </div>
+    </details>
     <details id="caseWorkspace" class="case-workspace">
       <summary class="minimal-disclosure-summary"><span>Fallwerkstatt <small id="caseCount">Aufnahme, Analyse und Übergabe</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
       <div class="case-content">
@@ -66,6 +75,7 @@
           <label>Falltyp<select id="caseType"></select></label>
           <button id="caseCreate" class="case-primary" type="button">Fall anlegen</button>
         </div>
+        <button id="caseExample" class="case-example" type="button">AED-Beispielfall ausprobieren</button>
         <p class="case-local">Fälle und ausgewählte öffentliche Belege bleiben in diesem Browser. Nur anonymisierte Angaben eintragen.</p>
         <p id="caseStatus" class="case-status" role="status"></p>
         <div id="caseRecord" hidden>
@@ -97,7 +107,7 @@
             </section>
             <div class="case-analysis-only case-research">
               <h3>Quellen gemeinsam prüfen</h3>
-              <p>Starte mit einer Aufgabenfrage oder nutze die Suche oben. Übernimm passende Fundstellen aus dem Original in deinen Fall.</p>
+              <a id="casePracticeLink" class="practice-return" href="#practiceLab">10 Fragen zu diesem Fall</a>
               <div id="caseQuestions" class="case-questions"></div>
             </div>
             <div class="case-fields">
@@ -251,6 +261,7 @@
             <button id="dialogReset" type="button">Neues Gespräch</button>
           </details>
           <div id="dialogFollowups" class="dialog-followups hidden" aria-label="Anschlussfragen"></div>
+          <a id="practiceReturn" class="practice-return hidden" href="#practiceLab">Zu den Beispielfragen</a>
           <div class="case-pin-area"><button type="button" id="casePin" class="hidden">Geprüften Beleg im Fall festhalten</button><span id="casePinStatus" role="status"></span><button type="button" id="caseReturn" class="hidden">Zur Fallakte ↑</button></div>
           <div class="answer-bottom" id="answerMode">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
           <div class="answer-quality" id="answerQuality">
@@ -276,27 +287,6 @@
       </div>
     </section>
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
-    <details id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
-      <summary class="minimal-disclosure-summary"><span>Beispielfragen entdecken <small>19 geprüfte Praxisfragen · MPBetreibV &amp; mehr</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
-      <div class="practice-expanded">
-      <div class="practice-head">
-        <div><span class="practice-eyebrow">RECHERCHE · PRAXISBEISPIELE</span><h2 id="practiceHeading">Häufige Praxisfragen – direkt ausprobieren.</h2>
-        <p>Redaktionell priorisierte Fragen, <strong>keine gemessene Nutzungsrangliste</strong>. Jede Antwort muss ihre Fundstelle im jeweiligen Original-PDF nachweisen.</p></div>
-        <span class="practice-provenance">Originalquelle wählen · 1 Klick</span>
-      </div>
-      <div class="practice-toolbar" role="group" aria-label="Praxisfragen filtern">
-        <button type="button" class="active" data-practice-filter="all" aria-pressed="true">Highlights</button>
-        <button type="button" data-practice-filter="mpbetreibv" aria-pressed="false">MPBetreibV</button>
-        <button type="button" data-practice-filter="other" aria-pressed="false">Andere Gesetze</button>
-        <button type="button" data-practice-filter="everything" aria-pressed="false">Alle Fragen</button>
-      </div>
-      <div id="practiceChoices" class="practice-choices" aria-live="polite">
-        <p class="practice-placeholder">Praxisfragen und gesetzliche Fundstellen werden geladen …</p>
-      </div>
-      <p id="practiceStatus" class="practice-status" role="status" aria-live="polite">Frage auswählen → Quellen-PDF wird geprüft → Antwort und Original ansehen.</p>
-      </div>
-    </details>
-
     <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
     <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen und Zahlen immer korrekt interpretieren oder Therapie- und Reparaturentscheidungen treffen.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>

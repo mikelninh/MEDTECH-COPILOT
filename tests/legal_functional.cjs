@@ -15,10 +15,16 @@ for(const f of faqs){
  assert.equal(match?.id,f.id,"FAQ must match itself: "+f.id);
  const result=Legal.answer(index,match,f.sourceId);
  const evidence=result.evidence?.[0];
- const sourceText=evidence?.page?index.pageTexts.find(p=>p.number===evidence.page)?.text||"":"";
- const correct=result.status==="evidence"&&evidence?.proof==="original-pdf-section"&&
-  Legal.norm(sourceText).includes(Legal.norm(f.proofPhrase))&&
-  Legal.norm(evidence.excerpt).includes(Legal.norm(f.proofPhrase));
+ const expectedEvidence=[f,...(f.supportingEvidence||[])];
+ const correct=result.status==="evidence"&&result.evidence.length===expectedEvidence.length&&
+  result.evidence.every((ev,i)=>{
+   const {proofPhrase,endPhrase}=expectedEvidence[i];
+   const sourceText=index.pageTexts.find(p=>p.number===ev.page)?.text||"";
+   return ev.proof==="original-pdf-section"&&
+    Legal.norm(sourceText).includes(Legal.norm(ev.excerpt))&&
+    Legal.norm(ev.excerpt).includes(Legal.norm(proofPhrase))&&
+    (!endPhrase||Legal.norm(ev.excerpt).endsWith(Legal.norm(endPhrase)));
+  });
  if(correct)passed++;
  results.push({id:f.id,source:f.sourceId,question:f.question,status:result.status,correct,page:evidence?.page||null,
   section:f.sectionMarker,proof:f.proofPhrase,baseline:old.status});
@@ -30,6 +36,11 @@ for(const f of faqs){
  assert.equal(Legal.answer(index,fake,f.sourceId).status,"unknown","Fake section must not generate citation");guards++;
  const fakeProof={...f,proofPhrase:"Eine vollkommen erfundene Gesetzesformulierung xyz"};
  assert.equal(Legal.answer(index,fakeProof,f.sourceId).status,"unknown","Fabricated quote must not be accepted");guards++;
+ if(f.supportingEvidence?.length){
+  const withoutSupport={...f,supportingEvidence:f.supportingEvidence.map(part=>({...part,proofPhrase:"Nicht vorhandener zusätzlicher Nachweis"}))};
+  assert.equal(Legal.answer(index,withoutSupport,f.sourceId).status,"unknown");
+  guards++;
+ }
  console.log("LEGAL_GOLD",JSON.stringify({id:f.id,status:result.status,page:evidence?.page||null,correct,section:f.sectionMarker,proof:f.proofPhrase,baseline:old.status}));
 }
 assert.equal(Legal.match(faqs,"Was hatte ich gestern zu Mittag?","mpbetreibv"),null);

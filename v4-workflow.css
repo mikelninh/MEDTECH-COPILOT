@@ -95,10 +95,6 @@
 .dialog-history li p { margin: .15rem 0; font-weight: 400; }
 .dialog-history button { color: #154c34; }
 
-.case-entry { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1rem; margin-block: .8rem 1rem; }
-.case-entry a, .case-entry button { font: inherit; font-size: .86rem; font-weight: 700; color: #154d35; }
-.case-entry a { background: #e8f4e9; padding: .55rem .7rem; border-radius: 6px; text-decoration: none; }
-.case-entry button { background: transparent; border: 0; padding: .5rem .1rem; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
 .case-guidance { max-width: 52rem; margin-block: 1.1rem; color: #19372a; }
 .case-guide-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem; margin-block-end: .7rem; }
 .case-guide-head h3 { margin: 0; }
@@ -129,3 +125,20 @@
 .case-content [hidden] { display: none; }
 .case-check-label { display: grid; gap: .2rem; }
 .case-check-label small { padding-left: .8rem; }
+
+#practiceLab .practice-expanded { padding: 1rem 1.15rem; }
+.practice-context { display: grid; gap: .4rem; margin-bottom: .85rem; width: min(100%, 390px); }
+.practice-context label { color: #214034; font-size: .9rem; font-weight: 700; }
+.practice-context select { min-height: 44px; padding: .55rem .65rem; min-width: 0; border: 1px solid #bccfc1; border-radius: 8px; background: #fff; color: #183e2a; font: inherit; font-size: .94rem; }
+#practiceLab .practice-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 .9rem; }
+#practiceLab .practice-choice { min-height: 47px; justify-content: flex-start; padding: .55rem .3rem; border: 0; border-bottom: 1px solid #dfe9e0; border-radius: 0; color: #1e4330; font: inherit; font-size: .94rem; font-weight: 630; line-height: 1.4; text-wrap: pretty; }
+#practiceLab .practice-choice:hover { background: #eef5ee; border-color: #dfe9e0; transform: none; box-shadow: none; }
+#practiceLab .practice-choice:focus-visible { outline: 2px solid #206e52; outline-offset: 1px; border-radius: 5px; }
+.practice-note, #practiceStatus { color: #4b6454; font-size: .81rem; margin: .7rem 0 0; }
+#practiceStatus:empty { display: none; }
+.practice-return { display: inline-block; margin: .75rem 0 0; color: #176044; font-size: .9rem; }
+.case-content .case-example { margin-top: .65rem; }
+@media (max-width: 650px) {
+  #practiceLab .practice-expanded { padding: .9rem .8rem; }
+  #practiceLab .practice-choices { grid-template-columns: 1fr; }
+}

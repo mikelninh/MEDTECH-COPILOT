@@ -9,9 +9,15 @@ Die Fallwerkstatt führt eine Fachkraft von der ersten Beobachtung bis zur dokum
 
 Mehrere Fälle bleiben im Browserprofil verfügbar. Noch vorhandene PDF-Fassungen können aus der Akte erneut geöffnet werden. Bei einem abweichenden Fingerprint bleiben Auszug und Fingerprint erhalten. Die eingebauten PDF-Snapshots werden in CI überprüft. Die verlinkte amtliche Fassung ist für den Geltungsstand maßgebend. Eigene PDFs und Gesprächsverläufe bleiben im Tab. Falltexte und ausdrücklich gewählte öffentliche Belege liegen im lokalen Browserspeicher. Der Export dient zur Weitergabe außerhalb der Demo.
 
+## Beispielfragen nach Rolle oder Situation
+
+Der Katalog enthält 53 redaktionell aufbereitete Fragen zu amtlichen Quellen. Vier Rollen und sechs Situationen zeigen jeweils zehn Fragen in fachlich priorisierter Reihenfolge. In diesen Listen erscheinen 51 unterschiedliche Fragen. Zwei weitere Fragen sind in der jeweiligen Quellenbibliothek verfügbar. Die Reihenfolge ist anhand amtlicher FAQ und Arbeitssituationen redaktionell gewählt. Es liegen keine gemessenen Nutzungshäufigkeiten vor.
+
+Die Auswahl einer Beispielfrage öffnet die zugehörige PDF-Fassung und die Fundstelle. Bei mehrseitigen Normen verlinkt die Antwort auch auf die ergänzende Fundstelle. Aus einer Fallakte führt ein Link direkt zur passenden Situation. Die freie Suche und die manuelle PDF-Auswahl bleiben verfügbar.
+
 ## Geführte Fallanalyse
 
-In der Suche ist der AED-Übungsfall direkt erreichbar. AED, STK, Vorkommnis und Instandhaltung haben eigene Prüfpunkte. Der Copilot ordnet die Fallangaben anhand expliziter Eingaben und schlägt die nächste Klärung mit einer Begründung vor. Eine Angabe ohne Fundort, ein dokumentierter Nachweis und ein Widerspruch haben unterschiedliche Zustände. Unterlagen wie die Gebrauchsanweisung werden von der Fachkraft geprüft und mit einer Referenz hinterlegt.
+Der AED-Übungsfall ist in der Fallwerkstatt direkt erreichbar. AED, STK, Vorkommnis und Instandhaltung haben eigene Prüfpunkte. Der Copilot ordnet die Fallangaben anhand expliziter Eingaben und schlägt die nächste Klärung mit einer Begründung vor. Eine Angabe ohne Fundort, ein dokumentierter Nachweis und ein Widerspruch haben unterschiedliche Zustände. Unterlagen wie die Gebrauchsanweisung werden von der Fachkraft geprüft und mit einer Referenz hinterlegt.
 
 Beim AED beeinflussen Zweckbestimmung, Selbsttest, Datum der Inbetriebnahme und Sichtprüfung die weiteren Prüfpunkte. Ein erfasster Selbsttestfehler oder ein gemeldeter schwerwiegender Verdacht wird hervorgehoben. Die dazugehörigen amtlichen Passagen werden im PDF angezeigt und anhand der ausgewählten Fassung geprüft. Fundstellen unterstützen die fachliche Entscheidung. Das Ergebnis ist ein bearbeitbarer Übergabeentwurf. Das Programm erteilt keine Freigaben und versendet keine Meldungen.
 

@@ -3,7 +3,7 @@ import { addEvidence, handoff, labels, newCase, readCases, storageKey, transitio
 import { analyzeCase } from "./case_analysis.mjs";
 import { mountCaseGuidance } from "./case_guidance_panel.mjs";
 
-export function setupCasePanel({ ask, getEvidence, openEvidence, openRule, isCurrentProof, onCaseChange }) {
+export function setupCasePanel({ ask, getEvidence, openEvidence, openRule, openPractice, isCurrentProof, onCaseChange }) {
   const el = id => document.getElementById(id);
   const panel = el("caseWorkspace");
   const fields = [...panel.querySelectorAll("[data-case-field]")];
@@ -91,6 +91,7 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, openRule, isCur
       input.value = item[input.dataset.caseField] || "";
       input.disabled = item.status === "closed" || (item.status === "handoff" && input.dataset.caseField !== "resolution");
     }
+    el("casePracticeLink").textContent = item.kind === "other" ? "Beispielfragen öffnen" : "10 Fragen zu diesem Fall";
     el("caseIntakeHint").textContent = workflows[item.kind].intake;
     const quick = el("caseQuestions");
     quick.replaceChildren();
@@ -152,6 +153,12 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, openRule, isCur
     });
   }
   el("caseType").replaceChildren(...Object.entries(workflows).map(([id, entry]) => option(entry.title, id)));
+  el("casePracticeLink").addEventListener("click", event => {
+    event.preventDefault();
+    const kind = active()?.kind;
+    const contexts = { aed: "aed", stk: "pruefungen", repair: "instandhaltung", incident: "vorkommnis" };
+    openPractice(contexts[kind] || "medizintechnik");
+  });
   el("caseExample").addEventListener("click", () => {
     const existing = cases.find(item => item.example === "aed-entry");
     const item = existing || {

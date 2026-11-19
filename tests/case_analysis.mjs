@@ -2,20 +2,19 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import Legal from "../src/legal_evidence.js";
 import Core from "../src/upload_core.js";
-import { exactCitation } from "../src/legal_dialog.mjs";
 import { analyzeCase, caseRules } from "../src/case_analysis.mjs";
 import { addEvidence, handoff, newCase } from "../src/case_workflow.mjs";
 
 const pages = JSON.parse(readFileSync(process.argv[2] || "/tmp/medtech-gold-pdf-pages.json", "utf8"));
 for (const [id, rule] of Object.entries(caseRules)) {
   const index = Core.chunkPages(pages[rule.sourceId]);
-  const proof = exactCitation(index, rule, Legal);
+  const proof = Legal.locate(index, rule);
   assert.ok(proof, id + " requires a passage from its official source");
   assert.ok(Legal.norm(pages[rule.sourceId].find(page => page.number === proof.page).text).includes(Legal.norm(proof.excerpt)));
   const altered = Core.chunkPages(pages[rule.sourceId].map(page => ({
     ...page, text: page.text.replace(new RegExp(rule.endPhrase.replaceAll(" ", "\\s+"), "g"), "Textänderung")
   })));
-  assert.equal(exactCitation(altered, rule, Legal), null, id + " must refuse changed text");
+  assert.equal(Legal.locate(altered, rule), null, id + " must refuse changed text");
 }
 const empty = { ...newCase("aed", "demo"), status: "analysis" };
 const analysis = (checks, item = empty, isCurrent) => analyzeCase({ ...item, checks }, isCurrent);

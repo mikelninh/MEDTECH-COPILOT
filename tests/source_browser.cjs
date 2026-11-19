@@ -236,53 +236,66 @@ async function question(page,q){
  console.log("PASS V1.2 mobile: answer-first, explicit PDF fullscreen verification, escape and zero overflow");
 
 
- // Full live-PDF benchmark of the six highest-priority shortcuts plus
- // four other statutes. These exercise the actual browser PDF.js extraction.
+ // Each role and situation exposes its ten curated shortcuts.
  const fast=await browser.newPage({viewport:{width:1440,height:900}});
  fast.on("pageerror",e=>errors.push("practice-lab: "+e.message));
  await fast.goto(url,{waitUntil:"networkidle"});
- await fast.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8,null,{timeout:15000});
+ await fast.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===10,null,{timeout:15000});
  assert.equal(await fast.locator("#practiceLab").evaluate(el=>el.open),false,"Shortcuts should not crowd the home view");
  await fast.locator("#practiceLab > summary").click();
- assert.match(await fast.locator("#practiceLab").innerText(),/keine gemessene Nutzungsrangliste/i);
- async function tryShortcut(id,law,needle){
-  const element=fast.locator('[data-practice-id="'+id+'"]');
-  if(!await element.count()){
-   await fast.locator('[data-practice-filter="everything"]').click();
-  }
-  await fast.locator('[data-practice-id="'+id+'"]').click();
+ assert.match(await fast.locator("#practiceLab").innerText(),/Redaktionelle Auswahl nach Praxisrelevanz/i);
+ const {contexts}=require("../data/legal_faq.json");
+ assert.equal(await fast.locator("#practiceContext optgroup").count(),2);
+ for(const context of contexts){
+  await fast.locator("#practiceContext").selectOption(context.id);
+  assert.deepEqual(await fast.locator("[data-practice-id]").evaluateAll(buttons=>buttons.map(button=>button.dataset.practiceId)),context.questionIds);
+ }
+ async function tryShortcut(context,id,law,needle){
+  await fast.locator("#practiceContext").selectOption(context);
+  const button=fast.locator('[data-practice-id="'+id+'"]');
+  const question=(await button.textContent()).trim();
+  await button.click();
   await fast.waitForFunction(
    args=>window.MedtechUploadDemo?.status()?.sourceId===args.law&&
     document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&
+    document.getElementById("answeredQuestion")?.textContent===args.question&&
     !document.getElementById("resultSection").classList.contains("hidden"),
-   {law},{timeout:90000});
+   {law,question},{timeout:25000});
   assert.equal(await fast.locator("#editorialAnswer").isVisible(),true,"Curated answer requires a verified statutory proof for "+id);
   assert.match(await fast.locator("#citationText").innerText(),new RegExp(needle,"i"),"Real PDF proof absent: "+id);
   assert.match(await fast.locator("#sourceOfficialLink").getAttribute("href"),/^https:\/\/www\.gesetze-im-internet\.de\//);
   assert.equal(await fast.locator("#heroSourceSelect").inputValue(),law);
   await fast.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0,null,{timeout:15000});
   assert.equal(await fast.locator("#pageCanvas").isVisible(),true);
+  assert.equal(await fast.locator("#heroRecommendations").isVisible(),false,"No second source-selection step");
  }
- for(const [id,law,proof] of [
-  ["b04","mpbetreibv","spätestens alle zwei Jahre"],
-  ["b03","mpbetreibv","Anlagen 1 und 2"],
-  ["b09","mpbetreibv","fünf Jahre aufzubewahren"],
-  ["b10","mpbetreibv","Anlage 2"],
-  ["b11","mpbetreibv","Protokoll"],
-  ["b06","mpbetreibv","nichtimplantierbaren"],
-  ["i01","mpamiv","schwerwiegende Vorkommnisse"],
-  ["d01","mpdg","Dieses Gesetz dient"],
-  ["a01","arbschg","Gefährdung"],
-  ["v01","mpav","Sachkenntnis"]
- ])await tryShortcut(id,law,proof);
- await fast.screenshot({path:"artifacts/v31-01-gold-faq-quick-choices.png",fullPage:true});
- console.log("PASS V3.1: ten clicked practice shortcuts -> correct source, literal statute proof, original PDF and editorial answer");
+ for(const [context,id,law,proof] of [
+  ["pruefungen","b04","mpbetreibv","spätestens alle zwei Jahre"],
+  ["audit","b03","mpbetreibv","Anlagen 1 und 2"],
+  ["audit","b09","mpbetreibv","fünf Jahre aufzubewahren"],
+  ["pruefungen","b10","mpbetreibv","Anlage 2"],
+  ["aed","p_aed_fail","mpbetreibv","unverzüglich wiederhergestellt"],
+  ["instandhaltung","p_repair_check","mpbetreibv","beeinträchtigt werden können"],
+  ["einweisung","p_start","mpbetreibv","Funktionsprüfung"],
+  ["betreiber","a01","arbschg","Gefährdung"],
+  ["produktsicherheit","i01","mpamiv","schwerwiegende Vorkommnisse"],
+  ["vorkommnis","p_report_where","mpamiv","zur zentralen Erfassung"],
+  ["vorkommnis","p_report_definition","mpamiv","hätte haben können"]
+ ])await tryShortcut(context,id,law,proof);
+ await fast.locator("#additionalCitations button").click();
+ assert.match(await fast.locator("#citationText").innerText(),/schwerwiegende Gefahr für die öffentliche Gesundheit/);
+ await fast.locator("#practiceReturn").click();
+ assert.equal(await fast.locator("#practiceContext").inputValue(),"vorkommnis");
+ assert.ok(await fast.locator("#practiceContext").evaluate(node=>node===document.activeElement));
+ await fast.locator("#practiceLab").screenshot({path:"artifacts/context-questions-desktop.png"});
+ console.log("PASS contextual questions: ten lists of ten, one-click PDF answers, supporting citation, return to context");
 
  const mobileQuick=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  mobileQuick.on("pageerror",e=>errors.push("practice-mobile: "+e.message));
  await mobileQuick.goto(url,{waitUntil:"networkidle"});
- await mobileQuick.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8);
+ await mobileQuick.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===10);
  await mobileQuick.locator("#practiceLab > summary").click();
+ await mobileQuick.locator("#practiceLab").screenshot({path:"artifacts/context-questions-mobile.png"});
  await mobileQuick.locator('[data-practice-id="b04"]').click();
  await mobileQuick.waitForFunction(()=>document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&
   window.MedtechUploadDemo?.status()?.sourceId==="mpbetreibv",null,{timeout:90000});

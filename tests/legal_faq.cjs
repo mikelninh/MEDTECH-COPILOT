@@ -19,8 +19,25 @@ for(const f of d.faqs){
  assert.ok(f.sectionMarker?.length>6&&f.proofPhrase?.length>6);
  assert.ok(Array.isArray(f.aliases));
  assert.ok(Number.isInteger(f.priority)&&f.priority>=1);
- assert.ok(f.quickLabel?.length>3);
+ if(f.quickLabel!==undefined)assert.ok(f.quickLabel.length>3);
 }
 assert.ok(d.faqs.filter(f=>f.sourceId==="mpbetreibv").length>=15);
 assert.deepEqual([...covered].sort(),[...laws].sort(),"All laws have a curated FAQ");
-console.log("PASS: 19 curated, government-linked practical FAQs (15 MPBetreibV); no invented usage popularity");
+const contextIds=new Set();
+const assigned=new Set();
+for(const context of d.contexts){
+ assert.ok(!contextIds.has(context.id));
+ contextIds.add(context.id);
+ assert.ok(["role","situation"].includes(context.type));
+ assert.ok(context.label.length>4);
+ assert.equal(context.questionIds.length,10,context.id);
+ assert.equal(new Set(context.questionIds).size,10,context.id);
+ for(const id of context.questionIds){
+  assert.ok(ids.has(id),context.id+" references "+id);
+  assigned.add(id);
+ }
+}
+assert.equal(d.contexts.filter(context=>context.type==="role").length,4);
+assert.equal(d.contexts.filter(context=>context.type==="situation").length,6);
+assert.equal(assigned.size,51);
+console.log(`PASS: ${d.faqs.length} curated FAQs; ${assigned.size} across ${d.contexts.length} sets of 10`);

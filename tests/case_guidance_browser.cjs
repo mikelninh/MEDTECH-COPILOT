@@ -16,8 +16,12 @@ async function text(page, selector, snippet) {
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(url, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelectorAll("#heroSourceSelect option").length === 9);
+    await page.locator("#caseWorkspace > summary").click();
     await page.locator("#caseExample").click();
     await text(page, "#casePriorityTitle", "Für die Benutzung durch Laien vorgesehen");
+    await page.locator("#casePracticeLink").click();
+    assert.equal(await page.locator("#practiceContext").inputValue(), "aed");
+    assert.equal(await page.locator("#practiceChoices button").count(), 10);
     await page.locator("#casePriorityGo").click();
     assert.equal(await byCheck(page, "purpose").locator("select").evaluate(el => el === document.activeElement), true);
     await byCheck(page, "purpose").locator("select").selectOption("yes");
@@ -78,6 +82,7 @@ async function text(page, selector, snippet) {
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     mobile.on("pageerror", error => errors.push(error.message));
     await mobile.goto(url, { waitUntil: "networkidle" });
+    await mobile.locator("#caseWorkspace > summary").click();
     await mobile.locator("#caseExample").click();
     await mobile.locator("#casePriorityGo").click();
     assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 3));
