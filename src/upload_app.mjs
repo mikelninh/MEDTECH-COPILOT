@@ -748,7 +748,7 @@ function offerSources(question,route){
   panel.append(mk("strong","hero-recommend-title","Bitte selbst eine Quelle bestätigen."));
   panel.append(mk("p","hero-recommend-note","Keine eindeutige Quelle aus deiner Frage erkannt. Wähle unten bewusst ein Buch; die Frage wird anschließend automatisch gesucht."));
   const button=mk("button","hero-browse","Quellenbibliothek ansehen ↓");
-  button.type="button";button.addEventListener("click",()=>$("sourceChooser").scrollIntoView({behavior:"smooth",block:"start"}));
+  button.type="button";button.addEventListener("click",()=>{$("sourceLibraryDisclosure").open=true;$("sourceLibraryDisclosure").scrollIntoView({behavior:"smooth",block:"start"})});
   panel.append(button);
   return;
  }
@@ -820,6 +820,17 @@ async function handleQuestion(text){
 }
 
 function setup(){
+ // Open collapsed resources on direct navigation or deep links.
+ function revealHash(){
+  const hash=decodeURIComponent(location.hash||"");
+  if(["#sourceChooser","#sourceLibraryDisclosure","#faqDisclosure"].includes(hash)){
+   $("sourceLibraryDisclosure").open=true;
+   if(hash==="#faqDisclosure")$("faqDisclosure").open=true;
+  }
+  if(hash==="#practiceLab")$("practiceLab").open=true;
+ }
+ window.addEventListener("hashchange",revealHash);
+ revealHash();
  const viewer=$("viewer");
  $("sourceSide").append(viewer);
  const close=mk("button","verify-close hidden","← Zur Antwort");close.id="verifyClose";close.type="button";
