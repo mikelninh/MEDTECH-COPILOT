@@ -10,7 +10,7 @@ const BASE="http://127.0.0.1:4173/";
 async function waitLoaded(page,n){
  await page.waitForFunction(count=>window.MedtechUploadDemo?.status()?.pages===count,n,{timeout:45000});
 }
-async function ask(page,question,expected,pageNo){
+async function ask(page,question,expected,pageNo,{mobile=false}={}){
  await page.locator("#questionInput").fill(question);
  await page.locator("#askButton").click();
  assert.equal(await page.locator("#answerStatus").innerText(),
@@ -32,7 +32,11 @@ async function ask(page,question,expected,pageNo){
    await page.screenshot({path:"artifacts/v09-render-failure.png",fullPage:true});
    throw e;
   }
-  assert.equal(await page.locator("#pageCanvas").isVisible(),true,"Source PDF canvas must be visible");
+  if(mobile){
+   assert.equal(await page.locator("#sourceSide").isVisible(),false,"Mobile shows the answer before opening the PDF");
+   await page.locator("#verifySource").click();
+  }
+  await page.locator("#pageCanvas").waitFor({state:"visible",timeout:12000});
   assert.equal(await page.locator("#viewerEmpty").isVisible(),false,"PDF rendering error cannot count as a pass");
   assert.ok(await page.locator("#pageCanvas").evaluate(el=>el.width>100&&el.height>100));
  }else assert.equal(await page.locator("#citationCard").isVisible(),false);
@@ -114,11 +118,10 @@ async function ask(page,question,expected,pageNo){
  await mobile.waitForFunction(()=>!!window.MedtechUploadDemo);
  await mobile.locator("#pdfFile").setInputFiles("/tmp/medtech_upload_fixture.pdf");
  await waitLoaded(mobile,4);
- await ask(mobile,"NanoPod CO2 Kapnographie","evidence",3);
+ await ask(mobile,"NanoPod CO2 Kapnographie","evidence",3,{mobile:true});
  const overflow=await mobile.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  assert.ok(overflow<=3,"Mobile horizontal overflow: "+overflow);
  await mobile.screenshot({path:"artifacts/v09-04-mobile-source.png",fullPage:true});
- await mobile.locator("#verifySource").click();
  await mobile.locator("#prevPage").click();
  assert.equal(await mobile.locator("#viewerPageLabel").innerText(),"Seite 2 von 4");
  assert.deepEqual(browserErrors,[],"JavaScript browser errors");
