@@ -6,6 +6,7 @@ import * as pdfjsLib from "../vendor/pdf.mjs";
 import "./upload_core.js";
 import "./source_router.js";
 import "./evidence_highlight.js";
+import "./legal_evidence.js";
 
 // PDF.js 6.5 uses the proposed Map#getOrInsertComputed API.
 // Headless Chromium versions used in CI may not implement it yet.
@@ -48,6 +49,7 @@ if(typeof WeakMap.prototype.getOrInsert!=="function"){
 const Core=window.MedtechManualCore;
 const Router=window.MedtechSourceRouter;
 const Highlight=window.MedtechEvidenceHighlight;
+const Legal=window.MedtechLegalEvidence;
 const Learning=window.MedtechLearningLoop;
 let learningStore=null;
 try{learningStore=window.localStorage}catch(_){}
@@ -162,6 +164,41 @@ function makeCard(source){
  b.addEventListener("click",()=>loadExample(source));
  return b;
 }
+let practiceFilter="all";
+function paintPracticeChoices(){
+ const container=$("practiceChoices");if(!container)return;
+ container.replaceChildren();
+ const data=state.faqCatalog?.faqs||[];
+ const sources=state.catalog?.sources||[];
+ if(!data.length||!sources.length){
+  container.append(mk("p","practice-placeholder","Der Fragenkatalog wird geladen. Original-PDFs sind weiterhin über die Quellenauswahl nutzbar."));
+  return;
+ }
+ const sorted=data.slice().sort((a,b)=>(a.priority||100)-(b.priority||100));
+ const chosen=practiceFilter==="all"?sorted.slice(0,8):practiceFilter==="mpbetreibv"?sorted.filter(f=>f.sourceId==="mpbetreibv"):practiceFilter==="other"?sorted.filter(f=>f.sourceId!=="mpbetreibv"):sorted;
+ for(const f of chosen){
+  const source=sources.find(x=>x.id===f.sourceId);if(!source)continue;
+  const button=mk("button","practice-choice");button.type="button";button.dataset.practiceId=f.id;
+  button.setAttribute("aria-label",f.question+" – "+source.title+" als Quelle auswählen und Frage prüfen");
+  const marker=mk("span","practice-icon","↗");
+  const content=mk("span","practice-copy");
+  content.append(mk("strong","",f.quickLabel||f.question),mk("small","",source.title+" · "+f.answerReference));
+  button.append(content,marker);
+  button.addEventListener("click",async()=>{
+   if(state.routing)return;
+   $("practiceStatus").textContent="Original-PDF für "+source.title+" wird geprüft. Anschließend erscheint der belegte Text neben der Antwort.";
+   $("heroQuestionInput").value=f.question;
+   try{
+    await updateHeroSelection(source.id);
+    await handleQuestion(f.question);
+    $("practiceStatus").textContent="Recherche durchgeführt. Prüfe die Fundstelle und die Original-PDF-Seite im Workspace.";
+   }catch(error){
+    $("practiceStatus").textContent="Dokument nicht bereit: "+String(error.message||error).slice(0,130);
+   }
+  });
+  container.append(button);
+ }
+}
 function paintFaqs(source){
  const panel=$("faqPanel"),list=$("faqList");
  if(!panel||!list)return;
@@ -201,8 +238,11 @@ async function loadFaqs(){
   for(const f of data.faqs)
    if(!/^[a-z0-9_-]{1,32}$/.test(f.id)||!sources.has(f.sourceId)||
      !/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/(?:__\d+|anlage_\d+)\.html$/.test(f.sourceUrl)||
-     typeof f.answer!=="string"||f.answer.length<45)throw new Error("FAQ source not verified");
-  state.faqCatalog=data;paintFaqs(state.source);paintLearningCounts();
+     typeof f.answer!=="string"||f.answer.length<45||
+     typeof f.sectionMarker!=="string"||f.sectionMarker.length<6||
+     typeof f.proofPhrase!=="string"||f.proofPhrase.length<7||
+     !Array.isArray(f.aliases)||!Number.isInteger(f.priority))throw new Error("FAQ source not verified");
+  state.faqCatalog=data;paintFaqs(state.source);paintPracticeChoices();paintLearningCounts();
  }catch(error){console.warn("Curated FAQ unavailable",error.message)}
 }
 function paintLearningCounts(){
@@ -285,7 +325,7 @@ async function loadCatalog(){
    const count=data.sources.filter(source=>source.group===button.dataset.sourceGroup).length;
    const badge=mk("span","tab-count",String(count));badge.setAttribute("aria-hidden","true");button.append(badge);
   }
-  paintCards();
+  paintCards();paintPracticeChoices();
  }catch(err){
   $("sourceCards").replaceChildren(mk("p","source-missing","Öffentliche Beispielquellen konnten nicht geladen werden. Eigenes PDF bleibt verfügbar."));
   console.warn("Public example source catalog unavailable:",err.message);
@@ -569,17 +609,18 @@ function paintExcerpt(evidence){
  }
  if(index<raw.length)el.append(document.createTextNode(raw.slice(index)));
 }
-function editorialAnswer(question){
+function editorialAnswer(result){
  const panel=$("editorialAnswer");panel.replaceChildren();panel.classList.add("hidden");
- if(!state.source||state.source.group!=="laws")return;
- const matched=state.faqCatalog?.faqs?.find(f=>f.sourceId===state.source.id&&Highlight?.normalize(f.question)===Highlight?.normalize(question));
- if(!matched)return;
- panel.append(mk("div","editorial-label","KURZORIENTIERUNG · REDAKTIONELL, NICHT FACHLICH FREIGEGEBEN"));
+ if(result.status!=="evidence"||!result.faqId||state.source?.group!=="laws")return;
+ const matched=state.faqCatalog?.faqs?.find(f=>f.id===result.faqId&&f.sourceId===state.source.id);
+ if(!matched||result.evidence?.[0]?.proof!=="original-pdf-section")return;
+ panel.append(mk("div","editorial-label","KURZORIENTIERUNG · GESETZESTEXT ABGEGLICHEN · NICHT JURISTISCH FREIGEGEBEN"));
  panel.append(mk("p","",matched.answer));
- const link=mk("a","editorial-link",matched.answerReference+" · geltende Norm prüfen ↗");
+ const link=mk("a","editorial-link",matched.answerReference+" · vollständige amtliche Norm prüfen ↗");
  link.href=matched.sourceUrl;link.target="_blank";link.rel="noopener noreferrer";panel.append(link);
  panel.classList.remove("hidden");
 }
+
 function closeVerify(){
  const side=$("sourceSide");
  if(!side)return;
@@ -619,7 +660,7 @@ function showResult(result){
  if(result.status==="evidence"){
   const first=result.evidence[0];
   state.activeEvidence=first;
-  editorialAnswer(state.lastQuestion);
+  editorialAnswer(result);
   const showEvidence=ev=>{
    state.activeEvidence=ev;
    $("citationPage").textContent="PDF-SEITE "+ev.page;
@@ -651,7 +692,9 @@ function showResult(result){
 }
 function ask(question){
  state.lastQuestion=String(question||"");
- const result=Core.search(state.index,state.lastQuestion);
+ const law=state.source?.group==="laws"&&Core.classify(state.lastQuestion)==="search";
+ const curated=law&&Legal?.match(state.faqCatalog?.faqs,state.lastQuestion,state.source.id);
+ const result=curated?Legal.answer(state.index,curated,state.source.id):Core.search(state.index,state.lastQuestion);
  showResult(result);
  learning?.ask(state.source?.id||"other",state.lastQuestion,result.status);
  paintLearningCounts();
@@ -790,6 +833,15 @@ function setup(){
  $("heroSourceSelect").addEventListener("change",event=>{void updateHeroSelection(event.target.value)});
  document.querySelectorAll("[data-quick-source]").forEach(button=>button.addEventListener("click",()=>{
   void updateHeroSelection(button.dataset.quickSource);
+ }));
+ document.querySelectorAll("[data-practice-filter]").forEach(button=>button.addEventListener("click",()=>{
+  practiceFilter=button.dataset.practiceFilter;
+  document.querySelectorAll("[data-practice-filter]").forEach(item=>{
+   const chosen=item===button;
+   item.classList.toggle("active",chosen);
+   item.setAttribute("aria-pressed",String(chosen));
+  });
+  paintPracticeChoices();
  }));
  $("welcomeExample").addEventListener("click",()=>{
   const q="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?";

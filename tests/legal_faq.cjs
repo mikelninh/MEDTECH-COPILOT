@@ -4,7 +4,7 @@ const assert=require("node:assert/strict"),fs=require("node:fs");
 const d=JSON.parse(fs.readFileSync("data/legal_faq.json","utf8"));
 assert.equal(d.schemaVersion,1);
 assert.ok(/NOT measured popularity/i.test(d.classification));
-assert.ok(d.faqs.length>=12);
+assert.ok(d.faqs.length>=19);
 const laws=new Set(["mpbetreibv","mpdg","mpamiv","mpav","arbschg"]);
 const ids=new Set(),covered=new Set();
 for(const f of d.faqs){
@@ -16,7 +16,11 @@ for(const f of d.faqs){
  assert.match(f.answerReference,/§|Anlage/);
  assert.match(f.sourceUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/(?:__\d+|anlage_\d+)\.html$/);
  assert.ok(!/diagnose|garantiert zutreffend/i.test(f.answer),"No unsupported confidence");
+ assert.ok(f.sectionMarker?.length>6&&f.proofPhrase?.length>6);
+ assert.ok(Array.isArray(f.aliases));
+ assert.ok(Number.isInteger(f.priority)&&f.priority>=1);
+ assert.ok(f.quickLabel?.length>3);
 }
-assert.ok(d.faqs.filter(f=>f.sourceId==="mpbetreibv").length>=8);
+assert.ok(d.faqs.filter(f=>f.sourceId==="mpbetreibv").length>=15);
 assert.deepEqual([...covered].sort(),[...laws].sort(),"All laws have a curated FAQ");
-console.log("PASS: 12 curated, government-linked legal FAQs (MPBetreibV priority); no invented usage popularity");
+console.log("PASS: 19 curated, government-linked practical FAQs (15 MPBetreibV); no invented usage popularity");

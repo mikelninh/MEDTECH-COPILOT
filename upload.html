@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="./source10.css">
 <link rel="stylesheet" href="./v12.css">
 <link rel="stylesheet" href="./v3.css">
+<link rel="stylesheet" href="./v31.css">
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
@@ -62,6 +63,23 @@
         <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Wähle eine Quelle bewusst aus oder lass dir passende Quellen vorschlagen.</p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
       </div>
+    </section>
+    <section id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
+      <div class="practice-head">
+        <div><span class="practice-eyebrow">RECHERCHE · PRAXISBEISPIELE</span><h2 id="practiceHeading">Häufige Praxisfragen – direkt ausprobieren.</h2>
+        <p>Redaktionell priorisierte Fragen, <strong>keine gemessene Nutzungsrangliste</strong>. Jede Antwort muss ihre Fundstelle im jeweiligen Original-PDF nachweisen.</p></div>
+        <span class="practice-provenance">Originalquelle wählen · 1 Klick</span>
+      </div>
+      <div class="practice-toolbar" role="group" aria-label="Praxisfragen filtern">
+        <button type="button" class="active" data-practice-filter="all" aria-pressed="true">Highlights</button>
+        <button type="button" data-practice-filter="mpbetreibv" aria-pressed="false">MPBetreibV</button>
+        <button type="button" data-practice-filter="other" aria-pressed="false">Andere Gesetze</button>
+        <button type="button" data-practice-filter="everything" aria-pressed="false">Alle Fragen</button>
+      </div>
+      <div id="practiceChoices" class="practice-choices" aria-live="polite">
+        <p class="practice-placeholder">Praxisfragen und gesetzliche Fundstellen werden geladen …</p>
+      </div>
+      <p id="practiceStatus" class="practice-status" role="status" aria-live="polite">Frage auswählen → Quellen-PDF wird geprüft → Antwort und Original ansehen.</p>
     </section>
     <div class="v3-proof-line" id="howItWorks" aria-label="So funktioniert MEDTECH COPILOT">
       <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Quellengebundene Recherche</span>

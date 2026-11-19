@@ -1,0 +1,42 @@
+/* MEDTECH COPILOT v3.1 — Quick choices are navigation, not a new card wall. */
+.practice-lab{max-width:1300px;margin:11px auto 24px;padding:21px 0 24px;border-top:1px solid #e9eeea;border-bottom:1px solid #e9eeea;scroll-margin-top:22px}
+.practice-head{display:flex;gap:20px;justify-content:space-between;align-items:start;margin-bottom:15px}
+.practice-eyebrow{display:inline-block;color:#689078;font:760 10px/1.4 ui-monospace,monospace;letter-spacing:.11em}
+.practice-head h2{color:#1b2c21;font:750 clamp(19px,2vw,25px)/1.25 Inter,system-ui,sans-serif;letter-spacing:-.048em;margin:5px 0 7px}
+.practice-head p{color:#839487;line-height:1.6;font-size:11px;max-width:750px;margin:0}
+.practice-head p strong{font-weight:650;color:#567460}
+.practice-provenance{color:#829a87;border:1px solid #e2ebe3;background:#f5f8f4;padding:9px 13px;border-radius:99px;white-space:nowrap;font-size:10px}
+.practice-toolbar{display:flex;gap:5px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.practice-toolbar button{background:transparent;color:#7c9081;border:0;border-radius:8px;padding:8px 13px;font-size:11px;font-weight:680}
+.practice-toolbar button.active,.practice-toolbar button:hover{background:#e7efe7;color:#175e36}
+.practice-toolbar button[aria-pressed=true]{box-shadow:inset 0 -2px #006339}
+.practice-choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.practice-choice{width:100%;display:flex;align-items:center;justify-content:space-between;gap:11px;text-align:left;background:#fff;border:1px solid #e5ebe6;border-radius:12px;min-height:80px;padding:12px 13px;transition:border-color .16s,box-shadow .16s,transform .16s}
+.practice-choice:hover{border-color:#75bb90;transform:translateY(-2px);box-shadow:0 7px 18px rgba(36,66,46,.05)}
+.practice-choice:focus-visible{outline:3px solid #a7dcc0;outline-offset:2px}
+.practice-copy{display:grid;gap:6px;min-width:0}
+.practice-copy strong{font-size:12px;line-height:1.2;font-weight:780;letter-spacing:-.028em;color:#22412d}
+.practice-copy small{font-size:10px;line-height:1.4;color:#8d9d91}
+.practice-icon{color:#568469;font-size:16px;flex:none;align-self:start}
+.practice-placeholder{font-size:12px;color:#83988a;margin:8px 0 17px;grid-column:1/-1}
+.practice-status{font-size:10px;color:#789180;margin:11px 0 0}
+#editorialAnswer .editorial-label{font-size:10px}
+#editorialAnswer p{font-size:14px}
+#resultSection .citation-meta{line-height:1.5}
+@media(max-width:1050px){.practice-choices{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){
+ .practice-lab{margin:7px auto 18px;padding:15px 0 18px}
+ .practice-head{display:block;margin-bottom:11px}
+ .practice-head h2{font-size:20px}
+ .practice-head p{font-size:10px}
+ .practice-provenance{display:none}
+ .practice-toolbar{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-bottom:10px}
+ .practice-toolbar button{white-space:nowrap;font-size:10px;min-height:39px;padding:9px 11px}
+ .practice-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .practice-choice{min-height:83px;padding:11px}
+ .practice-copy strong{font-size:11px}
+ .practice-copy small{font-size:9px}
+ .practice-status{line-height:1.6}
+}
+@media(max-width:370px){.practice-choices{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.practice-choice{transition:none}.practice-choice:hover{transform:none}}
