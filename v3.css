@@ -108,7 +108,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,su
 .answer-quality{border-top:1px solid #eff2ef!important;padding-top:17px!important}
 .answer-quality .eyebrow{color:#93a498;font-size:9px}
 .answer-feedback button{border-radius:99px;padding:10px 14px}
-#sourceSide{position:sticky!important;top:15px;min-width:0;align-self:start}
+#sourceSide{position:relative!important;top:auto!important;min-width:0;align-self:start;z-index:0}
 #sourceSide .viewer{border:1px solid #e1e7e2!important;border-radius:18px!important;background:#fff!important;box-shadow:none!important;overflow:hidden;min-height:490px}
 #sourceSide:not(.has-source) .source-identity{display:none}
 #sourceSide .source-identity{border-bottom:1px solid #ebf0eb!important;background:#fff!important;padding:18px 22px 14px!important;gap:6px!important}
