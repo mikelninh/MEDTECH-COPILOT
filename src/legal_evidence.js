@@ -67,7 +67,20 @@
      return {c,hits};
     }).sort((x,y)=>y.hits-x.hits)[0]?.c;
     if(!best||terms.filter(w=>norm(best.text).includes(w)).length<Math.min(2,terms.length))continue;
-    return {page:candidate.number,excerpt:best.text,matchedTerms:terms.filter(w=>norm(best.text).includes(w)).slice(0,8),coverage:1,score:100,proof:"original-pdf-section",section:faq.sectionMarker};
+    // Prefer a short *literal excerpt surrounding the proof*, never a chunk
+    // that happens to start in the preceding paragraph or neighbouring §.
+    const rawWords=String(candidate.text).replace(/\s+/g," ").trim().split(" ");
+    const normalizedWords=rawWords.map(w=>norm(w));
+    const needle=proof.split(" ");
+    let offset=-1;
+    for(let k=0;k<=normalizedWords.length-needle.length;k++){
+     if(needle.every((word,j)=>word===normalizedWords[k+j])){offset=k;break}
+    }
+    const excerpt=offset>=0?
+     rawWords.slice(Math.max(0,offset-9),Math.min(rawWords.length,offset+needle.length+41)).join(" "):
+     best.text;
+    if(!norm(excerpt).includes(proof))continue;
+    return {page:candidate.number,excerpt,matchedTerms:terms.filter(w=>norm(excerpt).includes(w)).slice(0,8),coverage:1,score:100,proof:"original-pdf-section",section:faq.sectionMarker};
    }
   }
   return null;
