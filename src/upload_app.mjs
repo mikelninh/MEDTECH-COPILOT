@@ -283,6 +283,7 @@ async function destroySource(){
  }
  if(state.url){URL.revokeObjectURL(state.url);state.url=null}
  state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;state.activeEvidence=null;
+ $("sourceSide").classList.remove("has-source");
  $("pdfHighlights").replaceChildren();closeVerify();
  showSource(null);
  resetOwnCover();
@@ -410,6 +411,7 @@ async function chooseFile(file,sourceMeta=null){
   $("loadedBar").classList.remove("hidden");
   controls(true);
   status("Dokument lokal indexiert. Bereit für deine Fragen.","success",index.pages+" Seiten");
+  $("sourceSide").classList.add("has-source");
   $("viewerEmpty").classList.add("hidden");
   await renderPage(1);
   if(!sourceMeta)await updateOwnCover(version);
@@ -638,68 +640,89 @@ async function animateBookChoice(selected){
   b.classList.remove("scanning");
  });
 }
+function heroMessage(message,tone="neutral"){
+ const el=$("heroQueryStatus");
+ el.textContent=message;el.dataset.tone=tone;
+}
+function offerSources(question,route){
+ const panel=$("heroRecommendations");panel.replaceChildren();panel.classList.remove("hidden");
+ const sources=state.catalog?.sources||[];
+ if(!sources.length){
+  panel.append(mk("p","hero-pending","Quellenkatalog noch nicht bereit. Die Frage bleibt im Feld erhalten."));return;
+ }
+ const matches=(route?.ranked||[]).filter(x=>x.score>=4).slice(0,3);
+ if(!matches.length){
+  panel.append(mk("strong","hero-recommend-title","Bitte selbst eine Quelle bestätigen."));
+  panel.append(mk("p","hero-recommend-note","Keine eindeutige Quelle aus deiner Frage erkannt. Wähle unten bewusst ein Buch; die Frage wird anschließend automatisch gesucht."));
+  const button=mk("button","hero-browse","Quellenbibliothek ansehen ↓");
+  button.type="button";button.addEventListener("click",()=>$("sourceChooser").scrollIntoView({behavior:"smooth",block:"start"}));
+  panel.append(button);
+  return;
+ }
+ panel.append(mk("strong","hero-recommend-title",route.status==="selected"?"Passende Quelle gefunden – bitte bestätigen":"Welche Quelle passt zu deiner Frage?"));
+ panel.append(mk("p","hero-recommend-note","Die Auswahl erfolgt bewusst durch dich. Es wird niemals stillschweigend zwischen Gesetzen gewechselt."));
+ const row=mk("div","hero-recommend-list");
+ for(const item of matches){
+  const src=sources.find(x=>x.id===item.id);if(!src)continue;
+  const button=mk("button","hero-recommend-card");button.type="button";button.dataset.recommendSource=src.id;
+  const cover=mk("img","",undefined);cover.src=src.cover;cover.alt="";cover.width=40;cover.height=58;
+  const name=mk("span","",undefined);name.append(mk("strong","",src.title),mk("small","",src.group==="laws"?"Konsolidierter Bundesportal-Text":"Fiktives Training"));
+  button.append(cover,name,mk("span","hero-recommend-arrow","→"));
+  button.addEventListener("click",async()=>{
+   if(state.routing)return;
+   state.routing=true;
+   button.disabled=true;
+   heroMessage("Prüfe die ausgewählte Quelle und lade ihre Originalseiten …");
+   try{
+    state.pendingQuestion=question;
+    await selectGroup(src.group);
+    await loadExample(src);
+    if(!state.index)heroMessage("Dokument nicht geladen. Wähle eine andere Quelle.","warning");
+   }finally{state.routing=false}
+  });
+  row.append(button);
+ }
+ panel.append(row);
+}
 async function handleQuestion(text){
  const q=String(text||"").trim();
  if(!q||state.routing)return null;
- if(!state.index){
-  autoStatus("Quelle auswählen","Bitte zuerst ausdrücklich eines der Beispielhandbücher, ein Gesetz oder dein eigenes PDF auswählen.","clarify");
-  return null;
+ if(Core.classify(q)==="blocked"&&!state.index){
+  state.pendingQuestion=null;
+  $("heroRecommendations").classList.add("hidden");
+  heroMessage("Sicherheitsgrenze: keine Anleitung zum Umgehen von Schutzfunktionen, zur Therapieänderung oder zum Zugriff auf Patientendaten.","warning");
+  return {status:"blocked",evidence:[]};
  }
- return ask(q);
- if(Core.classify(q)==="blocked"){
-  autoStatus("Sicherheitsgrenze","Keine Quelle wird für riskante technische oder klinische Handlungsanweisungen ausgewählt.","warning");
-  const answer={status:"blocked",reason:"Der Copilot gibt keine Anleitung zur Umgehung von Schutzfunktionen oder zu klinischen Änderungen.",answer:"",evidence:[]};
-  showResult(answer);return answer;
- }
- if(!state.catalog?.sources?.length){
-  autoStatus("Quellenkatalog derzeit nicht verfügbar","Du kannst noch ein eigenes PDF auswählen.","warning");
-  return null;
- }
- const result=Router.route(q,state.catalog.sources);
- if(result.status!=="selected"){
-  autoStatus("Welche Quelle meinst du?",result.reason,"clarify");
-  const shelf=$("sourceAutoBooks");shelf.replaceChildren();
-  const candidates=result.ranked.filter(x=>x.score>=2).slice(0,3);
-  if(!candidates.length)candidates.push(...result.ranked.slice(0,3));
-  const box=mk("div","auto-suggestions");
-  for(const candidate of candidates){
-   const source=state.catalog.sources.find(x=>x.id===candidate.id);
-   if(!source)continue;
-   const b=mk("button","auto-suggestion");
-   b.type="button";
-   const img=mk("img","auto-suggestion-cover");
-   img.src=source.cover;img.alt="";
-   b.append(img,mk("span","",source.title+" ↗"));
-   b.addEventListener("click",async()=>{
-    await selectGroup(source.group);
-    await loadExample(source);
-    if(state.index){$("questionInput").value=q;ask(q)}
-   });
-   box.append(b);
-  }
-  shelf.append(box);
-  return result;
- }
- const selected=state.catalog.sources.find(x=>x.id===result.id);
- state.routing=true;
- autoStatus("COPILOT SUCHT DAS PASSENDE BUCH","Vergleicht Begriffe und Fachgebiete. Keine automatische medizinische Entscheidung.","routing");
- try{
-  await animateBookChoice(selected);
-  await selectGroup(selected.group);
-  autoStatus(selected.title+" gewählt",result.reason+". Erklärbare Begriffserkennung – kein generatives KI-Modell.","success");
-  await loadExample(selected);
-  if(!state.index){
-   autoStatus("Quelle momentan nicht verfügbar","Die Dokumentenprüfung ist fehlgeschlagen. Bitte andere Quelle wählen oder neu versuchen.","warning");
-   return null;
-  }
+ if(state.index){
   $("questionInput").value=q;
+  $("heroQuestionInput").value=q;
+  $("heroRecommendations").classList.add("hidden");
   return ask(q);
- }finally{state.routing=false}
+ }
+ state.pendingQuestion=q;
+ const route=Router?.route(q,state.catalog?.sources||[])||{status:"unmatched",ranked:[]};
+ heroMessage("Jetzt eine Quelle ausdrücklich bestätigen. Danach wird deine Frage sofort darin gesucht.","action");
+ offerSources(q,route);
+ return route;
 }
 
 function setup(){
  const viewer=$("viewer");
  $("sourceSide").append(viewer);
+ const close=mk("button","verify-close hidden","← Zur Antwort");close.id="verifyClose";close.type="button";
+ close.addEventListener("click",()=>closeVerify());
+ viewer.prepend(close);
+ $("verifySource").addEventListener("click",openVerify);
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&$("sourceSide").classList.contains("verify-open"))closeVerify()});
+ $("heroQuestionForm").addEventListener("submit",event=>{
+  event.preventDefault();void handleQuestion($("heroQuestionInput").value);
+ });
+ document.querySelectorAll("[data-starter-question]").forEach(button=>button.addEventListener("click",()=>{
+  const q=button.dataset.starterQuestion;
+  $("heroQuestionInput").value=q;
+  void handleQuestion(q);
+ }));
+
  const identity=mk("div","source-identity");
  const kicker=mk("span","eyebrow","AKTIVE ORIGINALQUELLE");
  const title=mk("strong","source-identity-name","Bitte Quelle auswählen");title.id="viewerSourceName";
