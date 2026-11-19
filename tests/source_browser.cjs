@@ -175,6 +175,7 @@ async function question(page,q){
     window.MedtechUploadDemo?.status()?.loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
  assert.equal(await directly.locator("#heroRecommendations").isVisible(),false,"Explicit source must not ask for a second confirmation");
  assert.equal(await directly.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
+ assert.match(await directly.locator("#heroQueryStatus").innerText(),/Textstelle.*gefunden/,"Status must finish, not remain in loading");
  const answerRect=await directly.locator("#resultSection").boundingBox();
  const pdfRect=await directly.locator("#sourceSide").boundingBox();
  assert.ok(pdfRect.x>answerRect.x+answerRect.width-10,"Answer must appear next to the selected original");
@@ -215,6 +216,7 @@ async function question(page,q){
  assert.ok(viewerPosition.y>resultPosition.y,"Mobile answer must appear before long original PDF");
  await mobileFirst.locator("#verifySource").click();
  assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),true);
+ assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>getComputedStyle(el).position),"fixed","Mobile verify must truly cover the viewport");
  await mobileFirst.screenshot({path:"artifacts/v12-02-verify-mobile.png",fullPage:true});
  await mobileFirst.locator("#verifyClose").click();
  assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),false);
