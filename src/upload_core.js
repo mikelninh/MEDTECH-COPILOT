@@ -63,12 +63,13 @@ function classify(question){
 }
 function chunkPages(pages){
  if(!Array.isArray(pages)||!pages.length||pages.length>MAX_PAGES)throw new Error("Ungültige Seitenanzahl (maximal 120).");
- let chars=0;const all=[];
+ let chars=0;const all=[],pageTexts=[];
  for(let i=0;i<pages.length;i++){
   const page=pages[i],number=page.number||i+1;
   if(!Number.isInteger(number)||number<1||number>MAX_PAGES)throw new Error("Ungültige PDF-Seitennummer.");
   if(typeof page.text!=="string")throw new Error("Seite ohne lesbaren Text.");
   const content=page.text.replace(/\s+/g," ").trim();
+  pageTexts.push({number,text:content});
   chars+=content.length;if(chars>1200000)throw new Error("PDF-Text übersteigt das Limit.");
   const words=content.match(/\S+/g)||[];
   for(let start=0;start<words.length;start+=65){
@@ -84,7 +85,7 @@ function chunkPages(pages){
  if(chars<50||all.length===0)throw new Error("Kein durchsuchbarer Text erkannt. Gescanntes PDF? OCR ist noch nicht enthalten.");
  const df=new Map();
  for(const item of all)for(const term of item.concepts)df.set(term,(df.get(term)||0)+1);
- return {chunks:all,pages:pages.length,characters:chars,df:Object.fromEntries(df),N:all.length};
+ return {chunks:all,pages:pages.length,pageTexts,characters:chars,df:Object.fromEntries(df),N:all.length};
 }
 function search(index,question,options={}){
  if(!index?.chunks||!Number.isInteger(index.N))throw new Error("Dokumentindex fehlt.");
