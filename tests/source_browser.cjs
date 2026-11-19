@@ -85,7 +85,7 @@ async function question(page,q){
  assert.equal(feedback.asked,1);
  assert.equal(feedback.helpful,1);
  assert.equal(feedback.evidence,1);
- assert.equal(feedback.faqOpens.b01,1);
+ assert.equal(feedback.faqOpens.b04,1,"First FAQ is now the priority-one STK question");
 
  await desktop.waitForFunction(()=>window.MedtechUploadDemo.status().renderedPage>0);
  assert.equal(await desktop.locator("#pageCanvas").isVisible(),true);
