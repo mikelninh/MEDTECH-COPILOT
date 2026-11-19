@@ -224,6 +224,62 @@ async function question(page,q){
  assert.ok(mobileFirstOverflow<=3,"Question-first mobile overflow "+mobileFirstOverflow);
  console.log("PASS V1.2 mobile: answer-first, explicit PDF fullscreen verification, escape and zero overflow");
 
+
+ // Full live-PDF benchmark of the six highest-priority shortcuts plus
+ // four other statutes. These exercise the actual browser PDF.js extraction.
+ const fast=await browser.newPage({viewport:{width:1440,height:900}});
+ fast.on("pageerror",e=>errors.push("practice-lab: "+e.message));
+ await fast.goto(url,{waitUntil:"networkidle"});
+ await fast.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8,null,{timeout:15000});
+ assert.match(await fast.locator("#practiceLab").innerText(),/keine gemessene Nutzungsrangliste/i);
+ async function tryShortcut(id,law,needle){
+  const element=fast.locator('[data-practice-id="'+id+'"]');
+  if(!await element.count()){
+   await fast.locator('[data-practice-filter="everything"]').click();
+  }
+  await fast.locator('[data-practice-id="'+id+'"]').click();
+  await fast.waitForFunction(
+   args=>window.MedtechUploadDemo?.status()?.sourceId===args.law&&
+    document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&
+    !document.getElementById("resultSection").classList.contains("hidden"),
+   {law},{timeout:90000});
+  assert.equal(await fast.locator("#editorialAnswer").isVisible(),true,"Curated answer requires a verified statutory proof for "+id);
+  assert.match(await fast.locator("#citationText").innerText(),new RegExp(needle,"i"),"Real PDF proof absent: "+id);
+  assert.match(await fast.locator("#sourceOfficialLink").getAttribute("href"),/^https:\/\/www\.gesetze-im-internet\.de\//);
+  assert.equal(await fast.locator("#heroSourceSelect").inputValue(),law);
+  await fast.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0,null,{timeout:15000});
+  assert.equal(await fast.locator("#pageCanvas").isVisible(),true);
+ }
+ for(const [id,law,proof] of [
+  ["b04","mpbetreibv","spätestens alle zwei Jahre"],
+  ["b03","mpbetreibv","Anlagen 1 und 2"],
+  ["b09","mpbetreibv","fünf Jahre aufzubewahren"],
+  ["b10","mpbetreibv","Anlage 2"],
+  ["b11","mpbetreibv","Protokoll"],
+  ["b06","mpbetreibv","nichtimplantierbaren"],
+  ["i01","mpamiv","schwerwiegende Vorkommnisse"],
+  ["d01","mpdg","Dieses Gesetz dient"],
+  ["a01","arbschg","Gefährdung"],
+  ["v01","mpav","Sachkenntnis"]
+ ])await tryShortcut(id,law,proof);
+ await fast.screenshot({path:"artifacts/v31-01-gold-faq-quick-choices.png",fullPage:true});
+ console.log("PASS V3.1: ten clicked practice shortcuts -> correct source, literal statute proof, original PDF and editorial answer");
+
+ const mobileQuick=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ mobileQuick.on("pageerror",e=>errors.push("practice-mobile: "+e.message));
+ await mobileQuick.goto(url,{waitUntil:"networkidle"});
+ await mobileQuick.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===8);
+ await mobileQuick.locator('[data-practice-id="b04"]').click();
+ await mobileQuick.waitForFunction(()=>document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&
+  window.MedtechUploadDemo?.status()?.sourceId==="mpbetreibv",null,{timeout:90000});
+ assert.equal(await mobileQuick.locator("#editorialAnswer").isVisible(),true);
+ await mobileQuick.locator("#verifySource").click();
+ assert.equal(await mobileQuick.locator("#sourceSide").evaluate(el=>getComputedStyle(el).position),"fixed");
+ await mobileQuick.screenshot({path:"artifacts/v31-02-mobile-stk-answer-verify.png",fullPage:true});
+ await mobileQuick.locator("#verifyClose").click();
+ assert.ok(await mobileQuick.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth)<=3);
+ console.log("PASS V3.1 mobile: one-tap STK question, real proof, fullscreen PDF, no overflow");
+
  assert.deepEqual(errors,[]);
  console.log("PASS SOURCE E2E mobile: selected original always available, no overflow");
  await browser.close();
