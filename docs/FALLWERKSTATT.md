@@ -9,6 +9,14 @@ Die Fallwerkstatt führt eine Fachkraft von der ersten Beobachtung bis zur dokum
 
 Mehrere Fälle bleiben im Browserprofil verfügbar. Noch vorhandene PDF-Fassungen können aus der Akte erneut geöffnet werden. Bei einem abweichenden Fingerprint bleiben Auszug und Fingerprint erhalten. Die eingebauten PDF-Snapshots werden in CI überprüft. Die verlinkte amtliche Fassung ist für den Geltungsstand maßgebend. Eigene PDFs und Gesprächsverläufe bleiben im Tab. Falltexte und ausdrücklich gewählte öffentliche Belege liegen im lokalen Browserspeicher. Der Export dient zur Weitergabe außerhalb der Demo.
 
+## Geführte Fallanalyse
+
+In der Suche ist der AED-Übungsfall direkt erreichbar. AED, STK, Vorkommnis und Instandhaltung haben eigene Prüfpunkte. Der Copilot ordnet die Fallangaben anhand expliziter Eingaben und schlägt die nächste Klärung mit einer Begründung vor. Eine Angabe ohne Fundort, ein dokumentierter Nachweis und ein Widerspruch haben unterschiedliche Zustände. Unterlagen wie die Gebrauchsanweisung werden von der Fachkraft geprüft und mit einer Referenz hinterlegt.
+
+Beim AED beeinflussen Zweckbestimmung, Selbsttest, Datum der Inbetriebnahme und Sichtprüfung die weiteren Prüfpunkte. Ein erfasster Selbsttestfehler oder ein gemeldeter schwerwiegender Verdacht wird hervorgehoben. Die dazugehörigen amtlichen Passagen werden im PDF angezeigt und anhand der ausgewählten Fassung geprüft. Fundstellen unterstützen die fachliche Entscheidung. Das Ergebnis ist ein bearbeitbarer Übergabeentwurf. Das Programm erteilt keine Freigaben und versendet keine Meldungen.
+
+Übernommene Entwürfe behalten eigene Einträge. Neue Fallangaben oder Belege entziehen einer vorherigen Prüfung die Gültigkeit. Übernommene, überholte Felder müssen aktualisiert werden, bevor die Übergabe abgeschlossen werden kann. Die Fachkraft bestätigt die aktuelle Fassung und kann sie als lokale Akte herunterladen.
+
 ## Antworten und Prüfung
 
 - **Dialog ohne Modell.** Für ausgewählte Fragen zu STK, AED, Instandhaltung, MTK und Medizinproduktebuch gleicht der Dialog kurze fachliche Einordnungen mit Fundstellen in der tatsächlich geöffneten amtlichen MPBetreibV-PDF ab. Die jeweilige Aussage führt zu ihrer PDF-Passage. Der dokumentgebundene Kontext wird bei Quellen- oder Fallwechsel zurückgesetzt.
@@ -22,3 +30,9 @@ Die CI prüft 15 intern geschriebene Dialogverläufe gegen die amtlichen PDF-Sna
 Für die externe Abnahme stellen Medizintechnik und Recht unabhängig vom Umsetzungsteam 30 unbekannte Praxisfragen und 15 unbekannte Dialoge zusammen. Je Fall bewerten sie die Angemessenheit der Abstention oder Antwort, jede wesentliche Aussage am Original, den Rechtsstand, den Geltungsbereich und die Qualität der Übergabe. Bewertungsmaßstab ist [die Qualitätsrubrik](../data/answer_quality_rubric.json). Kritische Fehler wie eine unbelegte Gerätefreigabe oder eine falsch angewandte Meldepflicht verhindern einen Pilotstart.
 
 Im Pilot bearbeiten Fachkräfte anonymisierte Fälle jeweils mit ihrer bisherigen Recherche und mit der Fallwerkstatt. Gemessen werden Zeit bis zur **geprüften** nächsten Handlung, fehlende Pflichtangaben in der Übergabe, fachliche Korrekturen und Wiederverwendung im Arbeitsalltag. Ein Klinikpilot, die Prüfung mit einem realen Browsermodell und eine unabhängige fachliche Abnahme stehen noch aus.
+
+### Was zur Alltagsreife noch zu messen ist
+
+- **Tempo:** Zeit bis zur fachlich bestätigten nächsten Handlung, jeweils mit und ohne Fallwerkstatt am selben Falltyp. Messung getrennt nach Routinefall, fehlendem und widersprüchlichem Nachweis.
+- **Qualität:** Eine unabhängige Fachkraft bewertet anonymisierte Übergaben auf fehlende kritische Punkte, unbelegte Schlussfolgerungen und die Klarheit der nächsten Handlung.
+- **Nutzung:** Wiederholte Nutzung derselben Fachkräfte über mehrere Schichten beobachten. Die Fallakte ist derzeit an das Browserprofil gebunden, und eine Teamübergabe erfolgt über den Export.

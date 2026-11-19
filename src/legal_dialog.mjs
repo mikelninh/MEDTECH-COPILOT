@@ -96,7 +96,7 @@ function selectAnswer(q, topic, faqId) {
   return [null, faqTopics[faqId] || null, carry];
 }
 
-function exactCitation(index, claim, legal){
+export function exactCitation(index, claim, legal){
   const citation = legal.locate(index, claim);
   if (!citation || !claim.endPhrase) return citation;
   const page = index.pageTexts.find(item => item.number === citation.page);

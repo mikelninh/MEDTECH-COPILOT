@@ -94,3 +94,38 @@
 .dialog-history li { font-weight: 650; margin-block: .45rem; }
 .dialog-history li p { margin: .15rem 0; font-weight: 400; }
 .dialog-history button { color: #154c34; }
+
+.case-entry { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem 1rem; margin-block: .8rem 1rem; }
+.case-entry a, .case-entry button { font: inherit; font-size: .86rem; font-weight: 700; color: #154d35; }
+.case-entry a { background: #e8f4e9; padding: .55rem .7rem; border-radius: 6px; text-decoration: none; }
+.case-entry button { background: transparent; border: 0; padding: .5rem .1rem; text-decoration: underline; text-underline-offset: .2em; cursor: pointer; }
+.case-guidance { max-width: 52rem; margin-block: 1.1rem; color: #19372a; }
+.case-guide-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: .35rem .9rem; margin-block-end: .7rem; }
+.case-guide-head h3 { margin: 0; }
+.case-guide-head span { font-size: .82rem; color: #496655; }
+.case-priority { padding: .95rem 1rem; border-left: .25rem solid #2c794f; border-radius: 5px 9px 9px 5px; background: #eff7ef; }
+.case-priority[data-urgent="true"] { background: #ffefe7; border-color: #a34b24; }
+.case-priority > span { font-weight: 700; text-transform: uppercase; letter-spacing: .07em; font-size: .67rem; }
+.case-priority h4 { font-size: 1.12rem; margin: .25rem 0; }
+.case-priority p { font-size: .9rem; margin: .35rem 0; }
+.case-priority button { margin-top: .45rem; }
+.case-check-list { display: grid; gap: .3rem; }
+.case-check { border-top: 1px solid #e1e9e2; }
+.case-check summary { display: flex; justify-content: space-between; align-items: center; gap: .5rem; padding: .58rem .15rem; min-height: 44px; font-size: .88rem; cursor: pointer; }
+.case-check summary strong::before { content: "›"; display: inline-block; margin-right: .4rem; }
+.case-check[open] summary strong::before { transform: rotate(90deg); }
+.check-badge { flex-shrink: 0; font-size: .72rem; padding: .25rem .45rem; border-radius: .3rem; background: #f2f4f1; color: #454b46; }
+.check-badge[data-state="documented"] { background: #e1f1e7; color: #215137; }
+.check-badge:is([data-state="reported"],[data-state="conflict"]) { background: #ffefd9; color: #754218; }
+.case-check-body { padding: .15rem .35rem .75rem; display: grid; gap: .45rem; }
+.case-check-body p { font-size: .85rem; margin: 0; }
+.case-rule-set, .case-draft { margin-block: .75rem; }
+.case-rule-set summary, .case-draft summary { cursor: pointer; font-weight: 650; }
+.case-rule-set li { margin-block: .3rem; font-size: .86rem; }
+.case-rule-set button { margin-left: .5rem; }
+.case-draft p { white-space: pre-wrap; font-size: .88rem; }
+.case-content .case-review { display: flex; align-items: center; margin-block: .7rem; }
+.case-content .case-review input { width: 1rem; height: 1rem; margin: 0 .2rem 0 0; flex-shrink: 0; }
+.case-content [hidden] { display: none; }
+.case-check-label { display: grid; gap: .2rem; }
+.case-check-label small { padding-left: .8rem; }

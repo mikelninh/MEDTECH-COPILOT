@@ -1,6 +1,9 @@
 import { addEvidence, handoff, labels, newCase, readCases, storageKey, transition, workflows } from "./case_workflow.mjs";
 
-export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange }) {
+import { analyzeCase } from "./case_analysis.mjs";
+import { mountCaseGuidance } from "./case_guidance_panel.mjs";
+
+export function setupCasePanel({ ask, getEvidence, openEvidence, openRule, isCurrentProof, onCaseChange }) {
   const el = id => document.getElementById(id);
   const panel = el("caseWorkspace");
   const fields = [...panel.querySelectorAll("[data-case-field]")];
@@ -34,10 +37,27 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
     cases = cases.map(row => row.id === item.id ? item : row);
     save();
   };
+  const guidance = mountCaseGuidance({
+    getCase: active,
+    update: (item, redraw) => {
+      replace({ ...item, updated: new Date().toISOString() });
+      if (redraw) render();
+    },
+    openRule: async id => {
+      const version = caseVersion;
+      try { await openRule(id, () => version === caseVersion); }
+      catch (error) { if (version === caseVersion) announce(error.message); }
+    },
+    isCurrentProof,
+    announce
+  });
   const option = (label, value) => new Option(label, value);
   const change = (next, message) => {
     try {
-      replace(transition(active(), next));
+      const item = active();
+      const reviewed = next === "handoff" && guidance.validate(item);
+      const changed = transition(item, next);
+      replace(reviewed ? { ...changed, reviewedAt: changed.updated } : changed);
       render();
       announce(message);
     } catch (error) {
@@ -57,6 +77,7 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
     el("caseCount").textContent = cases.length ? cases.length + " lokale " + (cases.length === 1 ? "Fallakte" : "Fallakten") : "Aufnahme, Analyse und Übergabe";
     el("caseRecord").hidden = !item;
     refreshEvidence();
+    guidance.render();
     if (!item) return;
     const phases = ["intake", "analysis", "handoff", "closed"];
     panel.dataset.phase = item.status;
@@ -131,6 +152,27 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
     });
   }
   el("caseType").replaceChildren(...Object.entries(workflows).map(([id, entry]) => option(entry.title, id)));
+  el("caseExample").addEventListener("click", () => {
+    const existing = cases.find(item => item.example === "aed-entry");
+    const item = existing || {
+      ...newCase("aed", crypto.randomUUID()), example: "aed-entry", title: "Übungsfall · AED in der Eingangshalle",
+      facts: "Ein AED ist im Inventar erfasst. Das Selbsttestprotokoll meldet keinen Fehler. Gebrauchsanweisung und Sichtprüfprotokoll liegen noch nicht vor.",
+      checks: { fault: { value: "no", trace: "Übungsprotokoll · Inventar AED-017" } }
+    };
+    if (!existing) { cases = [item, ...cases]; save(); }
+    selected = item.id;
+    caseVersion++;
+    onCaseChange();
+    if (item.status === "intake") replace(transition(item, "analysis"));
+    panel.open = true;
+    history.replaceState(null, "", "#caseWorkspace");
+    render();
+    const heading = el(active().status === "analysis" ? "casePriorityTitle" : "caseGuidanceTitle");
+    heading.setAttribute("tabindex", "-1");
+    heading.focus({ preventScroll: true });
+    panel.scrollIntoView();
+    announce("Anonymisierter Übungsfall geöffnet.");
+  });
   el("caseCreate").addEventListener("click", () => {
     const item = newCase(el("caseType").value, crypto.randomUUID());
     cases = [item, ...cases];
@@ -155,6 +197,7 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
     const updated = { ...item, [field.dataset.caseField]: field.value, updated: new Date().toISOString() };
     replace(updated);
     el("casePicker").selectedOptions[0].textContent = (updated.title || workflows[updated.kind].title) + " · " + labels[updated.status];
+    guidance.render();
     if (storageMessage) announce("");
   }));
   el("caseStart").addEventListener("click", () => change("analysis", "Analyse geöffnet. Prüfe die Quellen und halte offene Punkte fest."));
@@ -164,7 +207,7 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
   el("caseExport").addEventListener("click", () => {
     const item = active();
     if (!item) return;
-    const url = URL.createObjectURL(new Blob([handoff(item)], { type: "text/markdown;charset=utf-8" }));
+    const url = URL.createObjectURL(new Blob([handoff(item, analyzeCase(item, isCurrentProof))], { type: "text/markdown;charset=utf-8" }));
     const link = document.createElement("a");
     link.href = url;
     link.download = "medtech-fall-" + item.id + ".md";
@@ -219,5 +262,5 @@ export function setupCasePanel({ ask, getEvidence, openEvidence, onCaseChange })
   });
   render();
   announce("");
-  return { refreshEvidence };
+  return { refreshEvidence, refreshGuidance: guidance.render };
 }

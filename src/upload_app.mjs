@@ -8,7 +8,8 @@ import "./source_router.js";
 import "./evidence_highlight.js";
 import "./legal_evidence.js";
 import { setupCasePanel } from "./case_panel.mjs";
-import { resolveDialog } from "./legal_dialog.mjs";
+import { exactCitation, resolveDialog } from "./legal_dialog.mjs";
+import { caseRules } from "./case_analysis.mjs";
 import { availableModel, synthesize } from "./local_synthesis.mjs";
 
 // PDF.js 6.5 uses the proposed Map#getOrInsertComputed API.
@@ -323,6 +324,7 @@ async function loadCatalog(){
    ids.add(item.id);
   }
   state.catalog=data;
+  casePanel?.refreshGuidance();
   buildSourceSelector();
   for(const button of document.querySelectorAll("[data-source-group]")){
    if(button.dataset.sourceGroup==="own")continue;
@@ -1017,7 +1019,21 @@ function setup(){
  }
  $("dialogReset").addEventListener("click",resetDialog);
  casePanel=setupCasePanel({
-  onCaseChange:()=>{ resetDialog(); $("casePinStatus").textContent=""; $("caseReturn").classList.add("hidden"); },
+  isCurrentProof: (proof, rule) => state.catalog?.sources.some(source =>
+   source.id===rule.sourceId && source.sha256===proof.hash && source.title===proof.source && proof.section===rule.reference
+  ),
+  openRule: async (id,isCurrent)=>{
+   const rule=caseRules[id];
+   const source=state.catalog?.sources.find(item=>item.id===rule?.sourceId && item.sourceKind==="government-law-pdf");
+   await loadCaseSource(source);
+   if(!isCurrent())return;
+   const citation=state.hash===source.sha256 && exactCitation(state.index,rule,Legal);
+   if(!citation)throw new Error("Die amtliche Passage ließ sich in dieser PDF-Fassung nicht verifizieren.");
+   resetDialog();
+   state.lastQuestion=source.title+" "+rule.reference;
+   showResult({status:"evidence",reason:"Amtliche Fundstelle für diesen Prüfschritt.",evidence:[{...citation,reference:rule.reference,ruleId:id}]});
+  },
+  onCaseChange:()=>{ resetDialog(); state.activeEvidence=null; $("casePinStatus").textContent=""; $("caseReturn").classList.add("hidden"); },
   ask: async (id,question,isCurrent)=>{
    await loadCaseSource(state.catalog?.sources.find(item=>item.id===id));
    if(!isCurrent())return;
@@ -1034,6 +1050,7 @@ function setup(){
    if(!page || !Legal.norm(page.text).includes(Legal.norm(proof.excerpt)))throw new Error("Der gespeicherte Auszug konnte auf der Seite nicht abgeglichen werden.");
    const evidence={page:proof.page,reference:proof.section,excerpt:proof.excerpt,matchedTerms:[]};
    await renderPage(evidence.page);
+   if(!isCurrent())return;
    state.lastQuestion="Beleg aus deiner Fallakte";
    showResult({status:"evidence",reason:source.title+" · gespeicherte Fassung und PDF-Seite abgeglichen.",evidence:[evidence]});
   },
@@ -1041,7 +1058,7 @@ function setup(){
    const ev=state.activeEvidence;
    const source=state.source;
    if(!ev || !source || source.sourceKind!=="government-law-pdf" || source.sha256!==state.hash || state.busy)return null;
-   return {source:source.title, page:ev.page, section:ev.reference || ev.section || "", excerpt:ev.excerpt,
+   return {ruleId:ev.ruleId, source:source.title, page:ev.page, section:ev.reference || ev.section || "", excerpt:ev.excerpt,
     hash:state.hash, snapshotDate:source.sourceSnapshotAt || "", amendment:source.lastAmendedStatement || "", url:source.originalUrl};
   }
  });

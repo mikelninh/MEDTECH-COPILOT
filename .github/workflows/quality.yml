@@ -49,6 +49,7 @@ jobs:
           python scripts/extract_gold_legal_pages.py /tmp/medtech-gold-pdf-pages.json
           node tests/legal_functional.cjs /tmp/medtech-gold-pdf-pages.json
           node tests/case_dialog.mjs /tmp/medtech-gold-pdf-pages.json
+          node tests/case_analysis.mjs /tmp/medtech-gold-pdf-pages.json
       - name: Preserve exact checked PDF samples
         uses: actions/upload-artifact@v4
         with:
@@ -128,6 +129,7 @@ jobs:
           node tests/upload_browser.cjs
           node tests/source_browser.cjs
           node tests/case_browser.cjs
+          node tests/case_guidance_browser.cjs
       - name: Simulated user journeys (7 personas, 28 fresh questions)
         run: node tests/simulated_users.cjs
       - name: Upload actual UI screenshots

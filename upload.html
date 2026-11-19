@@ -37,6 +37,10 @@
       <div class="intro-copy">
         <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
         <p>Fragen. Fundstelle finden. Im PDF selbst nachlesen.</p>
+        <div class="case-entry" aria-label="In der Fallwerkstatt arbeiten">
+          <a id="caseEntry" href="#caseWorkspace">Fallwerkstatt öffnen <span aria-hidden="true">↓</span></a>
+          <button id="caseExample" type="button">AED-Beispielfall ausprobieren</button>
+        </div>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
           <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
           <div class="hero-query-line">
@@ -74,6 +78,23 @@
           </div>
           <div class="case-intake-only"><button id="caseStart" class="case-primary" type="button">Analyse beginnen →</button></div>
           <div class="case-after-intake">
+            <section id="caseGuidance" class="case-guidance" aria-labelledby="caseGuidanceTitle" hidden>
+              <div class="case-guide-head"><h3 id="caseGuidanceTitle">Fallanalyse</h3><span id="caseAnalysisStatus" role="status"></span></div>
+              <div id="casePriority" class="case-priority">
+                <span>Nächster Schritt</span>
+                <h4 id="casePriorityTitle"></h4>
+                <p id="casePriorityWhy"></p>
+                <p id="casePriorityAction"></p>
+                <button id="casePriorityGo" type="button" hidden></button>
+              </div>
+              <h4>Nachweise zum konkreten Fall</h4>
+              <div id="caseCheckList" class="case-check-list"></div>
+              <details class="case-rule-set"><summary>Amtliche Rechtsgrundlagen</summary><ul id="caseRuleList"></ul></details>
+              <details class="case-draft"><summary>Übergabeentwurf ansehen</summary>
+                <p id="caseDraftText"></p>
+                <button id="caseAdoptDraft" type="button">Entwurf übernehmen</button>
+              </details>
+            </section>
             <div class="case-analysis-only case-research">
               <h3>Quellen gemeinsam prüfen</h3>
               <p>Starte mit einer Aufgabenfrage oder nutze die Suche oben. Übernimm passende Fundstellen aus dem Original in deinen Fall.</p>
@@ -91,6 +112,7 @@
                 <label>Termin<input data-case-field="due" type="date"></label>
               </div>
             </div>
+            <label id="caseReviewLabel" class="case-review case-analysis-only" hidden><input id="caseReviewed" type="checkbox"> Ich habe die aktuelle Übergabe fachlich geprüft.</label>
             <div class="case-analysis-only"><button id="casePrepare" class="case-primary" type="button">Übergabe vorbereiten →</button></div>
             <div class="case-after-analysis">
               <label>Übernahme und Ergebnis<textarea data-case-field="resolution" rows="3" maxlength="1800" placeholder="Wer hat übernommen? Wie wurden die offenen Punkte bearbeitet?"></textarea></label>

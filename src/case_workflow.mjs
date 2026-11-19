@@ -1,3 +1,5 @@
+import { checkLabels } from "./case_analysis.mjs";
+
 export const storageKey = "medtech-cases-v1";
 
 export const workflows = {
@@ -9,6 +11,11 @@ export const workflows = {
       ["mpbetreibv", "Was muss im Protokoll einer STK stehen?"]
     ],
     intake: "Gerätetyp, letzte Prüfung oder Inbetriebnahme, Einsatzort und vorliegendes Protokoll."
+  },
+  aed: {
+    title: "AED · Prüffrist und Selbsttest",
+    questions: [["mpbetreibv", "Wann können STK für selbsttestende AED entfallen?"]],
+    intake: "Modell oder Inventarkürzel, Beobachtung und Anlass der Prüfung."
   },
   incident: {
     title: "Vorkommnis beurteilen",
@@ -42,7 +49,7 @@ export function readCases(storage) {
 export function newCase(kind, id, date = new Date().toISOString()) {
   return {
     id, kind, status: "intake", title: "", facts: "", open: "", assessment: "",
-    next: "", owner: "", due: "", resolution: "", evidence: [],
+    next: "", owner: "", due: "", resolution: "", checks: {}, evidence: [],
     activity: [{ status: "intake", date }], updated: date
   };
 }
@@ -62,20 +69,25 @@ export function transition(item, status, date = new Date().toISOString()) {
   return {
     ...item, status, updated: date,
     resolution: status === "analysis" ? "" : item.resolution,
+    reviewedAt: status === "analysis" ? "" : item.reviewedAt,
     activity: [...item.activity, { status, date, note: status === "closed" ? item.resolution : "" }]
   };
 }
 
 export function addEvidence(item, evidence, date = new Date().toISOString()) {
   if (item.status !== "analysis") throw new Error("Öffne die Analyse, um einen Beleg hinzuzufügen.");
-  if (item.evidence.some(pin => pin.hash === evidence.hash && pin.page === evidence.page && pin.excerpt === evidence.excerpt)) return item;
+  const duplicate = item.evidence.find(pin => pin.hash === evidence.hash && pin.page === evidence.page && pin.excerpt === evidence.excerpt);
+  if (duplicate) {
+    if (!evidence.ruleId || evidence.ruleId === duplicate.ruleId) return item;
+    return { ...item, evidence: item.evidence.map(pin => pin === duplicate ? { ...pin, ...evidence } : pin), updated: date };
+  }
   if (item.evidence.length >= 30) throw new Error("Dieser Fall enthält bereits 30 Belege.");
   return { ...item, evidence: [...item.evidence, { ...evidence, date }], updated: date };
 }
 
 export const labels = { intake: "Aufnahme", analysis: "Analyse", handoff: "Übergabe vorbereitet", closed: "Abgeschlossen" };
 
-export function handoff(item) {
+export function handoff(item, analysis) {
   const notes = item.evidence.map((pin, i) => [
     `[${i + 1}] ${pin.source} · PDF-Seite ${pin.page}${pin.section ? " · " + pin.section : ""}`,
     pin.url, pin.snapshotDate && `PDF-Abrufdatum: ${pin.snapshotDate}`,
@@ -86,9 +98,13 @@ export function handoff(item) {
   return [
     `# ${item.title || workflows[item.kind].title}`,
     `${workflows[item.kind].title} · ${labels[item.status]}`,
+    item.reviewedAt && `Fachliche Prüfung von der bearbeitenden Person bestätigt · ${item.reviewedAt}`,
     `## Beobachtete Fakten\n${item.facts || "Offen"}`,
+    analysis && `## Fallnachweise (Angaben der Fachkraft)\n${analysis.rows.map(row =>
+      "- " + row.title + " · " + (row.label ? row.label + " · " : "") + checkLabels[row.state] + (row.trace ? " · " + row.trace : "")).join("\n")}`,
     `## Fachliche Einschätzung\n${item.assessment || "Offen"}`,
     `## Offene Punkte\n${item.open || "Keine erfasst"}`,
+    analysis?.draft.open && `## Offene Prüfpunkte der Fallanalyse\n${analysis.draft.open}`,
     `## Nächste Handlung\n${item.next || "Offen"}\nZuständig: ${item.owner || "Offen"}\nTermin: ${item.due || "Offen"}`,
     `## Geprüfte Belege\n${notes || "Keine festgehalten"}`,
     item.resolution && `## Dokumentierter Abschluss\n${item.resolution}`,
