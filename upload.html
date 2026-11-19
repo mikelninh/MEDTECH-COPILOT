@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="./v31.css">
 <link rel="stylesheet" href="./v32.css">
 <link rel="stylesheet" href="./v33.css">
+<link rel="stylesheet" href="./v4-workflow.css">
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
@@ -53,6 +54,59 @@
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
       </div>
     </section>
+    <details id="caseWorkspace" class="case-workspace">
+      <summary class="minimal-disclosure-summary"><span>Fallwerkstatt <small id="caseCount">Aufnahme, Analyse und Übergabe</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="case-content">
+        <div class="case-toolbar">
+          <label>Gespeicherte Fälle<select id="casePicker"></select></label>
+          <label>Falltyp<select id="caseType"></select></label>
+          <button id="caseCreate" class="case-primary" type="button">Fall anlegen</button>
+        </div>
+        <p class="case-local">Fälle und ausgewählte öffentliche Belege bleiben in diesem Browser. Nur anonymisierte Angaben eintragen.</p>
+        <p id="caseStatus" class="case-status" role="status"></p>
+        <div id="caseRecord" hidden>
+          <ol class="case-progress" aria-label="Fallfortschritt">
+            <li data-case-step="intake">Aufnahme</li><li data-case-step="analysis">Analyse</li><li data-case-step="handoff">Übergabe</li><li data-case-step="closed">Abschluss</li>
+          </ol>
+          <div class="case-fields">
+            <label>Falltitel<input id="caseTitle" data-case-field="title" maxlength="100" placeholder="AED in der Eingangshalle"></label>
+            <label>Beobachtete Fakten<textarea data-case-field="facts" maxlength="1800" rows="3" aria-describedby="caseIntakeHint"></textarea><small id="caseIntakeHint"></small></label>
+          </div>
+          <div class="case-intake-only"><button id="caseStart" class="case-primary" type="button">Analyse beginnen →</button></div>
+          <div class="case-after-intake">
+            <div class="case-analysis-only case-research">
+              <h3>Quellen gemeinsam prüfen</h3>
+              <p>Starte mit einer Aufgabenfrage oder nutze die Suche oben. Übernimm passende Fundstellen aus dem Original in deinen Fall.</p>
+              <div id="caseQuestions" class="case-questions"></div>
+            </div>
+            <div class="case-fields">
+              <label>Offene Punkte und fehlende Nachweise<textarea data-case-field="open" maxlength="1800" rows="2"></textarea></label>
+              <label>Deine fachliche Einschätzung<textarea data-case-field="assessment" maxlength="1800" rows="3"></textarea></label>
+            </div>
+            <details class="case-proof"><summary id="caseProofSummary">Festgehaltene Belege</summary><ol id="caseEvidence"></ol></details>
+            <div class="case-fields">
+              <label>Nächste Handlung<textarea data-case-field="next" maxlength="1000" rows="2"></textarea></label>
+              <div class="case-fields-row">
+                <label>Zuständige Rolle<input data-case-field="owner" maxlength="100" placeholder="Medizintechnik · Prüfteam"></label>
+                <label>Termin<input data-case-field="due" type="date"></label>
+              </div>
+            </div>
+            <div class="case-analysis-only"><button id="casePrepare" class="case-primary" type="button">Übergabe vorbereiten →</button></div>
+            <div class="case-after-analysis">
+              <label>Übernahme und Ergebnis<textarea data-case-field="resolution" rows="3" maxlength="1800" placeholder="Wer hat übernommen? Wie wurden die offenen Punkte bearbeitet?"></textarea></label>
+              <div class="case-actions">
+                <button type="button" id="caseClose" class="case-primary case-handoff-only">Fall abschließen</button>
+                <button type="button" id="caseBack">Analyse wieder öffnen</button>
+              </div>
+            </div>
+          </div>
+          <div class="case-actions case-footer">
+            <button id="caseExport" type="button">Fallakte herunterladen ↓</button>
+            <button id="caseDelete" type="button">Fall löschen</button>
+          </div>
+        </div>
+      </div>
+    </details>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
       <section id="workspaceWelcome" class="v3-welcome" aria-label="Antwortbereich">
         <div class="v3-pane-top"><span><span class="v3-pane-dot"></span> Antwort</span><span class="v3-pane-meta">Bereit für deine Frage</span></div>
@@ -165,7 +219,18 @@
             <div class="evidence-actions"><button class="verify-button" id="verifySource" type="button"><span aria-hidden="true">↗</span> Original prüfen</button><button class="jump-button" id="goToPage" type="button">Seite anzeigen <span aria-hidden="true">→</span></button></div>
           </div>
           <div id="additionalCitations" class="additional-citations"></div>
-          <div class="answer-bottom">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+          <div class="synthesis-area hidden" id="localSynthesis">
+            <button type="button" id="synthesizeAnswer">Mit lokaler KI vertiefen</button>
+            <p id="synthesisStatus" role="status"></p>
+          </div>
+          <details id="dialogHistory" class="dialog-history hidden">
+            <summary>Bisherige Fachfragen</summary>
+            <ol id="dialogTurns"></ol>
+            <button id="dialogReset" type="button">Neues Gespräch</button>
+          </details>
+          <div id="dialogFollowups" class="dialog-followups hidden" aria-label="Anschlussfragen"></div>
+          <div class="case-pin-area"><button type="button" id="casePin" class="hidden">Geprüften Beleg im Fall festhalten</button><span id="casePinStatus" role="status"></span><button type="button" id="caseReturn" class="hidden">Zur Fallakte ↑</button></div>
+          <div class="answer-bottom" id="answerMode">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
           <div class="answer-quality" id="answerQuality">
             <span class="eyebrow">QUELLENQUALITÄT / FEEDBACK</span>
             <p><strong>Automatisch geprüft:</strong> Auszug, PDF-Seite und Quellenbindung. <strong>Nicht automatisch geprüft:</strong> juristische Auslegung, vollständige Relevanz oder Aktualität.</p>
@@ -211,9 +276,9 @@
     </details>
 
     <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
-    <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+    <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen und Zahlen immer korrekt interpretieren oder Therapie- und Reparaturentscheidungen treffen.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V3.2 / MINIMAL FOCUS <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · FALLWERKSTATT <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>

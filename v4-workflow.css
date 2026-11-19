@@ -1,0 +1,96 @@
+.case-workspace {
+  max-width: 1200px;
+  margin: 0 auto 1.25rem;
+  border: 1px solid #dbe5dd;
+  border-radius: 16px;
+  background: #fff;
+}
+.case-content { padding: 0 1.1rem 1.1rem; }
+.case-toolbar, .case-fields-row, .case-actions, .case-questions, .dialog-followups {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: .65rem;
+}
+.case-toolbar label { flex: 1 1 14rem; min-width: 0; }
+.case-fields-row label { flex: 1 1 10rem; min-width: 0; }
+.case-content label { display: grid; gap: .35rem; font-size: .9rem; font-weight: 650; color: #18372a; }
+.case-content :is(input, textarea, select) {
+  min-width: 0;
+  width: 100%;
+  border: 1px solid #c9d7cd;
+  border-radius: 8px;
+  padding: .6rem .68rem;
+  background: #fbfcfb;
+  color: #163529;
+  font: inherit;
+  font-weight: 400;
+}
+.case-content textarea { resize: vertical; }
+.case-content :disabled { opacity: 1; background: #f0f4f0; }
+.case-content button, .case-pin-area button, .dialog-followups button, .dialog-ref {
+  background: #f4f8f4;
+  color: #154c34;
+  font: inherit;
+  font-size: .88rem;
+  font-weight: 650;
+  border: 1px solid #ccdacf;
+  border-radius: 8px;
+  min-height: 40px;
+  padding: .5rem .7rem;
+  cursor: pointer;
+  text-align: left;
+}
+.case-content button:hover, .case-pin-area button:hover, .dialog-followups button:hover, .dialog-ref:hover { background: #e8f3e9; }
+.case-content .case-primary { background: #166445; color: #fff; border-color: #166445; }
+.case-content .case-primary:hover { background: #104c35; }
+.case-local, .case-status, .case-content small, .case-pin-area span { font-size: .82rem; color: #476252; }
+.case-status:empty { display: none; }
+.case-progress {
+  list-style: none;
+  padding: .65rem 0;
+  margin: .65rem 0;
+  border-block: 1px solid #e4ece5;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem 1rem;
+}
+.case-progress li { color: #536658; padding: .25rem .45rem; font-size: .85rem; }
+.case-progress li[aria-current] { background: #dff2e4; color: #143e2b; font-weight: 700; border-radius: 5px; }
+.case-progress .complete { color: #1b6446; }
+.case-fields { display: grid; gap: .8rem; margin-block: .8rem; }
+.case-research { margin-block: 1rem; padding: .9rem; background: #f1f7f1; border-radius: 10px; }
+.case-research h3 { margin: 0; font-size: 1rem; }
+.case-research p { font-size: .9rem; }
+.case-proof { margin-block: .9rem; color: #18372a; }
+.case-proof summary { cursor: pointer; }
+.case-proof li { margin-block: .6rem; overflow-wrap: anywhere; }
+.case-proof li p { font-size: .86rem; }
+.case-proof li button { margin-left: .5rem; }
+.case-actions { margin-top: .65rem; }
+.case-footer { margin-top: 1rem; padding-top: .65rem; border-top: 1px solid #e4ece5; }
+.case-content :focus-visible, .case-pin-area button:focus-visible, .dialog-ref:focus-visible, .dialog-followups button:focus-visible {
+  outline: 2px solid #206e52;
+  outline-offset: 2px;
+}
+.case-workspace:not([data-phase="intake"]) .case-intake-only,
+.case-workspace[data-phase="intake"] .case-after-intake,
+.case-workspace:not([data-phase="analysis"]) .case-analysis-only,
+.case-workspace:is([data-phase="intake"], [data-phase="analysis"]) .case-after-analysis,
+.case-workspace:not([data-phase="handoff"]) .case-handoff-only { display: none; }
+.case-pin-area { margin-top: .6rem; display: flex; align-items: center; gap: .55rem; flex-wrap: wrap; }
+.case-pin-area:has(#casePin.hidden):has(span:empty) { display: none; }
+.dialog-followups { margin-block: .85rem; }
+.dialog-followups strong { flex: 1 0 100%; font-size: .87rem; color: #244c37; }
+.dialog-claim + .dialog-claim { margin-top: .85rem; padding-top: .65rem; border-top: 1px solid #d5e3d8; }
+.dialog-claim .dialog-ref { color: #155839; min-height: 32px; padding: .3rem .55rem; }
+.synthesis-area { margin-top: .85rem; }
+.synthesis-area button { border: 1px solid #ccdacf; background: #f4f8f4; color: #154c34; font: inherit; font-size: .88rem; font-weight: 650; border-radius: 8px; padding: .55rem .7rem; cursor: pointer; }
+.synthesis-area p { color: #476252; font-size: .82rem; }
+.synthesis-area p:empty { display: none; }
+.dialog-history { margin-top: .7rem; color: #355543; font-size: .87rem; }
+.dialog-history summary { cursor: pointer; }
+.dialog-history ol { padding-left: 1.25rem; }
+.dialog-history li { font-weight: 650; margin-block: .45rem; }
+.dialog-history li p { margin: .15rem 0; font-weight: 400; }
+.dialog-history button { color: #154c34; }
