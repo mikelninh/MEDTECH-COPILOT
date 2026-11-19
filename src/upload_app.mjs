@@ -63,6 +63,45 @@ const mk=(tag,cls,txt)=>{
  return n;
 };
 const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,faqCatalog:null,group:"laws",routing:false,pendingQuestion:null,activeEvidence:null,lastQuestion:null};
+function setSourceChoice(sourceId){
+ const control=$("heroSourceSelect");
+ const id=sourceId||"auto";
+ if(control&&[...control.options].some(o=>o.value===id))control.value=id;
+ document.querySelectorAll("[data-quick-source]").forEach(button=>{
+  const selected=button.dataset.quickSource===id;
+  button.classList.toggle("active",selected);
+  button.setAttribute("aria-pressed",String(selected));
+ });
+}
+function buildSourceSelector(){
+ const select=$("heroSourceSelect");
+ if(!select)return;
+ select.replaceChildren(new Option("Quelle wählen","auto"));
+ for(const [label,group] of [["Deutsche Gesetze","laws"],["Trainingshandbücher","medtech"]]){
+  const section=document.createElement("optgroup");section.label=label;
+  for(const item of state.catalog.sources.filter(x=>x.group===group))
+   section.append(new Option(item.title,item.id));
+  select.append(section);
+ }
+ select.append(new Option("Eigenes PDF auswählen","own"));
+ setSourceChoice(state.source?.id||"auto");
+}
+async function updateHeroSelection(id){
+ if(id==="own"){
+  setSourceChoice("own");
+  await selectGroup("own");
+  setSourceChoice("own");
+  heroMessage("Eigenes PDF: Wähle unten eine nicht vertrauliche PDF-Datei. Sie bleibt in diesem Tab.","action");
+  $("ownPdfPanel").scrollIntoView({behavior:"smooth",block:"start"});
+  return;
+ }
+ const current=state.source?.id;
+ if(current&&id!==current)await destroySource();
+ setSourceChoice(id);
+ const choice=state.catalog?.sources?.find(x=>x.id===id);
+ if(choice)heroMessage(choice.title+" für deine nächste Frage ausgewählt. Das PDF wird beim Suchen geprüft.","action");
+ else heroMessage("Stelle eine Frage und bestätige anschließend die passende Quelle.");
+}
 function showSource(source){
  state.source=source||null;
  const name=source?.title||"Bitte Quelle auswählen";
@@ -106,6 +145,7 @@ function showSource(source){
   }
  }else suggestions.classList.add("hidden");
  paintFaqs(source);
+ if(source)setSourceChoice(source.id);
  document.querySelectorAll("[data-source-id]").forEach(b=>{
   const chosen=!!source&&b.dataset.sourceId===source.id;
   b.classList.toggle("active",chosen);b.setAttribute("aria-pressed",String(chosen));
@@ -238,6 +278,7 @@ async function loadCatalog(){
    ids.add(item.id);
   }
   state.catalog=data;
+  buildSourceSelector();
   for(const button of document.querySelectorAll("[data-source-group]")){
    if(button.dataset.sourceGroup==="own")continue;
    const count=data.sources.filter(source=>source.group===button.dataset.sourceGroup).length;
@@ -264,6 +305,7 @@ const controls=ready=>{
 };
 function clearResults(){
  $("resultSection").classList.add("hidden");
+ $("workspaceWelcome").classList.remove("hidden");
  $("citationCard").classList.add("hidden");
  $("additionalCitations").replaceChildren();
  $("answerLead").textContent="";
@@ -559,6 +601,8 @@ function openVerify(){
  }
 }
 function showResult(result){
+ $("workspaceWelcome").classList.add("hidden");
+ $("answeredQuestion").textContent=state.lastQuestion||"Deine Frage";
  const statusLabel=result.status==="evidence"?"QUELLE GEFUNDEN":result.status==="blocked"?"SICHERHEITSGRENZE":"NICHT BELEGT";
  $("resultSection").classList.remove("hidden");
  $("answerStatus").textContent=statusLabel;
@@ -691,18 +735,38 @@ async function handleQuestion(text){
  if(Core.classify(q)==="blocked"&&!state.index){
   state.pendingQuestion=null;
   $("heroRecommendations").classList.add("hidden");
-  heroMessage("Sicherheitsgrenze: keine Anleitung zum Umgehen von Schutzfunktionen, zur Therapieänderung oder zum Zugriff auf Patientendaten.","warning");
+  heroMessage("Sicherheitsgrenze: keine Anleitungen zur Umgehung von Schutzfunktionen oder klinischen Änderungen.","warning");
   return {status:"blocked",evidence:[]};
  }
+ const selected=$("heroSourceSelect")?.value||"auto";
+ if(selected==="own"&&state.source?.id!=="own"){
+  state.pendingQuestion=q;
+  await selectGroup("own");setSourceChoice("own");
+  $("ownPdfPanel").scrollIntoView({behavior:"smooth",block:"start"});
+  heroMessage("Wähle zuerst dein PDF. Die Frage wird danach nur darin gesucht.","action");
+  return {status:"awaiting-private-document"};
+ }
+ const explicit=state.catalog?.sources?.find(x=>x.id===selected);
+ if(explicit&&state.source?.id!==explicit.id){
+  state.routing=true;
+  state.pendingQuestion=q;
+  $("heroRecommendations").classList.add("hidden");
+  heroMessage("Prüfe und öffne "+explicit.title+" …","action");
+  try{
+   await selectGroup(explicit.group);
+   await loadExample(explicit);
+   if(!state.index){state.pendingQuestion=null;heroMessage("Die Quelle konnte nicht geöffnet werden. Bitte erneut versuchen.","warning")}
+  }finally{state.routing=false}
+  return {status:state.index?"searched":"source-error"};
+ }
  if(state.index){
-  $("questionInput").value=q;
-  $("heroQuestionInput").value=q;
+  $("questionInput").value=q;$("heroQuestionInput").value=q;
   $("heroRecommendations").classList.add("hidden");
   return ask(q);
  }
  state.pendingQuestion=q;
  const route=Router?.route(q,state.catalog?.sources||[])||{status:"unmatched",ranked:[]};
- heroMessage("Jetzt eine Quelle ausdrücklich bestätigen. Danach wird deine Frage sofort darin gesucht.","action");
+ heroMessage("Bitte eine Quelle bestätigen. Wir suchen ausschließlich darin.","action");
  offerSources(q,route);
  return route;
 }
@@ -718,6 +782,16 @@ function setup(){
  $("heroQuestionForm").addEventListener("submit",event=>{
   event.preventDefault();void handleQuestion($("heroQuestionInput").value);
  });
+ $("heroSourceSelect").addEventListener("change",event=>{void updateHeroSelection(event.target.value)});
+ document.querySelectorAll("[data-quick-source]").forEach(button=>button.addEventListener("click",()=>{
+  void updateHeroSelection(button.dataset.quickSource);
+ }));
+ $("welcomeExample").addEventListener("click",()=>{
+  const q="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?";
+  $("heroQuestionInput").value=q;
+  void handleQuestion(q);
+ });
+
  document.querySelectorAll("[data-starter-question]").forEach(button=>button.addEventListener("click",()=>{
   const q=button.dataset.starterQuestion;
   $("heroQuestionInput").value=q;
@@ -733,7 +807,7 @@ function setup(){
  const proof=mk("div","source-provenance","Noch keine Datei ausgewählt");proof.id="viewerSourceProof";
  identity.append(kicker,title,meta,proof,external);
  viewer.prepend(identity);
- const viewerNote=mk("p","viewer-source-note","Quelle auswählen – anschließend bleibt die Originalseite ständig hier sichtbar.");
+ const viewerNote=mk("p","viewer-source-note","Die gelben Markierungen sind Suchhilfen. Fachliche Bewertung und Geltungsstand bitte immer am Original prüfen.");
  viewerNote.id="viewerTrustNote";viewer.append(viewerNote);
  document.querySelectorAll("[data-source-group]").forEach(b=>b.addEventListener("click",()=>selectGroup(b.dataset.sourceGroup)));
  paintCards();loadCatalog();loadFaqs();
