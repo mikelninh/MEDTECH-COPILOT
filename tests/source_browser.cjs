@@ -159,7 +159,7 @@ async function question(page,q){
   await start.screenshot({path:"artifacts/v12-no-highlight.png",fullPage:true});
   throw error;
  }
- assert.equal(await start.locator("#editorialAnswer").isVisible(),false,"Unmatched free text must not invent a curated legal answer");
+ assert.equal(await start.locator("#editorialAnswer").isVisible(),true,"Known legal FAQ alias must show the PDF-anchored editorial orientation");
  assert.ok(await start.locator("#sourceOfficialLink").getAttribute("href"));
  await start.screenshot({path:"artifacts/v12-01-question-first-desktop.png",fullPage:true});
 
