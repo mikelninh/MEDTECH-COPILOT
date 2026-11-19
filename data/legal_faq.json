@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "createdAt": "2026-11-19",
-  "classification": "Redaktionelle Auswahl typischer Praxisfragen; KEINE gemessene Häufigkeit. Normtexte manuell gegengeprüft, nicht rechtsgutachterlich freigegeben.",
+  "classification": "Editor-curated typical practice questions — NOT measured popularity. Redaktionell priorisiert, keine Nutzungsrangliste, keine juristische Freigabe.",
   "disclaimer": "Condensed orientation, not legal advice or a substitute for current norm text; check government portal before relying on any statement.",
   "faqs": [
     {
@@ -136,7 +136,7 @@
       "answer": "Wer Produkte beruflich oder gewerblich betreibt oder anwendet, muss dabei aufgetretene mutmaßlich schwerwiegende Vorkommnisse unverzüglich der zuständigen Bundesoberbehörde melden. Für die Bewertung und den Meldeweg sind die Definitionen und die weiteren Vorschriften der MPAMIV maßgeblich.",
       "sourceUrl": "https://www.gesetze-im-internet.de/mpamiv/__3.html",
       "sectionMarker": "§ 3 Meldepflicht",
-      "proofPhrase": "mutmaßlich schwerwiegende Vorkommnisse",
+      "proofPhrase": "mutmaßliche schwerwiegende Vorkommnisse unverzüglich",
       "quickLabel": "Vorkommnis melden",
       "priority": 9,
       "aliases": [
@@ -171,7 +171,8 @@
       "priority": 11,
       "aliases": [
         "Was gehört ins STK-Protokoll?"
-      ]
+      ],
+      "nextSectionMarker": "§ 13 Medizinproduktebuch"
     },
     {
       "id": "b08",
@@ -201,7 +202,8 @@
       "priority": 13,
       "aliases": [
         "Wer ist zur STK berechtigt?"
-      ]
+      ],
+      "nextSectionMarker": "§ 13 Medizinproduktebuch"
     },
     {
       "id": "a01",
@@ -241,7 +243,7 @@
       "answer": "Das MPDG ergänzt und vollzieht unionsrechtliche Vorgaben für Medizinprodukte in Deutschland. Für die richtige Einordnung müssen auch die einschlägigen EU-Verordnungen und die jeweilige konkrete Vorschrift herangezogen werden.",
       "sourceUrl": "https://www.gesetze-im-internet.de/mpdg/__1.html",
       "sectionMarker": "§ 1 Zweck des Gesetzes",
-      "proofPhrase": "unionsrechtlichen",
+      "proofPhrase": "Dieses Gesetz dient der Durchführung und Ergänzung",
       "quickLabel": "Wozu dient das MPDG?",
       "priority": 16,
       "aliases": [
