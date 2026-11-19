@@ -106,6 +106,7 @@ async function updateHeroSelection(id){
 }
 function showSource(source){
  state.source=source||null;
+ document.body.classList.toggle("has-active-source",!!source);
  const name=source?.title||"Bitte Quelle auswählen";
  const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="government-law-pdf"?(source.retrievalMode==="verified-prior-snapshot"?"Bundesportal-Snapshot vom "+(source.sourceSnapshotAt||"unbekannt")+" · heute nicht neu abrufbar · aktuelle Fassung separat prüfen":"Original-PDF aus dem Bundesportal · abgerufen "+(source.sourceSnapshotAt||"Datum unbekannt")+" · geltende Fassung separat prüfen"):source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
  $("selectedSourceName").textContent=name;
