@@ -48,7 +48,7 @@ async function ask(page,question,expected,pageNo){
  const nav=await page.goto(BASE+"upload.html",{waitUntil:"networkidle"});
  assert.equal(nav.status(),200);
  await page.waitForFunction(()=>!!window.MedtechUploadDemo,{timeout:12000});
- assert.match(await page.locator("h1").innerText(),/Stelle deine Frage.*Prüfe das Original/);
+ assert.match(await page.locator("h1").innerText(),/Stelle deine Frage\.\s*Prüfe das Original\./);
  assert.equal(await page.locator("#workspaceWelcome").isVisible(),true);
  assert.equal(await page.locator("#heroAskButton").isEnabled(),true,"New first-question entry must be interactive");
  assert.equal(await page.locator("#askButton").isDisabled(),true);
