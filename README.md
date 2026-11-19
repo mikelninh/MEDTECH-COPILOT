@@ -1,5 +1,7 @@
 # MEDTECH COPILOT — FIELDNOTES v0.9
 
+**Fallwerkstatt:** Einen Fall aufnehmen, am Original prüfen, eine Übergabe festhalten und abschließen. [Ablauf und Pilotabnahme](docs/FALLWERKSTATT.md).
+
 **Bring Your Own Manual: ask a local PDF and verify the original page.**
 
 Independent, public prototype for hospital-medical-engineering knowledge workflows. **Not affiliated with, connected to, or approved by UKB**. Not suitable for clinical decisions, device servicing or release.
@@ -15,7 +17,7 @@ https://mikelninh.github.io/MEDTECH-COPILOT/
 - Select a **text-based, non-confidential PDF** (max 15 MB, 120 pages). It is processed entirely inside the browser using **self-hosted Mozilla PDF.js 6.5.438**. Nothing in the PDF or the questions is uploaded to an application server.
 - Full page-by-page text extraction and local passage index. Type a question in German or English; receive **an exact extracted passage and PDF page**, or a visible abstention/safety boundary. This is **lexical, extractive retrieval** and **not** semantic/LLM RAG.
 - The **original PDF page is rendered beside the evidence**; a temporary local blob URL opens the PDF at the cited page in the browser.
-- Clear document/index/blob URL from browser memory with **Remove PDF**. No database, cookies or localStorage. Hosted page/library downloads may be logged by the platform.
+- Clear document/index/blob URL from browser memory with **Remove PDF**. The PDF remains ephemeral. Explicitly created case records and optional aggregate counters use separate browser storage. Hosted page/library downloads may be logged by the platform.
 - No scanned-page OCR, no patient-data access, no document upload service, no repair or therapy instructions.
 - Strict new test suite: 70+ unit cases, manufacturer PDF browser upload, synthetic multi-page PDF, scanned textless document, HTML-safe source display, mobile and reset paths. Exact current results live in [GitHub Actions](https://github.com/mikelninh/MEDTECH-COPILOT/actions).
 - See [V0.9 design, privacy and technical gates](docs/BYOM_V09.md).

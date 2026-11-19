@@ -64,3 +64,5 @@ body{background:#fafbf9;color:var(--v3-ink);font-family:Inter,"Segoe UI",Arial,s
  .byom-launch-privacy{font-size:10px!important}
 }
 @media(prefers-reduced-motion:reduce){.v3-home-search{transition:none!important}}
+
+.byom-practice-link { color: #176044; font-size: .92rem; font-weight: 680; text-underline-offset: .18em; }

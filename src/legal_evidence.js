@@ -78,9 +78,18 @@
     for(let k=0;k<=normalizedWords.length-needle.length;k++){
      if(needle.every((word,j)=>word===normalizedWords[k+j])){offset=k;break}
     }
-    const excerpt=offset>=0?
+    let excerpt=offset>=0?
      rawWords.slice(Math.max(0,offset-9),Math.min(rawWords.length,offset+needle.length+41)).join(" "):
      best.text;
+    if(faq.endPhrase){
+     const original=raw.replace(/\s+/g," ");
+     const lower=original.toLowerCase();
+     const spanStart=lower.indexOf(faq.proofPhrase.toLowerCase());
+     const end=lower.indexOf(faq.endPhrase.toLowerCase(),spanStart+faq.proofPhrase.length);
+     if(spanStart<0||end<0||end-spanStart>900)continue;
+     const endOffset=end+faq.endPhrase.length;
+     excerpt=original.slice(spanStart,/[.?!]/.test(original[endOffset]||"")?endOffset+1:endOffset);
+    }
     if(!norm(excerpt).includes(proof))continue;
     return {page:candidate.number,excerpt,matchedTerms:terms.filter(w=>norm(excerpt).includes(w)).slice(0,8),coverage:1,score:100,proof:"original-pdf-section",section:faq.sectionMarker};
    }
@@ -89,9 +98,13 @@
  }
  function answer(index,faq,sourceId){
   if(!faq||sourceId!==faq.sourceId)return {status:"unknown",reason:"Quelle und Rechtsfrage passen nicht zusammen.",evidence:[]};
-  const citation=locate(index,faq);
-  if(!citation)return {status:"unknown",reason:"Der Original-PDF-Text konnte die angegebene Norm und Belegpassage nicht gemeinsam bestätigen. Bitte die amtliche Quelle direkt prüfen.",evidence:[],faqId:faq.id};
-  return {status:"evidence",reason:"Norm und Belegpassage im ausgewählten Original-PDF abgeglichen. Fachliche Auslegung und Aktualität weiterhin prüfen.",evidence:[citation],answer:citation.excerpt,faqId:faq.id};
+  const citations=[faq,...(faq.supportingEvidence||[])]
+   .map(part=>{
+    const match=locate(index,part);
+    return match&&{...match,reference:part.answerReference};
+   });
+  if(citations.some(match=>!match))return {status:"unknown",reason:"Der Original-PDF-Text konnte die angegebene Norm und Belegpassage nicht gemeinsam bestätigen. Bitte die amtliche Quelle direkt prüfen.",evidence:[],faqId:faq.id};
+  return {status:"evidence",reason:"Norm und Belegpassage im ausgewählten Original-PDF abgeglichen. Fachliche Auslegung und Aktualität weiterhin prüfen.",evidence:citations,answer:citations[0].excerpt,faqId:faq.id};
  }
  return {norm,match,locate,answer};
 });

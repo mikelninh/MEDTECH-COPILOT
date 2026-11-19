@@ -14,43 +14,42 @@
 <link rel="stylesheet" href="./v31.css">
 <link rel="stylesheet" href="./v32.css">
 <link rel="stylesheet" href="./v33.css">
+<link rel="stylesheet" href="./v4-workflow.css">
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
-<body>
+<body class="simple-workspace">
 <div class="site">
   <header class="topbar">
     <a href="./upload.html" class="brand" aria-label="MEDTECH COPILOT">
       <span class="brand-mark" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M7 8a9 9 0 0 1 9-5h3v16H3v-3a9 9 0 0 1 4-8Z" fill="#79C98B"/><path d="M24 3h4a9 9 0 0 1 9 9v7H21V6a3 3 0 0 1 3-3Z" fill="#00673B"/><path d="M3 22h16v15h-7a9 9 0 0 1-9-9v-6Z" fill="#9ADE9F"/><path d="M21 21h16v7a9 9 0 0 1-9 9h-7V21Z" fill="#0F8750"/></svg></span>
       <span class="brand-wordmark">MEDTECH <strong>COPILOT</strong></span>
     </a>
-    <nav aria-label="Hauptnavigation">
-      <a href="#sourceLibraryDisclosure">Quellen</a>
-      <a href="#practiceLab">Beispielfragen</a>
-      <a href="./" class="nav-demos">Weitere Demos <span aria-hidden="true">↗</span></a>
-    </nav>
   </header>
   <main>
 
     <section class="source-intro" aria-labelledby="mainTitle">
       <div class="intro-copy">
-        <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
-        <p>Fragen. Fundstelle finden. Im PDF selbst nachlesen.</p>
+        <h1 id="mainTitle">Was gilt in der Medizintechnik?</h1>
+        <p>Stell eine Frage und prüfe die Antwort direkt im Original-PDF.</p>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
           <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
           <div class="hero-query-line">
             <svg class="hero-search-icon" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" stroke="currentColor" stroke-width="1.9"/><path d="m16.2 16.2 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-            <input id="heroQuestionInput" type="search" maxlength="400" placeholder="Wann ist eine STK vorgeschrieben?" autocomplete="off" aria-describedby="heroQueryStatus" required>
-            <label class="visually-hidden" for="heroSourceSelect">Quelle für die Recherche auswählen</label>
-            <select id="heroSourceSelect" aria-label="Quelle für die Recherche auswählen">
-              <option value="auto">Quelle wählen</option>
-            </select>
-            <button id="heroAskButton" type="submit">Antwort finden <span aria-hidden="true">→</span></button>
+            <input id="heroQuestionInput" type="search" maxlength="400" placeholder="Deine Frage zu einem Gesetz oder Handbuch" autocomplete="off" aria-describedby="heroQueryStatus" required>
+            <button id="heroAskButton" type="submit">Fragen</button>
           </div>
         </form>
-        <div class="minimal-example-line"><button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">Beispiel ausprobieren: STK-Fristen <span aria-hidden="true">↗</span></button></div>
-        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Quelle bewusst wählen oder nach der Frage bestätigen.</p>
+        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite"></p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
+        <div class="first-example">
+          <button id="welcomeExample" type="button" disabled>
+            <span>Beispiel ausprobieren</span>
+            <strong>Wie oft ist eine STK fällig?</strong>
+            <span class="first-example-arrow" aria-hidden="true">→</span>
+          </button>
+          <a href="#practiceLab">Weitere Beispielfragen</a>
+        </div>
       </div>
     </section>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
@@ -60,41 +59,9 @@
           <div class="v3-welcome-symbol" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M20 2 24.8 15.2 38 20 24.8 24.8 20 38 15.2 24.8 2 20 15.2 15.2 20 2Z" fill="currentColor"/></svg></div>
           <h2>Deine Antwort erscheint hier.</h2>
           <p>Mit einem Klick zur belegten Passage und ihrer Originalseite.</p>
-          <button type="button" id="welcomeExample" class="v3-try-example">STK-Beispiel starten <span aria-hidden="true">↗</span></button>
         </div>
         <div class="v3-welcome-foot"><span>FRAGE</span><span>FUNDSTELLE</span><span>ORIGINAL</span></div>
       </section>
-      <details id="sourceLibraryDisclosure" class="source-library-disclosure">
-        <summary class="minimal-disclosure-summary"><span>Quellenbibliothek <small>Gesetze, Handbücher oder eigenes PDF</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
-      <section class="source-chooser" id="sourceChooser" aria-label="Quelle für diese Recherche auswählen">
-        <div class="chooser-head"><span class="eyebrow">QUELLEN</span><span class="source-help">Eine Quelle pro Frage. Keine Vermischung.</span></div>
-        <p class="source-library-intro">Deine Quellen <span>Originaldokumente ansehen und bewusst auswählen</span></p>
-        <div class="source-tabs" role="group" aria-label="Quellenkategorie">
-          <button type="button" data-source-group="medtech" aria-pressed="false">Handbücher</button>
-          <button type="button" class="active" data-source-group="laws" aria-pressed="true">Deutsche Gesetze</button>
-          <button type="button" data-source-group="own" aria-pressed="false">Mein PDF</button>
-        </div>
-        <div id="sourceCards" class="source-cards" aria-live="polite"><p>Beispielquellen werden geprüft …</p></div>
-        <div id="sourceAutoStatus" class="source-auto-status hidden" role="status" aria-live="polite">
-          <div class="auto-status-header"><span class="auto-status-star">✦</span><strong id="sourceAutoTitle">Quellen-Copilot</strong></div>
-          <p id="sourceAutoReason">Ich finde die passende Quelle für deine Frage.</p>
-          <div id="sourceAutoBooks" class="source-auto-books"></div>
-        </div>
-        <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
-        <details id="faqDisclosure" class="v3-disclosure v3-faq-disclosure"><summary>Fragen &amp; Antworten zu den Gesetzen <span>Kuratiert, mit Gesetzeslinks <span aria-hidden="true">↗</span></span></summary><section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
-          <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
-          <span class="faq-no-popularity">Keine echte Nutzungsrangliste · Redaktionelle Startauswahl</span></div>
-          <div id="faqList" class="faq-list"></div>
-        </section></details>
-        <div id="sourceBanner" class="source-banner">
-          <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
-          <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
-        </div>
-        <div id="allLawHint" class="all-law-hint hidden">
-          <span>Hier: fünf konsolidierte PDF-Texte aus dem Bundesportal. Änderungen und Geltung dort prüfen. Weitere Gesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
-        </div>
-      </section>
-      </details>
     <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
       <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
       <div class="own-book-panel" id="ownBookPanel" aria-label="Cover für dein eigenes PDF">
@@ -134,14 +101,13 @@
       </div>
     </section>
     <section class="search-section hidden" id="askSection" aria-label="Frage an das Dokument">
-      <div class="workspace-header"><div><span class="eyebrow">WEITERFRAGEN</span><h2>Noch eine Frage zu dieser Quelle?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
+      <div class="workspace-header"><h2>Nachfragen</h2><button id="restartQuestion" type="button" class="restart-question">Neue Frage</button></div>
       <form id="questionForm" class="question-form">
         <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
-        <input id="questionInput" disabled autocomplete="off" placeholder="Erst Quelle auswählen, dann eine Frage stellen …" maxlength="400">
-        <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
+        <input id="questionInput" disabled autocomplete="off" placeholder="Was möchtest du dazu wissen?" maxlength="400">
+        <button type="submit" id="askButton" disabled>Fragen</button>
       </form>
-      <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
-      <details id="qualityDisclosure" class="v3-disclosure v3-quality-disclosure"><summary>Qualität &amp; lokale Statistik <span>Datensparsam · freiwillig <span aria-hidden="true">↗</span></span></summary><div class="learning-panel" id="learningPanel">
+      <details id="qualityDisclosure" class="v3-disclosure v3-quality-disclosure"><summary>Lokale Statistik</summary><div class="learning-panel" id="learningPanel">
         <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
         <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
         <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
@@ -154,24 +120,38 @@
       <div class="result-head"><span class="v3-result-label"><span class="v3-pane-dot"></span> Antwort</span><span class="answer-status" id="answerStatus"></span></div>
       <div class="result-grid">
         <div class="answer-side">
-          <div class="v3-current-question"><span>DEINE FRAGE</span><strong id="answeredQuestion"></strong></div>
-          <h2 id="answerTitle">Fundstelle</h2>
+          <h2 id="answeredQuestion" tabindex="-1"></h2>
+          <p id="answerTitle" class="answer-state"></p>
           <p id="answerLead"></p>
           <div id="editorialAnswer" class="editorial-answer hidden" aria-label="Redaktionelle Kurzorientierung"></div>
           <div class="citation-card hidden" id="citationCard">
-            <div class="citation-top"><span>BELEGTE PASSAGE</span><span id="citationPage"></span></div>
-            <blockquote id="citationText"></blockquote>
-            <div class="citation-meta" id="citationMeta"></div>
-            <div class="evidence-actions"><button class="verify-button" id="verifySource" type="button"><span aria-hidden="true">↗</span> Original prüfen</button><button class="jump-button" id="goToPage" type="button">Seite anzeigen <span aria-hidden="true">→</span></button></div>
+            <div class="evidence-actions"><button class="verify-button" id="verifySource" type="button">Original-PDF ansehen</button><span id="citationPage"></span></div>
+            <details id="quoteDisclosure" class="quote-disclosure">
+              <summary>Textauszug anzeigen</summary>
+              <blockquote id="citationText"></blockquote>
+              <div class="citation-meta" id="citationMeta"></div>
+              <button class="jump-button" id="goToPage" type="button">Belegseite anzeigen</button>
+            </details>
           </div>
           <div id="additionalCitations" class="additional-citations"></div>
-          <div class="answer-bottom">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
-          <div class="answer-quality" id="answerQuality">
-            <span class="eyebrow">QUELLENQUALITÄT / FEEDBACK</span>
-            <p><strong>Automatisch geprüft:</strong> Auszug, PDF-Seite und Quellenbindung. <strong>Nicht automatisch geprüft:</strong> juristische Auslegung, vollständige Relevanz oder Aktualität.</p>
+          <div class="synthesis-area hidden" id="localSynthesis">
+            <button type="button" id="synthesizeAnswer">Mit lokaler KI vertiefen</button>
+            <p id="synthesisStatus" role="status"></p>
+          </div>
+          <details id="dialogHistory" class="dialog-history hidden">
+            <summary>Bisherige Fachfragen</summary>
+            <ol id="dialogTurns"></ol>
+            <button id="dialogReset" type="button">Neues Gespräch</button>
+          </details>
+          <div id="dialogFollowups" class="dialog-followups hidden" aria-label="Anschlussfragen"></div>
+          <a id="practiceReturn" class="practice-return hidden" href="#practiceLab">Zu den Beispielfragen</a>
+          <div class="case-pin-area"><button type="button" id="casePin" class="hidden">Geprüften Beleg im Fall festhalten</button><span id="casePinStatus" role="status"></span><button type="button" id="caseReturn" class="hidden">Zur Fallakte ↑</button></div>
+          <div class="answer-bottom" id="answerMode">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+          <details class="answer-quality" id="answerQuality">
+            <summary>Antwort bewerten</summary>
             <div class="answer-feedback"><span>Hat dir diese Fundstelle geholfen?</span><button type="button" id="answerHelpful">Ja, hilfreich</button><button type="button" id="answerUnhelpful">Nein, unpassend</button></div>
             <span id="feedbackAcknowledgement" class="feedback-ack" role="status"></span>
-          </div>
+          </details>
         </div>
         <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
           <div class="viewer-head"><strong>Original-PDF</strong><span id="viewerPageLabel">Noch keine Seite</span></div>
@@ -189,31 +169,129 @@
       </div>
     </section>
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
+    <details id="toolsDisclosure" class="workspace-tools">
+      <summary>Weitere Werkzeuge</summary>
+      <div class="tools-content">
     <details id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
-      <summary class="minimal-disclosure-summary"><span>Beispielfragen entdecken <small>19 geprüfte Praxisfragen · MPBetreibV &amp; mehr</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <summary class="minimal-disclosure-summary"><span id="practiceHeading">Beispielfragen <small>10 Fragen pro Rolle oder Situation</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
       <div class="practice-expanded">
-      <div class="practice-head">
-        <div><span class="practice-eyebrow">RECHERCHE · PRAXISBEISPIELE</span><h2 id="practiceHeading">Häufige Praxisfragen – direkt ausprobieren.</h2>
-        <p>Redaktionell priorisierte Fragen, <strong>keine gemessene Nutzungsrangliste</strong>. Jede Antwort muss ihre Fundstelle im jeweiligen Original-PDF nachweisen.</p></div>
-        <span class="practice-provenance">Originalquelle wählen · 1 Klick</span>
-      </div>
-      <div class="practice-toolbar" role="group" aria-label="Praxisfragen filtern">
-        <button type="button" class="active" data-practice-filter="all" aria-pressed="true">Highlights</button>
-        <button type="button" data-practice-filter="mpbetreibv" aria-pressed="false">MPBetreibV</button>
-        <button type="button" data-practice-filter="other" aria-pressed="false">Andere Gesetze</button>
-        <button type="button" data-practice-filter="everything" aria-pressed="false">Alle Fragen</button>
-      </div>
-      <div id="practiceChoices" class="practice-choices" aria-live="polite">
-        <p class="practice-placeholder">Praxisfragen und gesetzliche Fundstellen werden geladen …</p>
-      </div>
-      <p id="practiceStatus" class="practice-status" role="status" aria-live="polite">Frage auswählen → Quellen-PDF wird geprüft → Antwort und Original ansehen.</p>
+        <div class="practice-context">
+          <label for="practiceContext">Rolle oder Situation</label>
+          <select id="practiceContext" aria-describedby="practiceNote" disabled><option>Wird geladen …</option></select>
+        </div>
+        <div id="practiceChoices" class="practice-choices">
+          <p class="practice-placeholder">Fragen werden geladen …</p>
+        </div>
+        <p id="practiceNote" class="practice-note">Redaktionelle Auswahl nach Praxisrelevanz.</p>
+        <p id="practiceStatus" class="practice-status" role="status"></p>
       </div>
     </details>
-
-    <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
-    <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+    <details id="caseWorkspace" class="case-workspace">
+      <summary class="minimal-disclosure-summary"><span>Fallwerkstatt <small id="caseCount">Aufnahme, Analyse und Übergabe</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <div class="case-content">
+        <div class="case-toolbar">
+          <label>Gespeicherte Fälle<select id="casePicker"></select></label>
+          <label>Falltyp<select id="caseType"></select></label>
+          <button id="caseCreate" class="case-primary" type="button">Fall anlegen</button>
+        </div>
+        <button id="caseExample" class="case-example" type="button">AED-Beispielfall ausprobieren</button>
+        <p class="case-local">Fälle und ausgewählte öffentliche Belege bleiben in diesem Browser. Nur anonymisierte Angaben eintragen.</p>
+        <p id="caseStatus" class="case-status" role="status"></p>
+        <div id="caseRecord" hidden>
+          <ol class="case-progress" aria-label="Fallfortschritt">
+            <li data-case-step="intake">Aufnahme</li><li data-case-step="analysis">Analyse</li><li data-case-step="handoff">Übergabe</li><li data-case-step="closed">Abschluss</li>
+          </ol>
+          <div class="case-fields">
+            <label>Falltitel<input id="caseTitle" data-case-field="title" maxlength="100" placeholder="AED in der Eingangshalle"></label>
+            <label>Beobachtete Fakten<textarea data-case-field="facts" maxlength="1800" rows="3" aria-describedby="caseIntakeHint"></textarea><small id="caseIntakeHint"></small></label>
+          </div>
+          <div class="case-intake-only"><button id="caseStart" class="case-primary" type="button">Analyse beginnen →</button></div>
+          <div class="case-after-intake">
+            <section id="caseGuidance" class="case-guidance" aria-labelledby="caseGuidanceTitle" hidden>
+              <div class="case-guide-head"><h3 id="caseGuidanceTitle">Fallanalyse</h3><span id="caseAnalysisStatus" role="status"></span></div>
+              <div id="casePriority" class="case-priority">
+                <span>Nächster Schritt</span>
+                <h4 id="casePriorityTitle"></h4>
+                <p id="casePriorityWhy"></p>
+                <p id="casePriorityAction"></p>
+                <button id="casePriorityGo" type="button" hidden></button>
+              </div>
+              <h4>Nachweise zum konkreten Fall</h4>
+              <div id="caseCheckList" class="case-check-list"></div>
+              <details class="case-rule-set"><summary>Amtliche Rechtsgrundlagen</summary><ul id="caseRuleList"></ul></details>
+              <details class="case-draft"><summary>Übergabeentwurf ansehen</summary>
+                <p id="caseDraftText"></p>
+                <button id="caseAdoptDraft" type="button">Entwurf übernehmen</button>
+              </details>
+            </section>
+            <div class="case-analysis-only case-research">
+              <h3>Quellen gemeinsam prüfen</h3>
+              <a id="casePracticeLink" class="practice-return" href="#practiceLab">10 Fragen zu diesem Fall</a>
+              <div id="caseQuestions" class="case-questions"></div>
+            </div>
+            <div class="case-fields">
+              <label>Offene Punkte und fehlende Nachweise<textarea data-case-field="open" maxlength="1800" rows="2"></textarea></label>
+              <label>Deine fachliche Einschätzung<textarea data-case-field="assessment" maxlength="1800" rows="3"></textarea></label>
+            </div>
+            <details class="case-proof"><summary id="caseProofSummary">Festgehaltene Belege</summary><ol id="caseEvidence"></ol></details>
+            <div class="case-fields">
+              <label>Nächste Handlung<textarea data-case-field="next" maxlength="1000" rows="2"></textarea></label>
+              <div class="case-fields-row">
+                <label>Zuständige Rolle<input data-case-field="owner" maxlength="100" placeholder="Medizintechnik · Prüfteam"></label>
+                <label>Termin<input data-case-field="due" type="date"></label>
+              </div>
+            </div>
+            <label id="caseReviewLabel" class="case-review case-analysis-only" hidden><input id="caseReviewed" type="checkbox"> Ich habe die aktuelle Übergabe fachlich geprüft.</label>
+            <div class="case-analysis-only"><button id="casePrepare" class="case-primary" type="button">Übergabe vorbereiten →</button></div>
+            <div class="case-after-analysis">
+              <label>Übernahme und Ergebnis<textarea data-case-field="resolution" rows="3" maxlength="1800" placeholder="Wer hat übernommen? Wie wurden die offenen Punkte bearbeitet?"></textarea></label>
+              <div class="case-actions">
+                <button type="button" id="caseClose" class="case-primary case-handoff-only">Fall abschließen</button>
+                <button type="button" id="caseBack">Analyse wieder öffnen</button>
+              </div>
+            </div>
+          </div>
+          <div class="case-actions case-footer">
+            <button id="caseExport" type="button">Fallakte herunterladen ↓</button>
+            <button id="caseDelete" type="button">Fall löschen</button>
+          </div>
+        </div>
+      </div>
+    </details>
+      <details id="sourceLibraryDisclosure" class="source-library-disclosure">
+        <summary class="minimal-disclosure-summary"><span>Quellenbibliothek <small>Gesetze, Handbücher oder eigenes PDF</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
+      <section class="source-chooser" id="sourceChooser" aria-label="Quelle für diese Recherche auswählen">
+        <div class="manual-source"><label for="heroSourceSelect">Quelle für die Recherche auswählen</label>
+            <select id="heroSourceSelect" aria-label="Quelle für die Recherche auswählen">
+              <option value="auto">Quelle wählen</option>
+            </select></div>
+        <div class="source-tabs" role="group" aria-label="Quellenkategorie">
+          <button type="button" data-source-group="medtech" aria-pressed="false">Handbücher</button>
+          <button type="button" class="active" data-source-group="laws" aria-pressed="true">Deutsche Gesetze</button>
+          <button type="button" data-source-group="own" aria-pressed="false">Mein PDF</button>
+        </div>
+        <div id="sourceCards" class="source-cards" aria-live="polite"><p>Beispielquellen werden geprüft …</p></div>
+        <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
+        <details id="faqDisclosure" class="v3-disclosure v3-faq-disclosure"><summary>Fragen &amp; Antworten zu den Gesetzen <span>Kuratiert, mit Gesetzeslinks <span aria-hidden="true">↗</span></span></summary><section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
+          <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
+          <span class="faq-no-popularity">Keine echte Nutzungsrangliste · Redaktionelle Startauswahl</span></div>
+          <div id="faqList" class="faq-list"></div>
+        </section></details>
+        <div id="sourceBanner" class="source-banner">
+          <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
+          <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
+        </div>
+        <div id="allLawHint" class="all-law-hint hidden">
+          <span>Hier: fünf konsolidierte PDF-Texte aus dem Bundesportal. Änderungen und Geltung dort prüfen. Weitere Gesetze:</span><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer">Im gesamten GitLaw-Korpus recherchieren ↗</a>
+        </div>
+      </section>
+      </details>
+        <a href="./" class="back-home">Weitere Demos</a>
+      </div>
+    </details>
+    <div class="boundary"><span aria-hidden="true">!</span><p>Demo zur Quellenrecherche. Dokumente bitte anonymisiert und ohne Klinikdaten verwenden.</p></div>
   </main>
-  <footer>MEDTECH COPILOT · V3.2 / MINIMAL FOCUS <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT</footer>
 </div>
 </body>
 </html>

@@ -21,7 +21,12 @@
    [/\bmpdg\b|medizinprodukterecht durchfuhrungsgesetz|medizinprodukterecht/,12,"Medizinprodukterecht"],
    [/marktuberwach|marktzulass|inverkehrbring/,9,"Marktüberwachung und Bereitstellung"],
    [/konformitatserklarung|ce kennzeich|benannte stelle/,9,"Konformität und Benannte Stellen"],
-   [/vigilanz|schwerwiegend\w* vorkommnis|meldepflicht/,7,"Vorkommnisse und Meldewege"]
+   [/vigilanz/,7,"Marktüberwachung und Vigilanz"]
+  ],
+  mpamiv:[
+   [/\bmpamiv\b|medizinprodukte anwendermelde/,12,"Medizinprodukte-Anwendermelde- und Informationsverordnung"],
+   [/vorkommnis\w*.{0,32}(?:meld|anzeig)|(?:meld|anzeig)\w*.{0,32}vorkommnis/,10,"Meldung von Medizinprodukte-Vorkommnissen"],
+   [/mutmasslich\w* schwerwiegend\w* vorkommnis/,10,"Begriffsbestimmung für Vorkommnisse"]
   ],
   arbschg:[
    [/\barbschg\b|arbeitsschutzgesetz/,12,"Arbeitsschutzgesetz"],
