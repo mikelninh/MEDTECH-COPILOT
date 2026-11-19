@@ -66,7 +66,7 @@ const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null
 function showSource(source){
  state.source=source||null;
  const name=source?.title||"Bitte Quelle auswählen";
- const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="government-law-pdf"?"Bundesportal-PDF · Stand: "+(source.lastAmendedStatement||"Original prüfen")+" · Gesetzesänderungen separat prüfen":source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
+ const note=source?((source.subtitle||"PDF")+" · "+(source.sourceKind==="government-law-pdf"?(source.retrievalMode==="verified-prior-snapshot"?"Bundesportal-Snapshot vom "+(source.sourceSnapshotAt||"unbekannt")+" · heute nicht neu abrufbar · aktuelle Fassung separat prüfen":"Original-PDF aus dem Bundesportal · abgerufen "+(source.sourceSnapshotAt||"Datum unbekannt")+" · geltende Fassung separat prüfen"):source.sourceKind==="manufacturer-original"?"Geprüftes öffentliches Herstellerdokument":source.sourceKind==="fictional-training"?"Fiktives Übungshandbuch – keine echte Herstelleranleitung":"Nur in diesem Tab gespeichert")):"Handbuch, Bundesgesetz oder eigenes PDF wählen.";
  $("selectedSourceName").textContent=name;
  $("selectedSourceInfo").textContent=note;
  $("sourceBanner").classList.toggle("has-source",!!source);
@@ -515,6 +515,7 @@ function paintExcerpt(evidence){
  const words=[...new Set((evidence?.matchedTerms||[]).map(String).filter(w=>w.length>=4))].sort((a,b)=>b.length-a.length);
  if(!words.length){el.textContent=raw;return}
  const escaped=words.map(w=>w.replace(/[^A-Za-z0-9ÄÖÜäöüß]/g,"")).filter(Boolean);
+ if(!escaped.length){el.textContent=raw;return}
  let matcher;
  try{matcher=new RegExp("("+escaped.join("|")+")","gi")}catch(_){el.textContent=raw;return}
  let index=0;
