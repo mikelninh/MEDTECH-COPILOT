@@ -3,52 +3,85 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#15392e">
-<meta name="description" content="Eigenes PDF lokal durchsuchen: Belegte Originalpassagen und Seitenvorschau – ohne Upload an einen Server.">
+<meta name="theme-color" content="#fafbf9">
+<meta name="description" content="MEDTECH COPILOT: Quellengebundene Recherche für Medizinprodukterecht. Frage stellen, Fundstelle lesen, Original-PDF prüfen.">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob: data:; worker-src 'self' blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'none'">
-<title>Fragen. Finden. Prüfen. · MEDTECH COPILOT V1.2</title>
+<title>MEDTECH COPILOT · Frage. Antwort. Original.</title>
 <link rel="stylesheet" href="./v9.css">
 <link rel="stylesheet" href="./source10.css">
 <link rel="stylesheet" href="./v12.css">
+<link rel="stylesheet" href="./v3.css">
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
 <body>
 <div class="site">
   <header class="topbar">
-    <a href="./" class="brand" aria-label="MEDTECH COPILOT Startseite"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 36 36" fill="none"><path d="M2 18h9l5-9 5 18 4-9h9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>medtech<b>.</b><small>COPILOT / BYOM</small></span></a>
-    <nav aria-label="Navigation"><a href="./">← Alle Demos</a><span class="status"><span class="status-light"></span> LOCAL FIRST</span></nav>
+    <a href="./upload.html" class="brand" aria-label="MEDTECH COPILOT">
+      <span class="brand-mark" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M7 8a9 9 0 0 1 9-5h3v16H3v-3a9 9 0 0 1 4-8Z" fill="#79C98B"/><path d="M24 3h4a9 9 0 0 1 9 9v7H21V6a3 3 0 0 1 3-3Z" fill="#00673B"/><path d="M3 22h16v15h-7a9 9 0 0 1-9-9v-6Z" fill="#9ADE9F"/><path d="M21 21h16v7a9 9 0 0 1-9 9h-7V21Z" fill="#0F8750"/></svg></span>
+      <span class="brand-wordmark">MEDTECH <strong>COPILOT</strong></span>
+    </a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#sourceChooser">Quellen</a>
+      <a href="#faqDisclosure">FAQs</a>
+      <a href="./" class="nav-demos">Weitere Demos <span aria-hidden="true">↗</span></a>
+    </nav>
   </header>
   <main>
-    <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
+
     <section class="source-intro" aria-labelledby="mainTitle">
-      <div class="intro-copy"><span class="eyebrow">GITLAW × MEDTECH COPILOT · SOURCE FIRST</span>
-        <h1 id="mainTitle">Eine Frage. <em>Eine überprüfbare Quelle.</em></h1>
-        <p>Medizinprodukterecht ohne Rätselraten: Frage stellen, eine Quelle bewusst bestätigen und die relevante Stelle <strong>im Original selbst prüfen</strong>.</p>
+      <div class="intro-copy">
+        <span class="hero-overline">MEDIZINTECHNIK &amp; MEDIZINPRODUKTERECHT</span>
+        <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
+        <p>Finde belegbare Textstellen in Gesetzen und Handbüchern – und lies sie direkt im Original-PDF. Ohne Blackbox.</p>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
-          <label for="heroQuestionInput">Was möchtest du wissen?</label>
-          <div class="hero-query-line"><input id="heroQuestionInput" type="search" maxlength="400" placeholder="z. B. Wann ist eine STK vorgeschrieben?" aria-describedby="heroQueryStatus" required><button type="submit" id="heroAskButton">Fundstelle finden <span aria-hidden="true">↗</span></button></div>
+          <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
+          <div class="hero-query-line">
+            <svg class="hero-search-icon" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" stroke="currentColor" stroke-width="1.9"/><path d="m16.2 16.2 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+            <input id="heroQuestionInput" type="search" maxlength="400" placeholder="Wann ist eine STK vorgeschrieben?" autocomplete="off" aria-describedby="heroQueryStatus" required>
+            <label class="visually-hidden" for="heroSourceSelect">Quelle für die Recherche auswählen</label>
+            <select id="heroSourceSelect" aria-label="Quelle für die Recherche auswählen">
+              <option value="auto">Quelle wählen</option>
+            </select>
+            <button id="heroAskButton" type="submit">Antwort finden <span aria-hidden="true">→</span></button>
+          </div>
         </form>
-        <div class="hero-examples" aria-label="Schnell starten">
-          <span>PROBIER ES MIT</span>
-          <button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">STK-Fristen</button>
-          <button type="button" data-starter-question="Für welche Geräte braucht man ein Medizinproduktebuch?">Medizinproduktebuch</button>
-          <button type="button" data-starter-question="Wann muss ein mutmaßlich schwerwiegendes Vorkommnis gemeldet werden?">Vorkommnis melden</button>
+        <div class="v3-quickbar" aria-label="Quellen und Beispiele">
+          <div class="v3-source-pills" aria-label="Quelle schnell auswählen">
+            <button type="button" data-quick-source="mpbetreibv" aria-pressed="false">MPBetreibV</button>
+            <button type="button" data-quick-source="mpdg" aria-pressed="false">MPDG</button>
+            <button type="button" data-quick-source="own" aria-pressed="false">＋ Eigenes PDF</button>
+          </div>
+          <div class="hero-examples" aria-label="Beispielfragen">
+            <span>Zum Beispiel:</span>
+            <button type="button" data-starter-question="Wie oft ist eine sicherheitstechnische Kontrolle (STK) fällig?">STK-Fristen</button>
+            <button type="button" data-starter-question="Für welche Geräte braucht man ein Medizinproduktebuch?">Medizinproduktebuch</button>
+            <button type="button" data-starter-question="Wann muss ein mutmaßlich schwerwiegendes Vorkommnis gemeldet werden?">Vorkommnisse</button>
+          </div>
         </div>
-        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Keine automatische Gerätefreigabe oder Rechtsberatung. Du wählst die Quelle vor der Suche.</p>
+        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Wähle eine Quelle bewusst aus oder lass dir passende Quellen vorschlagen.</p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
-        <div class="intro-principles"><span>01 · FRAGEN</span><span>02 · QUELLE BESTÄTIGEN</span><span>03 · BELEG PRÜFEN</span></div>
       </div>
-      <div class="intro-visual"><div class="intro-library" aria-hidden="true">
-        <img class="intro-book intro-book-a" src="./covers/mpamiv.svg" alt="" width="340" height="482">
-        <img class="intro-book intro-book-b" src="./covers/lumen.svg" alt="" width="340" height="482">
-        <img class="intro-book intro-book-c" src="./covers/mpbetreibv.svg" alt="" width="340" height="482">
-        </div><a href="https://mikelninh.github.io/gitlaw/#/research" target="_blank" rel="noopener noreferrer" class="gitlaw-cta">Alle Bundesgesetze in GitLaw <span aria-hidden="true">↗</span><small>Separates Recherchewerkzeug · umfassender Gesetzeskorpus</small></a></div>
     </section>
+    <div class="v3-proof-line" id="howItWorks" aria-label="So funktioniert MEDTECH COPILOT">
+      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M5 12.5 10 17l9-10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Quellengebundene Recherche</span>
+      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="m5 4 14 0v16H5zM9 9h6m-6 4h6m-6 4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Original-PDF daneben</span>
+      <span><svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true"><path d="M12 3 5 6v6c0 5 3 7.7 7 9 4-1.3 7-4 7-9V6l-7-3Z" stroke="currentColor" stroke-width="1.6"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg> Unbelegte Antworten werden abgelehnt</span>
+    </div>
     <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
+      <section id="workspaceWelcome" class="v3-welcome" aria-label="Antwortbereich">
+        <div class="v3-pane-top"><span><span class="v3-pane-dot"></span> Antwort</span><span class="v3-pane-meta">Bereit für deine Frage</span></div>
+        <div class="v3-welcome-content">
+          <div class="v3-welcome-symbol" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M20 2 24.8 15.2 38 20 24.8 24.8 20 38 15.2 24.8 2 20 15.2 15.2 20 2Z" fill="currentColor"/></svg></div>
+          <h2>Wissen, das du<br><em>überprüfen kannst.</em></h2>
+          <p>Stelle oben deine Frage. Wir suchen eine passende Textstelle – und zeigen dir genau, wo sie im Dokument steht.</p>
+          <button type="button" id="welcomeExample" class="v3-try-example">Beispiel: STK-Fristen ansehen <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="v3-welcome-foot"><span>FRAGE</span><span>FUNDSTELLE</span><span>ORIGINAL</span></div>
+      </section>
       <section class="source-chooser" id="sourceChooser" aria-label="Quelle für diese Recherche auswählen">
-        <div class="chooser-head"><span class="eyebrow">02 / QUELLE BESTÄTIGEN</span><span class="source-help"><strong>Explizite Auswahl:</strong> Nur die aktivierte Quelle wird für deine Frage verwendet.</span></div>
-        <p class="source-library-intro">Die Quellenbibliothek <span>Eine ausgewählte Quelle pro Frage · kein Quellenmix</span></p>
+        <div class="chooser-head"><span class="eyebrow">QUELLEN</span><span class="source-help">Eine Quelle pro Frage. Keine Vermischung.</span></div>
+        <p class="source-library-intro">Deine Quellen <span>Originaldokumente ansehen und bewusst auswählen</span></p>
         <div class="source-tabs" role="group" aria-label="Quellenkategorie">
           <button type="button" data-source-group="medtech" aria-pressed="false">Handbücher</button>
           <button type="button" class="active" data-source-group="laws" aria-pressed="true">Deutsche Gesetze</button>
@@ -61,11 +94,11 @@
           <div id="sourceAutoBooks" class="source-auto-books"></div>
         </div>
         <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
-        <section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
+        <details id="faqDisclosure" class="v3-disclosure v3-faq-disclosure"><summary>Fragen &amp; Antworten zu den Gesetzen <span>Kuratiert, mit Gesetzeslinks <span aria-hidden="true">↗</span></span></summary><section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
           <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
           <span class="faq-no-popularity">Keine echte Nutzungsrangliste · Redaktionelle Startauswahl</span></div>
           <div id="faqList" class="faq-list"></div>
-        </section>
+        </section></details>
         <div id="sourceBanner" class="source-banner">
           <span class="source-banner-led"></span><div><strong id="selectedSourceName">Noch keine Quelle ausgewählt</strong>
           <small id="selectedSourceInfo">Wähle ein Beispiel oder dein eigenes PDF.</small></div>
@@ -120,19 +153,20 @@
         <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
       </form>
       <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
-      <div class="learning-panel" id="learningPanel">
+      <details id="qualityDisclosure" class="v3-disclosure v3-quality-disclosure"><summary>Qualität &amp; lokale Statistik <span>Datensparsam · freiwillig <span aria-hidden="true">↗</span></span></summary><div class="learning-panel" id="learningPanel">
         <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
         <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
         <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
         <p class="learning-privacy">Freiwillig · Nur Zähler in diesem Browser. Keine Fragen, Dokumente oder Kennungen werden gespeichert oder versendet. Keine besucherübergreifende Statistik.</p>
         <div id="learningCounts" class="learning-counts" aria-live="polite"></div>
         <div class="learning-actions"><button type="button" id="exportLearning">Zähler als JSON exportieren</button><button type="button" id="resetLearning">Lokale Zähler löschen</button></div>
-      </div>
+      </div></details>
     </section>
     <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
-      <div class="result-head"><span class="eyebrow">03 / ANTWORT & BELEG</span><span class="answer-status" id="answerStatus"></span></div>
+      <div class="result-head"><span class="v3-result-label"><span class="v3-pane-dot"></span> Antwort</span><span class="answer-status" id="answerStatus"></span></div>
       <div class="result-grid">
         <div class="answer-side">
+          <div class="v3-current-question"><span>DEINE FRAGE</span><strong id="answeredQuestion"></strong></div>
           <h2 id="answerTitle">Fundstelle</h2>
           <p id="answerLead"></p>
           <div id="editorialAnswer" class="editorial-answer hidden" aria-label="Redaktionelle Kurzorientierung"></div>
@@ -152,9 +186,9 @@
           </div>
         </div>
         <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
-          <div class="viewer-head"><strong>ORIGINAL / PDF</strong><span id="viewerPageLabel">Noch kein PDF</span></div>
+          <div class="viewer-head"><strong>Original-PDF</strong><span id="viewerPageLabel">Noch keine Seite</span></div>
           <div class="viewer-stage" id="viewerStage">
-            <div class="viewer-empty" id="viewerEmpty"><span>▣</span><p>Wähle links eine Quelle. Das Original bleibt hier sichtbar.</p></div>
+            <div class="viewer-empty" id="viewerEmpty"><span class="v3-pdf-icon" aria-hidden="true">▣</span><strong>Original. Keine Behauptung.</strong><p>Wenn du eine Quelle auswählst, erscheint hier ihr PDF. Fundstellen werden markiert.</p><span class="v3-pdf-placeholder-line"></span><span class="v3-pdf-placeholder-line short"></span><span class="v3-pdf-placeholder-line"></span></div>
             <div id="pdfPageFrame" class="pdf-page-frame"><canvas id="pageCanvas" class="hidden" aria-label="Gerenderte Original-PDF-Seite"></canvas><div id="pdfHighlights" class="pdf-highlights" aria-hidden="true"></div></div>
           </div>
           <div class="viewer-controls">
@@ -167,9 +201,10 @@
       </div>
     </section>
       </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
-    <section class="limit-foot"><div><span class="eyebrow">WAS DIESE DEMO KANN – UND NICHT KANN</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+    <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
+    <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen/Zahlen immer korrekt interpretieren, Therapie- oder Reparaturentscheidungen treffen, semantisch wie ein LLM schlussfolgern.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
   </main>
-  <footer>MEDTECH COPILOT · V1.2 / DISCOVER → ANSWER → VERIFY <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT · V3 / MINIMAL PRODUCT <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
 </div>
 </body>
 </html>

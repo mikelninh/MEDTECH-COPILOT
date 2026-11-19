@@ -46,7 +46,7 @@ jobs:
       - name: Assemble public-only files
         run: |
           mkdir -p dist/src dist/data
-          cp index.html upload.html v4.css v5.css v6.css v7.css v8.css v9.css entry9.css source10.css v12.css dist/
+          cp index.html upload.html v4.css v5.css v6.css v7.css v8.css v9.css entry9.css source10.css v12.css v3.css v3-home.css dist/
           cp src/retrieval.js src/scenarios.js src/fieldnotes.js src/pdf_evidence.js src/pdf_demo.js src/upload_core.js src/upload_app.mjs src/source_router.js src/learning_loop.js src/evidence_highlight.js dist/src/
           cp data/corpus.json data/legal_faq.json data/answer_quality_rubric.json dist/data/
           mkdir -p dist/covers

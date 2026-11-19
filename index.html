@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="./v7.css">
 <link rel="stylesheet" href="./v8.css">
 <link rel="stylesheet" href="./entry9.css">
+<link rel="stylesheet" href="./v3-home.css">
 <script defer src="./src/retrieval.js"></script>
 <script defer src="./src/scenarios.js"></script>
 <script defer src="./src/pdf_evidence.js"></script>
@@ -39,27 +40,28 @@
   <main id="main">
     <div class="safety-strip" role="note"><span class="safety-mark">!</span><span><strong>Unabhängiger Prototyp.</strong> Kein UKB-Produkt, keine internen Daten. Fiktive Übungsgeräte plus eine kuratierte öffentliche Herstellerquelle. Nicht für klinische Entscheidungen, Reparaturen oder Freigaben einsetzen.</span></div>
 
+
     <section id="view-desk" class="view">
       <section class="byom-launch" aria-labelledby="byomLaunchTitle">
         <div class="byom-launch-copy">
-          <span class="byom-launch-label"><span class="byom-spark"></span> V1.2 · DISCOVER / ANSWER / VERIFY</span>
-          <h2 id="byomLaunchTitle">Stell deine Frage.<br><em>Prüfe den Beleg.</em></h2>
-          <p>Frag zuerst, wähle die vorgeschlagene Originalquelle bewusst aus und prüfe die markierte Fundstelle im PDF. Fünf Gesetzestexte aus dem Bundesportal, zwei fiktive Trainingsbücher – oder dein eigenes PDF lokal.</p>
-          <a class="byom-launch-button" href="./upload.html">Jetzt eine Frage stellen <span aria-hidden="true">↗</span></a>
-          <div class="byom-launch-privacy">7 Quellen · Original-PDF mit Fundstellen · lokaler Datenschutz</div>
+          <span class="byom-launch-label">MEDIZINTECHNIK &amp; MEDIZINPRODUKTERECHT</span>
+          <h2 id="byomLaunchTitle">Stelle deine Frage.<br><em>Prüfe das Original.</em></h2>
+          <p>Quellengebundene Recherche. Passende Fundstellen finden und die Original-PDF-Seite direkt daneben prüfen.</p>
+          <a class="byom-launch-button v3-home-search" href="./upload.html" aria-label="Zum Recherche-Workspace mit Fragefeld">
+            <span class="v3-home-search-label"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.2" stroke="currentColor" stroke-width="1.9"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>Stelle deine Frage …</span>
+            <strong>Antwort finden <span aria-hidden="true">→</span></strong>
+          </a>
+          <div class="byom-launch-privacy">5 Bundesportal-Texte · 2 fiktive Trainingshandbücher · Eigenes PDF lokal</div>
         </div>
-        <a href="./upload.html" class="byom-launch-shelf" aria-label="Quellenrecherche mit sieben Quellen öffnen, fünf Buchcover als Vorschau">
-          <span class="byom-shelf-kicker">FIELDNOTES / BIBLIOTHEK</span>
-          <div class="byom-shelf-books" aria-hidden="true">
-            <img src="./covers/lumen.svg" alt="" width="340" height="482">
-            <img src="./covers/orion.svg" alt="" width="340" height="482">
-            <img src="./covers/mpbetreibv.svg" alt="" width="340" height="482">
-            <img src="./covers/mpdg.svg" alt="" width="340" height="482">
-            <img src="./covers/arbschg.svg" alt="" width="340" height="482">
+        <a href="./upload.html" class="byom-launch-shelf v3-home-preview" aria-label="Recherche-Workspace öffnen, Beispielvorschau für Antwort und Original nebeneinander">
+          <span class="v3-preview-heading">DER WORKSPACE</span>
+          <div class="v3-preview-grid">
+            <div class="v3-preview-answer"><span class="v3-preview-panel-label"><span></span> Antwort</span><div class="v3-preview-glyph">✦</div><strong>Eine Antwort, die du prüfen kannst.</strong><p>Fundstellen, Seitenangabe und ein Auszug aus der ausdrücklich gewählten Quelle.</p><div class="v3-preview-source">Quelle &amp; Fundstelle <span>↗</span></div></div>
+            <div class="v3-preview-pdf"><span class="v3-preview-panel-label"><span></span> Original-PDF</span><div class="v3-preview-paper"><span>ORIGINALDOKUMENT</span><div class="v3-preview-line thick"></div><div class="v3-preview-line"></div><div class="v3-preview-line highlighted"></div><div class="v3-preview-line short"></div><div class="v3-preview-line"></div><div class="v3-preview-line short"></div></div></div>
           </div>
-          <span class="byom-shelf-footer"><strong>7 Quellen. Ein Prinzip.</strong><span>Öffnen ↗</span></span>
         </a>
       </section>
+
 
       <section class="pdf-proof" aria-label="V0.8 Original-PDF nachweisen">
         <div class="pdf-proof-top">

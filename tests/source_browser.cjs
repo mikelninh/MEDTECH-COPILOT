@@ -27,6 +27,10 @@ async function question(page,q){
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
  assert.equal(await desktop.locator("#heroQuestionInput").isVisible(),true,"Question-first search must be immediately visible");
  assert.equal(await desktop.locator("#heroAskButton").isEnabled(),true);
+ assert.match(await desktop.locator("#mainTitle").innerText(),/Stelle deine Frage/);
+ assert.equal(await desktop.locator("#heroSourceSelect").isVisible(),true);
+ assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),true);
+ assert.equal(await desktop.locator("#sourceSide").isVisible(),true);
  await desktop.locator("[data-source-group='medtech']").click();
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===2);
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
@@ -37,8 +41,10 @@ async function question(page,q){
  assert.equal(await desktop.locator("#viewer").isVisible(),true);
  await desktop.locator("[data-source-id='lumen']").click();
  await ready(desktop,"lumen");
- const boxes=await Promise.all([".source-chooser","#sourceSide"].map(x=>desktop.locator(x).boundingBox()));
- assert.ok(boxes[1].x>boxes[0].x+boxes[0].width-10,"Source PDF must remain side-by-side on desktop");
+ const boxes=await Promise.all(["#workspaceWelcome","#sourceSide"].map(x=>desktop.locator(x).boundingBox()));
+ assert.ok(boxes[1].x>boxes[0].x+boxes[0].width-10,"Answer panel and original PDF must be side-by-side on desktop");
+ const sourcesRect=await desktop.locator("#sourceChooser").boundingBox();
+ assert.ok(sourcesRect.y>boxes[0].y,"Source library must follow the primary answer/PDF workspace");
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/LUMEN P200/);
  assert.equal(await question(desktop,"Was steht zur Batteriehistorie?"),"QUELLE GEFUNDEN");
  assert.match(await desktop.locator("#citationPage").innerText(),/PDF-SEITE 2/);
@@ -61,8 +67,11 @@ async function question(page,q){
  await ready(desktop,"mpbetreibv");
  assert.match(await desktop.locator("#sourceOfficialLink").getAttribute("href"),/gesetze-im-internet\.de\/mpbetreibv_2025\/MPBetreibV\.pdf/);
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/MPBetreibV/);
- assert.equal(await desktop.locator("#faqPanel").isVisible(),true,"Official-law FAQs should be visible on selection");
+ assert.equal(await desktop.locator("#faqPanel").isVisible(),false,"Long FAQ library should stay collapsed for minimal UI");
+ await desktop.locator("#faqDisclosure > summary").click();
+ assert.equal(await desktop.locator("#faqPanel").isVisible(),true,"Official-law FAQs should be available on demand");
  assert.ok(await desktop.locator(".faq-item").count()>=8,"MPBetreibV should have eight curated questions");
+ await desktop.locator("#qualityDisclosure > summary").click();
  await desktop.locator("#learningConsent").check();
  await desktop.locator(".faq-item summary").first().click();
  assert.match(await desktop.locator(".faq-item").first().locator(".faq-official").getAttribute("href"),/gesetze-im-internet\.de\/mpbetreibv_2025\/__/);
@@ -124,6 +133,8 @@ async function question(page,q){
  await start.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
  await start.locator("#heroAskButton").click();
  assert.equal(await start.locator("#heroRecommendations").isVisible(),true,"Question must produce an explicit source confirmation");
+ assert.equal(await start.locator("#heroSourceSelect").inputValue(),"auto");
+ assert.equal(await start.locator("#workspaceWelcome").isVisible(),true);
  assert.equal(await start.locator("#resultSection").isVisible(),false,"Question must not silently choose a law");
  assert.equal(await start.locator("[data-recommend-source='mpbetreibv']").count(),1);
  await start.locator("[data-recommend-source='mpbetreibv']").click();
@@ -131,6 +142,9 @@ async function question(page,q){
     window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),
     null,{timeout:90000});
  assert.equal(await start.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
+ assert.equal(await start.locator("#workspaceWelcome").isVisible(),false,"Real answer must replace the honest empty state");
+ assert.equal(await start.locator("#heroSourceSelect").inputValue(),"mpbetreibv","Chosen source must remain visible in question bar");
+ assert.match(await start.locator("#answeredQuestion").innerText(),/Medizinproduktebuch/);
  assert.match(await start.locator("#citationText").innerText(),/medizinproduktebuch/i);
  try{
   await start.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0&&
@@ -148,6 +162,26 @@ async function question(page,q){
  assert.equal(await start.locator("#editorialAnswer").isVisible(),false,"Unmatched free text must not invent a curated legal answer");
  assert.ok(await start.locator("#sourceOfficialLink").getAttribute("href"));
  await start.screenshot({path:"artifacts/v12-01-question-first-desktop.png",fullPage:true});
+
+ const directly=await browser.newPage({viewport:{width:1366,height:850}});
+ directly.on("pageerror",e=>errors.push("direct-source: "+e.message));
+ await directly.goto(url,{waitUntil:"networkidle"});
+ await directly.waitForFunction(()=>document.querySelectorAll("#heroSourceSelect option").length===9);
+ await directly.locator("[data-quick-source='mpbetreibv']").click();
+ assert.equal(await directly.locator("#heroSourceSelect").inputValue(),"mpbetreibv");
+ await directly.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
+ await directly.locator("#heroAskButton").click();
+ await directly.waitForFunction(()=>window.MedtechUploadDemo?.status()?.sourceId==="mpbetreibv"&&
+    window.MedtechUploadDemo?.status()?.loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
+ assert.equal(await directly.locator("#heroRecommendations").isVisible(),false,"Explicit source must not ask for a second confirmation");
+ assert.equal(await directly.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
+ const answerRect=await directly.locator("#resultSection").boundingBox();
+ const pdfRect=await directly.locator("#sourceSide").boundingBox();
+ assert.ok(pdfRect.x>answerRect.x+answerRect.width-10,"Answer must appear next to the selected original");
+ assert.ok(pdfRect.y<=answerRect.y+60,"PDF must align at top of answer, not below source cards");
+ await directly.screenshot({path:"artifacts/v3-01-minimal-product-desktop.png",fullPage:true});
+ console.log("PASS V3: selected source chip, direct question, real answer beside PDF, no unnecessary chooser");
+
  console.log("PASS V1.2: question-first, explicit source confirmation, PDF passage overlay and no invented summaries");
 
  console.log("PASS SOURCE E2E desktop: handbook, 5 government-portal legal PDFs, custom PDF, source isolation, side by side");
@@ -173,6 +207,9 @@ async function question(page,q){
  await mobileFirst.locator("[data-recommend-source='mpbetreibv']").click();
  await mobileFirst.waitForFunction(()=>window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
  assert.equal(await mobileFirst.locator("#resultSection").isVisible(),true);
+ assert.equal(await mobileFirst.locator("#workspaceWelcome").isVisible(),false);
+ assert.equal(await mobileFirst.locator("#heroSourceSelect").isVisible(),true);
+
  const resultPosition=await mobileFirst.locator("#resultSection").boundingBox();
  const viewerPosition=await mobileFirst.locator("#sourceSide").boundingBox();
  assert.ok(viewerPosition.y>resultPosition.y,"Mobile answer must appear before long original PDF");
