@@ -44,7 +44,7 @@ async function question(page,q){
   await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"All listed books need visible cover images");
  }
- assert.equal(await desktop.locator("#viewer").isVisible(),true);
+ assert.equal(await desktop.locator("#viewer").isVisible(),false,"Viewer remains hidden until a source is loaded");
  await desktop.locator("[data-source-id='lumen']").click();
  await ready(desktop,"lumen");
  assert.equal(await desktop.locator("#sourceSide").isVisible(),true,"Original becomes visible after source load");
