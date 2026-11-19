@@ -22,6 +22,11 @@ for(const src of manifest.sources){
   assert.equal(src.sourceKind,"government-law-pdf");
   assert.match(src.originalUrl,/^https:\/\/www\.gesetze-im-internet\.de\/[a-z0-9_]+\/[A-Za-z0-9_.-]+\.pdf$/);
   assert.equal(src.fetchedFrom,"www.gesetze-im-internet.de");
+  assert.ok(["official-live","verified-prior-snapshot"].includes(src.retrievalMode),"Must distinguish live and backup source");
+  assert.match(src.sourceSnapshotAt,/^\d{4}-\d{2}-\d{2}$/);
+  const age=Math.round((Date.parse(manifest.retrievedAt+"T00:00:00Z")-Date.parse(src.sourceSnapshotAt+"T00:00:00Z"))/86400000);
+  assert.ok(age>=0&&age<=7,"Source older than seven days: "+src.title);
+
   assert.ok(typeof src.lastAmendedStatement==="string"&&src.lastAmendedStatement.length>7);
   assert.match(src.sourceAuthority,/government-hosted/i);
   assert.ok(bytes.includes(Buffer.from("gesetze-im-internet.de"))||bytes.length>3000,"Government law PDF must contain meaningful original content");
