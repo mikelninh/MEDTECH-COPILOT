@@ -33,30 +33,42 @@
   const heading=norm(faq.sectionMarker),proof=norm(faq.proofPhrase);
   if(heading.length<8||proof.length<6)return null;
   const pages=index.pageTexts;
+  const sectionNumber=faq.sectionMarker.match(/^§\s*(\d+)/);
+  const nextNumber=sectionNumber?Number(sectionNumber[1])+1:null;
+  const nextHeading=faq.nextSectionMarker?norm(faq.nextSectionMarker):"";
+  // Bound the passage by a *real heading*, not bare references like "§ 13 Absatz 1".
+  function crossedNextSection(raw,startOffset){
+   const fragment=String(raw||"").slice(startOffset);
+   const exact=nextHeading&&norm(fragment).indexOf(nextHeading);
+   if(exact>=0)return exact;
+   if(nextNumber===null)return -1;
+   const match=fragment.match(new RegExp("(?:^|\\n)\\s*§\\s*"+nextNumber+"\\s*\\n?\\s*[A-ZÄÖÜ][a-zäöüß]{4,}","m"));
+   return match?norm(fragment.slice(0,match.index)).length:-1;
+  }
   for(let i=0;i<pages.length;i++){
-   const original=pages[i];
-   const txt=norm(original.text);
-   let start=txt.indexOf(heading);
+   const text=norm(pages[i].text);
+   const start=text.indexOf(heading);
    if(start<0)continue;
-   let hit=txt.indexOf(proof,start+heading.length);
-   if(hit<0||hit-start>8500)continue;
-   // Refuse when the passage occurs after another statutory section.
-   const between=txt.slice(start+heading.length,hit);
-   const n=faq.sectionMarker.match(/^§\s*(\d+)/);
-   if(n){
-    const next=Number(n[1])+1;
-    const nextHead=new RegExp("(?:^| )"+next+" [a-z]{5,} ");
-    if(nextHead.test(between))continue;
+   for(let j=i;j<Math.min(pages.length,i+3);j++){
+    const candidate=pages[j],content=norm(candidate.text);
+    const begin=j===i?start+heading.length:0;
+    const hit=content.indexOf(proof,begin);
+    if(hit<0)continue;
+    const raw=String(candidate.text);
+    const nextHeadingStart=crossedNextSection(raw,j===i?Math.max(0,raw.indexOf("§")):0);
+    // On subsequent pages, the proof must appear before the next statute.
+    if(j>i&&nextHeadingStart>=0&&hit>=nextHeadingStart)continue;
+    if(j===i&&hit-start>8500)continue;
+    const relevant=index.chunks.filter(c=>c.page===candidate.number);
+    const exactChunk=relevant.find(c=>norm(c.text).includes(proof));
+    const terms=proof.split(" ").filter(w=>w.length>3);
+    const best=exactChunk||relevant.map(c=>{
+     const txt=norm(c.text),hits=terms.filter(w=>txt.includes(w)).length;
+     return {c,hits};
+    }).sort((x,y)=>y.hits-x.hits)[0]?.c;
+    if(!best||terms.filter(w=>norm(best.text).includes(w)).length<Math.min(2,terms.length))continue;
+    return {page:candidate.number,excerpt:best.text,matchedTerms:terms.filter(w=>norm(best.text).includes(w)).slice(0,8),coverage:1,score:100,proof:"original-pdf-section",section:faq.sectionMarker};
    }
-   const relevant=index.chunks.filter(c=>c.page===original.number);
-   const full=relevant.find(c=>norm(c.text).includes(proof));
-   const terms=proof.split(" ").filter(w=>w.length>3);
-   const best=full||relevant.map(c=>{
-    const content=norm(c.text),hits=terms.filter(w=>content.includes(w)).length;
-    return {c,hits};
-   }).sort((a,b)=>b.hits-a.hits)[0]?.c;
-   if(!best||terms.filter(w=>norm(best.text).includes(w)).length<Math.min(2,terms.length))continue;
-   return {page:original.number,excerpt:best.text,matchedTerms:terms.filter(w=>norm(best.text).includes(w)).slice(0,8),coverage:1,score:100,proof:"original-pdf-section",section:faq.sectionMarker};
   }
   return null;
  }
