@@ -1,0 +1,30 @@
+/* v3.3: quiet first paint. No placeholder dashboard before the first source. */
+body:not(.has-active-source) #workspaceWelcome,
+body:not(.has-active-source) #sourceSide{display:none!important}
+body:not(.has-active-source) .source-workbench{display:block!important;max-width:920px;margin:0 auto!important}
+body:not(.has-active-source) #sourceLibraryDisclosure{width:100%;margin:0!important}
+body:not(.has-active-source) #practiceLab{max-width:920px!important;margin:10px auto 20px!important}
+body:not(.has-active-source) .source-intro{padding-top:clamp(65px,9vh,116px)!important;padding-bottom:53px!important}
+body:not(.has-active-source) #heroQueryStatus:not([data-tone]){position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+body:not(.has-active-source) #heroRecommendations:not(.hidden){max-width:820px;margin:18px auto 0}
+body:not(.has-active-source) .source-library-disclosure,
+body:not(.has-active-source) #practiceLab{border-color:#e9eeea!important;background:transparent!important}
+body:not(.has-active-source) .minimal-disclosure-summary{font-weight:630;font-size:12px;min-height:57px!important;padding:12px 15px!important}
+body:not(.has-active-source) .minimal-disclosure-summary small{font-size:10px}
+body:not(.has-active-source) #practiceLab .practice-expanded{background:white}
+body:not(.has-active-source) .source-intro h1{font-size:clamp(45px,5.5vw,74px)!important}
+body:not(.has-active-source) .source-intro .intro-copy>p{color:#75887b!important}
+body:not(.has-active-source) .site main{min-height:calc(100vh - 180px)}
+body.has-active-source .source-intro{padding-top:38px!important;padding-bottom:29px!important}
+body.has-active-source .source-intro h1{font-size:clamp(35px,3.7vw,48px)!important}
+body.has-active-source .source-intro .intro-copy>p{display:none}
+body.has-active-source .minimal-example-line{display:none}
+body.has-active-source #sourceLibraryDisclosure:not([open]){opacity:.9}
+body.has-active-source .source-workbench{row-gap:14px!important}
+@media(max-width:700px){
+ body:not(.has-active-source) .source-intro{padding-top:clamp(70px,13vh,120px)!important;padding-bottom:38px!important}
+ body:not(.has-active-source) .source-intro h1{font-size:clamp(40px,10.1vw,52px)!important}
+ body:not(.has-active-source) #practiceLab{margin-top:8px!important}
+ body.has-active-source .source-intro{padding:24px 0 16px!important}
+ body.has-active-source .source-intro h1{font-size:34px!important}
+}
