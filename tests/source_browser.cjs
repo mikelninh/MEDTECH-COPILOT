@@ -40,6 +40,8 @@ async function question(page,q){
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
  assert.equal(await desktop.locator("[data-source-id='orion']").count(),1);
  for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  await img.scrollIntoViewIfNeeded();
+  await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"All listed books need visible cover images");
  }
  assert.equal(await desktop.locator("#viewer").isVisible(),true);
@@ -65,6 +67,8 @@ async function question(page,q){
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/Bitte Quelle auswählen/);
  assert.ok((await desktop.locator(".all-law-hint a").getAttribute("href")).includes("gitlaw"));
  for(const img of await desktop.locator(".source-choice .source-cover").all()){
+  await img.scrollIntoViewIfNeeded();
+  await img.evaluate(image=>image.decode());
   assert.equal(await img.evaluate(el=>el.complete&&el.naturalWidth>0),true,"Every legal book must have a loaded cover");
  }
  await desktop.locator("[data-source-id='mpbetreibv']").click();
