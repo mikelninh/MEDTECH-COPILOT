@@ -10,11 +10,11 @@ body{background:#fafbf9;color:var(--v3-ink);font-family:Inter,"Segoe UI",Arial,s
 .safety-strip{background:#f6f9f5;border:1px solid #e7eee7;color:#728474;font-size:11px}
 .byom-launch{background:transparent!important;max-width:1320px;display:flex!important;flex-direction:column;gap:0!important;min-height:0!important;border:0!important;border-radius:0!important;overflow:visible!important;margin:10px auto 35px!important;box-shadow:none!important;color:var(--v3-ink)!important;text-align:center}
 .byom-launch:before{display:none!important}
-.byom-launch-copy{padding:clamp(50px,6vw,85px) clamp(10px,3vw,35px) 34px!important;width:100%;max-width:1120px;margin:auto}
+.byom-launch-copy{padding:clamp(30px,4vw,56px) clamp(10px,3vw,35px) 25px!important;width:100%;max-width:1120px;margin:auto}
 .byom-launch-label{display:inline-block!important;font:760 10px system-ui,sans-serif!important;letter-spacing:.17em;color:#84988a!important}
-.byom-launch h2{font-family:Inter,"Segoe UI",Arial,system-ui,sans-serif;font-size:clamp(45px,5.45vw,78px)!important;font-weight:790!important;letter-spacing:-.078em!important;line-height:1.07!important;margin:21px 0 19px!important;color:#17231b!important}
+.byom-launch h2{font-family:Inter,"Segoe UI",Arial,system-ui,sans-serif;font-size:clamp(44px,4.9vw,70px)!important;font-weight:790!important;letter-spacing:-.078em!important;line-height:1.07!important;margin:17px 0 14px!important;color:#17231b!important}
 .byom-launch h2 em{color:var(--v3-green)!important;font-style:normal!important}
-.byom-launch p{margin:0 auto 29px!important;max-width:620px!important;font-size:15px!important;line-height:1.75!important;color:#69786d!important}
+.byom-launch p{margin:0 auto 22px!important;max-width:620px!important;font-size:15px!important;line-height:1.75!important;color:#69786d!important}
 .v3-home-search{display:flex!important;align-items:center!important;gap:10px!important;justify-content:space-between!important;width:100%;max-width:1080px;margin:0 auto;padding:7px 7px 7px 23px!important;background:#fff!important;border:1px solid #dde5de;border-radius:18px!important;min-height:79px;box-shadow:0 14px 39px rgba(35,54,40,.07)!important;transition:border-color .2s,box-shadow .2s!important}
 .v3-home-search:hover{background:#fff!important;border-color:#91b99e!important;box-shadow:0 16px 45px rgba(27,64,40,.11)!important}
 .v3-home-search-label{display:flex;align-items:center;gap:18px;min-width:0;color:#849187;font-size:14px;font-weight:500}
