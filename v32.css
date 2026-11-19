@@ -1,0 +1,71 @@
+/* V3.2 minimal focus. Progressive disclosure, not another card gallery. */
+.source-intro{padding-top:clamp(50px,7vw,95px)!important;padding-bottom:48px!important;max-width:1000px}
+.source-intro h1{font-size:clamp(42px,5.2vw,72px)!important;letter-spacing:-.08em!important;line-height:1.09!important;margin:0 0 16px!important}
+.source-intro .intro-copy>p{font-size:14px!important;max-width:510px!important;color:#728176!important;margin-bottom:28px!important}
+.hero-query-line{max-width:905px;margin:0 auto;box-shadow:0 8px 30px rgba(27,54,34,.065)!important}
+.minimal-example-line{max-width:905px;margin:14px auto 0;text-align:left}
+.minimal-example-line button{padding:6px 0;background:none;border:0;color:#4f7762;font-size:12px;font-weight:620;cursor:pointer}
+.minimal-example-line button:hover{text-decoration:underline;text-underline-offset:4px}
+.minimal-example-line button span{margin-left:4px}
+.source-intro .hero-query-status{margin:13px auto 0!important;font-size:11px!important;max-width:905px;text-align:left;color:#9aa8a0!important;min-height:0!important}
+.source-intro .hero-query-status[data-tone=warning]{color:#ad6b43!important}
+.source-intro .hero-query-status[data-tone=success]{color:#287748!important}
+.source-intro .hero-query-status[data-tone=action]{color:#276749!important}
+.source-workbench{grid-template-areas:"answer pdf" "composer pdf" "sources sources" "upload upload"!important;row-gap:14px!important;max-width:1240px}
+#sourceLibraryDisclosure{grid-area:sources;display:block;min-width:0}
+#sourceChooser{grid-area:auto!important}
+.source-library-disclosure,.practice-lab{border:1px solid #e4ebe6;background:rgba(255,255,255,.82);border-radius:13px;overflow:hidden}
+.source-library-disclosure{margin-top:4px}
+.source-library-disclosure:not([open]),.practice-lab:not([open]){box-shadow:none}
+.minimal-disclosure-summary{display:flex;cursor:pointer;align-items:center;justify-content:space-between;gap:15px;list-style:none;padding:18px 21px;min-height:65px;font-weight:730;font-size:13px;color:#233e2c;user-select:none}
+.minimal-disclosure-summary::-webkit-details-marker{display:none}
+.minimal-disclosure-summary>span:first-child{display:flex;gap:6px;flex-direction:column}
+.minimal-disclosure-summary small{color:#8c9b90;font-size:11px;font-weight:450}
+.minimal-disclosure-chevron{color:#628270;font-size:21px;transition:transform .18s ease}
+details[open]>.minimal-disclosure-summary .minimal-disclosure-chevron{transform:rotate(180deg)}
+.minimal-disclosure-summary:hover{background:#f7faf7}
+#sourceLibraryDisclosure #sourceChooser{border-radius:0!important;border:0!important;border-top:1px solid #e4ebe6!important;box-shadow:none!important;padding:24px!important;margin:0!important}
+#practiceLab{max-width:1240px!important;margin:18px auto 28px!important;padding:0!important;border-top:1px solid #e4ebe6!important;border-bottom:1px solid #e4ebe6!important}
+#practiceLab .practice-expanded{padding:4px 23px 22px;border-top:1px solid #e7eee8}
+#practiceLab .practice-head{margin:12px 0 14px}
+#practiceLab .practice-head h2{font-size:18px}
+#practiceLab .practice-head p{font-size:11px}
+#practiceLab .practice-choices{grid-template-columns:repeat(4,minmax(0,1fr))}
+#practiceLab .practice-choice{min-height:75px;background:#fff;border-radius:9px}
+.v3-welcome{min-height:345px!important;border-radius:15px}
+.v3-welcome-symbol,.v3-welcome-foot,.v3-try-example{display:none!important}
+.v3-welcome-content{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:48px clamp(28px,4vw,52px)!important}
+.v3-welcome-content h2{font-size:clamp(23px,2.2vw,34px)!important;line-height:1.19!important;color:#3c5946!important;margin:0 0 13px!important;letter-spacing:-.055em!important}
+.v3-welcome-content p{font-size:13px!important;line-height:1.65!important;max-width:340px;color:#8ca092!important}
+#sourceSide:not(.has-source) .viewer-stage{min-height:220px!important;max-height:320px!important}
+#sourceSide:not(.has-source) .viewer-empty{max-height:310px}
+.v3-pdf-placeholder-line{opacity:.5}
+.limit-foot{max-width:1240px;margin:35px auto!important}
+footer{font-size:10px!important}
+@media(max-width:850px){
+ .source-workbench{grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"answer" "composer" "pdf" "sources" "upload"!important;gap:12px!important}
+ #sourceLibraryDisclosure{grid-area:sources!important}
+ #sourceSide{grid-area:pdf!important}
+ #practiceLab .practice-choices{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:700px){
+ .topbar{height:66px!important;min-height:66px!important}
+ .topbar .nav-demos{display:none}
+ .source-intro{padding:46px 0 33px!important}
+ .source-intro h1{font-size:clamp(40px,10.6vw,53px)!important;text-align:left}
+ .source-intro .intro-copy>p{font-size:13px!important;text-align:left;margin:0 0 24px!important}
+ .hero-query-line{box-shadow:none!important}
+ .minimal-example-line{margin-top:13px}
+ #sourceLibraryDisclosure{width:100%}
+ .minimal-disclosure-summary{padding:16px;min-height:60px;font-size:12px}
+ #sourceLibraryDisclosure #sourceChooser{padding:14px!important}
+ #practiceLab{margin:11px auto 22px!important}
+ #practiceLab .practice-expanded{padding:4px 12px 17px}
+ #practiceLab .practice-choices{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #practiceLab .practice-head h2{font-size:16px}
+ .v3-welcome{min-height:220px!important}
+ .v3-welcome-content{padding:26px!important}
+ .v3-welcome-content h2{font-size:24px!important}
+ #sourceSide:not(.has-source) .viewer-stage{min-height:170px!important;max-height:210px!important}
+}
+@media(prefers-reduced-motion:reduce){.minimal-disclosure-chevron{transition:none}}
