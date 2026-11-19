@@ -238,6 +238,7 @@ async function selectGroup(group){
  if(!["medtech","laws","own"].includes(group))return;
  state.group=group;
  await destroySource();
+ setSourceChoice(group==="own"?"own":"auto");
  $("ownPdfPanel").classList.toggle("hidden",group!=="own");
  $("allLawHint").classList.toggle("hidden",group!=="laws");
  document.querySelectorAll("[data-source-group]").forEach(b=>{
