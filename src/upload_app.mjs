@@ -514,7 +514,7 @@ function paintExcerpt(evidence){
  const raw=String(evidence?.excerpt||"");
  const words=[...new Set((evidence?.matchedTerms||[]).map(String).filter(w=>w.length>=4))].sort((a,b)=>b.length-a.length);
  if(!words.length){el.textContent=raw;return}
- const escaped=words.map(w=>w.replace(/[.*+?^${"}()|[\]\\]/g,"\\$&"));
+ const escaped=words.map(w=>w.replace(/[^A-Za-z0-9ÄÖÜäöüß]/g,"")).filter(Boolean);
  let matcher;
  try{matcher=new RegExp("("+escaped.join("|")+")","gi")}catch(_){el.textContent=raw;return}
  let index=0;
