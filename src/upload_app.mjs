@@ -507,45 +507,94 @@ async function renderPage(pageNumber){
   $("pageCanvas").classList.add("hidden");
  }
 }
+function paintExcerpt(evidence){
+ const el=$("citationText");el.replaceChildren();
+ const raw=String(evidence?.excerpt||"");
+ const words=[...new Set((evidence?.matchedTerms||[]).map(String).filter(w=>w.length>=4))].sort((a,b)=>b.length-a.length);
+ if(!words.length){el.textContent=raw;return}
+ const escaped=words.map(w=>w.replace(/[.*+?^${"}()|[\]\\]/g,"\\$&"));
+ let matcher;
+ try{matcher=new RegExp("("+escaped.join("|")+")","gi")}catch(_){el.textContent=raw;return}
+ let index=0;
+ for(const found of raw.matchAll(matcher)){
+  if(found.index>index)el.append(document.createTextNode(raw.slice(index,found.index)));
+  const mark=mk("mark","passage-term",found[0]);
+  el.append(mark);index=found.index+found[0].length;
+ }
+ if(index<raw.length)el.append(document.createTextNode(raw.slice(index)));
+}
+function editorialAnswer(question){
+ const panel=$("editorialAnswer");panel.replaceChildren();panel.classList.add("hidden");
+ if(!state.source||state.source.group!=="laws")return;
+ const matched=state.faqCatalog?.faqs?.find(f=>f.sourceId===state.source.id&&Highlight?.normalize(f.question)===Highlight?.normalize(question));
+ if(!matched)return;
+ panel.append(mk("div","editorial-label","KURZORIENTIERUNG · REDAKTIONELL, NICHT FACHLICH FREIGEGEBEN"));
+ panel.append(mk("p","",matched.answer));
+ const link=mk("a","editorial-link",matched.answerReference+" · geltende Norm prüfen ↗");
+ link.href=matched.sourceUrl;link.target="_blank";link.rel="noopener noreferrer";panel.append(link);
+ panel.classList.remove("hidden");
+}
+function closeVerify(){
+ const side=$("sourceSide");
+ if(!side)return;
+ side.classList.remove("verify-open");
+ document.body.classList.remove("verify-mode");
+ const close=$("verifyClose");if(close)close.classList.add("hidden");
+}
+function openVerify(){
+ if(!state.pdf)return;
+ const side=$("sourceSide");
+ if(window.matchMedia("(max-width:700px)").matches){
+  side.classList.add("verify-open");
+  document.body.classList.add("verify-mode");
+  $("verifyClose").classList.remove("hidden");
+  $("verifyClose").focus({preventScroll:true});
+ }else{
+  side.scrollIntoView({behavior:"smooth",block:"nearest"});
+  side.classList.add("verify-pulse");
+  window.setTimeout(()=>side.classList.remove("verify-pulse"),1100);
+ }
+}
 function showResult(result){
  const statusLabel=result.status==="evidence"?"QUELLE GEFUNDEN":result.status==="blocked"?"SICHERHEITSGRENZE":"NICHT BELEGT";
  $("resultSection").classList.remove("hidden");
  $("answerStatus").textContent=statusLabel;
  $("answerStatus").className="answer-status "+result.status;
- $("answerTitle").textContent=result.status==="evidence"?"Das steht tatsächlich im Dokument.":result.status==="blocked"?"Diese Anfrage beantworten wir nicht.":"Keine ausreichende Evidenz gefunden.";
+ $("answerTitle").textContent=result.status==="evidence"?"Eine Fundstelle. Direkt im Original.":result.status==="blocked"?"Sicherheit geht vor.":"Keine belastbare Fundstelle gefunden.";
  $("feedbackAcknowledgement").textContent="";
  $("answerHelpful").disabled=false;$("answerUnhelpful").disabled=false;
  $("answerLead").textContent=result.reason;
  const c=$("citationCard"),extra=$("additionalCitations");
  c.classList.add("hidden");extra.replaceChildren();
+ $("editorialAnswer").replaceChildren();$("editorialAnswer").classList.add("hidden");
+ state.activeEvidence=null;
  if(result.status==="evidence"){
   const first=result.evidence[0];
-  $("citationPage").textContent="PDF-SEITE "+first.page;
-  $("citationText").textContent=first.excerpt;
-  $("citationMeta").textContent="Wortgetreuer Indexauszug · "+first.matchedTerms.length+" Suchbegriffe gefunden";
-  $("goToPage").onclick=()=>renderPage(first.page);
+  state.activeEvidence=first;
+  editorialAnswer(state.lastQuestion);
+  const showEvidence=ev=>{
+   state.activeEvidence=ev;
+   $("citationPage").textContent="PDF-SEITE "+ev.page;
+   paintExcerpt(ev);
+   $("citationMeta").textContent="Quellenauszug · "+ev.matchedTerms.length+" Übereinstimmungen · im Original prüfen";
+   $("goToPage").onclick=()=>renderPage(ev.page);
+   renderPage(ev.page);
+  };
   c.classList.remove("hidden");
+  showEvidence(first);
   for(const ev of result.evidence.slice(1)){
    const b=mk("button","more-citation","Weitere Fundstelle: Seite "+ev.page+" ↗");
-   b.type="button";b.addEventListener("click",()=>{
-    $("citationText").textContent=ev.excerpt;
-    $("citationPage").textContent="PDF-SEITE "+ev.page;
-    $("citationMeta").textContent="Wortgetreuer Indexauszug · "+ev.matchedTerms.length+" Suchbegriffe gefunden";
-    $("goToPage").onclick=()=>renderPage(ev.page);
-    renderPage(ev.page);
-   });
+   b.type="button";b.addEventListener("click",()=>showEvidence(ev));
    extra.append(b);
   }
-  $("viewerTrustNote").textContent="Originalseite zur gefundenen Passage. Gedruckte Seitenzahlen können abweichen.";
-  renderPage(first.page);
+  $("viewerTrustNote").textContent="Gold markierte Passagen sind visuelle Suchhilfen. Für die vollständige Bedeutung das Original und seinen Kontext prüfen.";
  }else{
-  // A refusal or non-answer must not visually inherit the previous citation.
-  state.renderVersion++;
-  state.renderedPage=0;
+  state.activeEvidence=null;
+  state.renderVersion++;state.renderedPage=0;
+  $("pdfHighlights").replaceChildren();
   if(state.render){try{state.render.cancel()}catch(_){}}
-  // Keep the expressly chosen PDF visible, but reset the prior citation context.
   if(state.pdf)renderPage(1);
-  $("viewerTrustNote").textContent="Originalquelle ist weiter sichtbar, aber zu dieser Frage gibt es keine belegte Fundstelle.";
+  $("viewerTrustNote").textContent="Original bleibt verfügbar, aber keine belegte Antwort auf diese Frage.";
   const link=$("openOriginal");
   link.removeAttribute("href");link.classList.add("disabled");
   link.setAttribute("aria-disabled","true");link.tabIndex=-1;
@@ -553,9 +602,10 @@ function showResult(result){
  $("resultSection").scrollIntoView({behavior:"smooth",block:"start"});
 }
 function ask(question){
- const result=Core.search(state.index,question);
+ state.lastQuestion=String(question||"");
+ const result=Core.search(state.index,state.lastQuestion);
  showResult(result);
- learning?.ask(state.source?.id||"other",question,result.status);
+ learning?.ask(state.source?.id||"other",state.lastQuestion,result.status);
  paintLearningCounts();
  return result;
 }
