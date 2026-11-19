@@ -48,7 +48,7 @@ async function ask(page,question,expected,pageNo){
  const nav=await page.goto(BASE+"upload.html",{waitUntil:"networkidle"});
  assert.equal(nav.status(),200);
  await page.waitForFunction(()=>!!window.MedtechUploadDemo,{timeout:12000});
- assert.match(await page.locator("h1").innerText(),/Stelle deine Frage\.\s*Prüfe das Original\./);
+ assert.match(await page.locator("h1").innerText(),/Was gilt in der Medizintechnik/);
  assert.equal(await page.locator("#workspaceWelcome").isVisible(),false,"No idle answer card on minimalist first paint");
  assert.equal(await page.locator("#sourceSide").isVisible(),false,"No idle PDF card on first paint");
  assert.equal(await page.locator("#heroAskButton").isEnabled(),true,"New first-question entry must be interactive");
@@ -118,6 +118,7 @@ async function ask(page,question,expected,pageNo){
  const overflow=await mobile.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  assert.ok(overflow<=3,"Mobile horizontal overflow: "+overflow);
  await mobile.screenshot({path:"artifacts/v09-04-mobile-source.png",fullPage:true});
+ await mobile.locator("#verifySource").click();
  await mobile.locator("#prevPage").click();
  assert.equal(await mobile.locator("#viewerPageLabel").innerText(),"Seite 2 von 4");
  assert.deepEqual(browserErrors,[],"JavaScript browser errors");

@@ -9,6 +9,12 @@ Die Fallwerkstatt führt eine Fachkraft von der ersten Beobachtung bis zur dokum
 
 Mehrere Fälle bleiben im Browserprofil verfügbar. Noch vorhandene PDF-Fassungen können aus der Akte erneut geöffnet werden. Bei einem abweichenden Fingerprint bleiben Auszug und Fingerprint erhalten. Die eingebauten PDF-Snapshots werden in CI überprüft. Die verlinkte amtliche Fassung ist für den Geltungsstand maßgebend. Eigene PDFs und Gesprächsverläufe bleiben im Tab. Falltexte und ausdrücklich gewählte öffentliche Belege liegen im lokalen Browserspeicher. Der Export dient zur Weitergabe außerhalb der Demo.
 
+## Einstieg
+
+Auf der Startseite genügt eine Frage oder ein Klick auf das STK-Beispiel. Bei eindeutig zuordenbaren Rechtsfragen öffnet sich die passende amtliche Quelle automatisch. Bei unklarer Zuordnung erscheint eine kurze Auswahl. Eine Frage unter „Nachfragen“ bleibt in der geöffneten Quelle. Die markierte PDF-Seite steht am Desktop neben der Antwort und öffnet sich mobil über „Original-PDF ansehen“.
+
+Die rollenbezogenen Beispiele, die manuelle Quellenauswahl und die Fallwerkstatt sind unter „Weitere Werkzeuge“ erreichbar.
+
 ## Beispielfragen nach Rolle oder Situation
 
 Der Katalog enthält 53 redaktionell aufbereitete Fragen zu amtlichen Quellen. Vier Rollen und sechs Situationen zeigen jeweils zehn Fragen in fachlich priorisierter Reihenfolge. In diesen Listen erscheinen 51 unterschiedliche Fragen. Zwei weitere Fragen sind in der jeweiligen Quellenbibliothek verfügbar. Die Reihenfolge ist anhand amtlicher FAQ und Arbeitssituationen redaktionell gewählt. Es liegen keine gemessenen Nutzungshäufigkeiten vor.

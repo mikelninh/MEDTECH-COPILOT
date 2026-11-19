@@ -27,13 +27,17 @@ async function question(page,q){
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
  assert.equal(await desktop.locator("#heroQuestionInput").isVisible(),true,"Question-first search must be immediately visible");
  assert.equal(await desktop.locator("#heroAskButton").isEnabled(),true);
- assert.match(await desktop.locator("#mainTitle").innerText(),/Stelle deine Frage/);
- assert.equal(await desktop.locator("#heroSourceSelect").isVisible(),true);
+ assert.match(await desktop.locator("#mainTitle").innerText(),/Medizintechnik/);
+ assert.equal(await desktop.locator("#heroSourceSelect").isVisible(),false,"Manual source picker stays in the tools");
+ assert.equal(await desktop.locator("#toolsDisclosure").evaluate(el=>el.open),false);
+ assert.equal(await desktop.locator("#welcomeExample").isVisible(),true,"One example must be visible on the first screen");
+ await desktop.screenshot({path:"artifacts/simple-question-first.png",fullPage:true});
  assert.equal(await desktop.locator("#workspaceWelcome").isVisible(),false,"Empty answer mockup must not crowd first paint");
  assert.equal(await desktop.locator("#sourceSide").isVisible(),false,"Empty PDF mockup must not crowd first paint");
  assert.equal(await desktop.locator("#sourceLibraryDisclosure").evaluate(el=>el.open),false,"Source shelf must start collapsed");
  assert.equal(await desktop.locator("#practiceLab").evaluate(el=>el.open),false,"Question catalogue must start collapsed");
  assert.equal(await desktop.locator(".v3-quickbar").count(),0,"No duplicate chip bar");
+ await desktop.locator("#toolsDisclosure > summary").click();
  await desktop.locator("#sourceLibraryDisclosure > summary").click();
  await desktop.locator("[data-source-group='medtech']").click();
  await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===2);
@@ -90,6 +94,7 @@ async function question(page,q){
  assert.equal(persisted.includes("Wer gilt als Betreiber"),false,"Never persist raw FAQ text");
 
  assert.equal(await question(desktop,"Was steht zum Medizinproduktebuch?"),"QUELLE GEFUNDEN");
+ await desktop.locator("#answerQuality > summary").click();
  await desktop.locator("#answerHelpful").click();
  const feedback=await desktop.evaluate(()=>JSON.parse(localStorage.getItem("medtech_source_quality_aggregate_v1")));
  assert.equal(feedback.asked,1);
@@ -142,27 +147,25 @@ async function question(page,q){
  await start.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
  await start.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
  await start.locator("#heroAskButton").click();
- assert.equal(await start.locator("#heroRecommendations").isVisible(),true,"Question must produce an explicit source confirmation");
- assert.equal(await start.locator("#heroSourceSelect").inputValue(),"auto");
- assert.equal(await start.locator("#workspaceWelcome").isVisible(),false,"Start with a single question input, not empty workspace");
- assert.equal(await start.locator("#resultSection").isVisible(),false,"Question must not silently choose a law");
- assert.equal(await start.locator("[data-recommend-source='mpbetreibv']").count(),1);
- await start.locator("[data-recommend-source='mpbetreibv']").click();
  await start.waitForFunction(()=>window.MedtechUploadDemo.status().sourceId==="mpbetreibv"&&
     window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),
     null,{timeout:90000});
  assert.equal(await start.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
+ assert.equal(await start.locator("#heroRecommendations").isVisible(),false,"Recognized legal question answers in one action");
+ assert.equal(await start.locator("#quoteDisclosure").evaluate(el=>el.open),false,"A verified short answer precedes the excerpt");
  assert.equal(await start.locator("#workspaceWelcome").isVisible(),false,"Real answer must replace the honest empty state");
  assert.equal(await start.locator("#heroSourceSelect").inputValue(),"mpbetreibv","Chosen source must remain visible in question bar");
  assert.match(await start.locator("#answeredQuestion").innerText(),/Medizinproduktebuch/);
- assert.match(await start.locator("#citationText").innerText(),/medizinproduktebuch/i);
+ await start.locator("#quoteDisclosure > summary").click();
+ assert.equal(await start.locator("#citationText").isVisible(),true);
+ assert.match(await start.locator("#citationText").textContent(),/medizinproduktebuch/i);
  try{
   await start.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0&&
     document.querySelectorAll("#pdfHighlights .pdf-passage-hit").length>0,null,{timeout:16000});
  }catch(error){
   console.error("V12_HIGHLIGHT_DIAGNOSTIC",JSON.stringify({
    status:await start.evaluate(()=>window.MedtechUploadDemo?.status()),
-   excerpt:(await start.locator("#citationText").innerText()).slice(0,200),
+   excerpt:(await start.locator("#citationText").textContent()).slice(0,200),
    highlights:await start.locator("#pdfHighlights .pdf-passage-hit").count(),
    canvasVisible:await start.locator("#pageCanvas").isVisible()
   }));
@@ -177,6 +180,8 @@ async function question(page,q){
  directly.on("pageerror",e=>errors.push("direct-source: "+e.message));
  await directly.goto(url,{waitUntil:"networkidle"});
  await directly.waitForFunction(()=>document.querySelectorAll("#heroSourceSelect option").length===9);
+ await directly.locator("#toolsDisclosure > summary").click();
+ await directly.locator("#sourceLibraryDisclosure > summary").click();
  await directly.locator("#heroSourceSelect").selectOption("mpbetreibv");
  assert.equal(await directly.locator("#heroSourceSelect").inputValue(),"mpbetreibv");
  await directly.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
@@ -185,7 +190,7 @@ async function question(page,q){
     window.MedtechUploadDemo?.status()?.loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
  assert.equal(await directly.locator("#heroRecommendations").isVisible(),false,"Explicit source must not ask for a second confirmation");
  assert.equal(await directly.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
- assert.match(await directly.locator("#heroQueryStatus").innerText(),/Textstelle.*gefunden/,"Status must finish, not remain in loading");
+ assert.equal(await directly.locator("#heroQueryStatus").innerText(),"","Status clears after a successful answer");
  const answerRect=await directly.locator("#resultSection").boundingBox();
  const pdfRect=await directly.locator("#sourceSide").boundingBox();
  assert.ok(pdfRect.x>answerRect.x+answerRect.width-10,"Answer must appear next to the selected original");
@@ -193,7 +198,7 @@ async function question(page,q){
  await directly.screenshot({path:"artifacts/v3-01-minimal-product-desktop.png",fullPage:true});
  console.log("PASS V3: selected source chip, direct question, real answer beside PDF, no unnecessary chooser");
 
- console.log("PASS V1.2: question-first, explicit source confirmation, PDF passage overlay and no invented summaries");
+ console.log("PASS one-step source recognition, retained manual selection, PDF passage overlay and no invented summaries");
 
  console.log("PASS SOURCE E2E desktop: handbook, 5 government-portal legal PDFs, custom PDF, source isolation, side by side");
 
@@ -201,6 +206,7 @@ async function question(page,q){
  mobile.on("pageerror",e=>errors.push("mobile "+e.message));
  await mobile.goto(url,{waitUntil:"networkidle"});
  await mobile.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ await mobile.locator("#toolsDisclosure > summary").click();
  await mobile.locator("#sourceLibraryDisclosure > summary").click();
  await mobile.locator("[data-source-group='medtech']").click();
  await mobile.locator("[data-source-id='lumen']").click();
@@ -214,23 +220,27 @@ async function question(page,q){
  mobileFirst.on("pageerror",e=>errors.push("mobile-first: "+e.message));
  await mobileFirst.goto(url,{waitUntil:"networkidle"});
  await mobileFirst.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
- await mobileFirst.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
- await mobileFirst.locator("#heroAskButton").click();
- await mobileFirst.locator("[data-recommend-source='mpbetreibv']").click();
+ await mobileFirst.locator("#welcomeExample").click();
  await mobileFirst.waitForFunction(()=>window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
  assert.equal(await mobileFirst.locator("#resultSection").isVisible(),true);
  assert.equal(await mobileFirst.locator("#workspaceWelcome").isVisible(),false);
- assert.equal(await mobileFirst.locator("#heroSourceSelect").isVisible(),true);
-
- const resultPosition=await mobileFirst.locator("#resultSection").boundingBox();
- const viewerPosition=await mobileFirst.locator("#sourceSide").boundingBox();
- assert.ok(viewerPosition.y>resultPosition.y,"Mobile answer must appear before long original PDF");
+ assert.equal(await mobileFirst.locator("#heroSourceSelect").isVisible(),false);
+ assert.match(await mobileFirst.locator("#answeredQuestion").innerText(),/sicherheitstechnische Kontrolle/);
+ assert.equal(await mobileFirst.locator("#sourceSide").isVisible(),false,"Mobile reader sees the answer before the PDF overlay");
  await mobileFirst.locator("#verifySource").click();
  assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),true);
  assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>getComputedStyle(el).position),"fixed","Mobile verify must truly cover the viewport");
  await mobileFirst.screenshot({path:"artifacts/v12-02-verify-mobile.png",fullPage:true});
  await mobileFirst.locator("#verifyClose").click();
  assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),false);
+ await mobileFirst.locator("#restartQuestion").click();
+ assert.equal(await mobileFirst.locator("#heroQuestionInput").inputValue(),"");
+ assert.equal(await mobileFirst.locator("#resultSection").isVisible(),false);
+ await mobileFirst.locator("#heroQuestionInput").fill("MPDG oder MPBetreibV");
+ await mobileFirst.locator("#heroAskButton").click();
+ assert.equal(await mobileFirst.locator("#heroRecommendations").isVisible(),true);
+ assert.equal(await mobileFirst.locator("[data-recommend-source]").count(),2);
+ assert.equal(await mobileFirst.locator("#resultSection").isVisible(),false);
  const mobileFirstOverflow=await mobileFirst.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  assert.ok(mobileFirstOverflow<=3,"Question-first mobile overflow "+mobileFirstOverflow);
  console.log("PASS V1.2 mobile: answer-first, explicit PDF fullscreen verification, escape and zero overflow");
@@ -242,7 +252,7 @@ async function question(page,q){
  await fast.goto(url,{waitUntil:"networkidle"});
  await fast.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===10,null,{timeout:15000});
  assert.equal(await fast.locator("#practiceLab").evaluate(el=>el.open),false,"Shortcuts should not crowd the home view");
- await fast.locator("#practiceLab > summary").click();
+ await fast.getByRole("link",{name:"Weitere Beispielfragen"}).click();
  assert.match(await fast.locator("#practiceLab").innerText(),/Redaktionelle Auswahl nach Praxisrelevanz/i);
  const {contexts}=require("../data/legal_faq.json");
  assert.equal(await fast.locator("#practiceContext optgroup").count(),2);
@@ -262,7 +272,7 @@ async function question(page,q){
     !document.getElementById("resultSection").classList.contains("hidden"),
    {law,question},{timeout:25000});
   assert.equal(await fast.locator("#editorialAnswer").isVisible(),true,"Curated answer requires a verified statutory proof for "+id);
-  assert.match(await fast.locator("#citationText").innerText(),new RegExp(needle,"i"),"Real PDF proof absent: "+id);
+  assert.match(await fast.locator("#citationText").textContent(),new RegExp(needle,"i"),"Real PDF proof absent: "+id);
   assert.match(await fast.locator("#sourceOfficialLink").getAttribute("href"),/^https:\/\/www\.gesetze-im-internet\.de\//);
   assert.equal(await fast.locator("#heroSourceSelect").inputValue(),law);
   await fast.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0,null,{timeout:15000});
@@ -283,7 +293,7 @@ async function question(page,q){
   ["vorkommnis","p_report_definition","mpamiv","hätte haben können"]
  ])await tryShortcut(context,id,law,proof);
  await fast.locator("#additionalCitations button").click();
- assert.match(await fast.locator("#citationText").innerText(),/schwerwiegende Gefahr für die öffentliche Gesundheit/);
+ assert.match(await fast.locator("#citationText").textContent(),/schwerwiegende Gefahr für die öffentliche Gesundheit/);
  await fast.locator("#practiceReturn").click();
  assert.equal(await fast.locator("#practiceContext").inputValue(),"vorkommnis");
  assert.ok(await fast.locator("#practiceContext").evaluate(node=>node===document.activeElement));
@@ -294,7 +304,7 @@ async function question(page,q){
  mobileQuick.on("pageerror",e=>errors.push("practice-mobile: "+e.message));
  await mobileQuick.goto(url,{waitUntil:"networkidle"});
  await mobileQuick.waitForFunction(()=>document.querySelectorAll("[data-practice-id]").length===10);
- await mobileQuick.locator("#practiceLab > summary").click();
+ await mobileQuick.getByRole("link",{name:"Weitere Beispielfragen"}).click();
  await mobileQuick.locator("#practiceLab").screenshot({path:"artifacts/context-questions-mobile.png"});
  await mobileQuick.locator('[data-practice-id="b04"]').click();
  await mobileQuick.waitForFunction(()=>document.getElementById("answerStatus")?.textContent==="QUELLE GEFUNDEN"&&

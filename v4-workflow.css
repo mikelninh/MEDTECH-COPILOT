@@ -142,3 +142,92 @@
   #practiceLab .practice-expanded { padding: .9rem .8rem; }
   #practiceLab .practice-choices { grid-template-columns: 1fr; }
 }
+
+/* A question, a starting example, and the tools only when needed. */
+.simple-workspace .topbar { min-height: 66px !important; height: 66px !important; }
+.first-example a:hover, .restart-question:hover { text-decoration: underline; }
+.simple-workspace .source-intro {
+  max-width: 760px;
+  padding: clamp(58px, 10vh, 100px) 0 34px !important;
+}
+.simple-workspace.has-active-source .source-intro { padding: 28px 0 23px !important; }
+.simple-workspace .source-intro #mainTitle {
+  font-size: clamp(32px, 4.8vw, 57px) !important;
+  letter-spacing: -.056em !important;
+  margin: 0 0 .75rem !important;
+}
+.simple-workspace.has-active-source .source-intro #mainTitle { font-size: clamp(27px, 3.2vw, 40px) !important; }
+.simple-workspace .source-intro .intro-copy > p:not(.hero-query-status) {
+  color: #405f50 !important;
+  font-size: 1rem !important;
+  margin: 0 auto 1.25rem !important;
+}
+.simple-workspace .hero-query-line { min-height: 60px; border-radius: 12px !important; }
+.simple-workspace .hero-query-line input { font-size: 1rem !important; height: 48px; }
+.simple-workspace .hero-query-line button { height: 46px; min-width: 94px; border-radius: 8px !important; font-size: .9rem !important; }
+.simple-workspace .hero-query-status:empty { display: none; }
+.simple-workspace .hero-query-status:not(:empty) { font-size: .9rem !important; max-width: none; }
+.simple-workspace .hero-recommend-card { min-height: 44px; font-weight: 680; padding: .55rem .7rem; }
+.simple-workspace .hero-recommend-note, .simple-workspace .hero-pending { font-size: .9rem !important; }
+.first-example { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem; margin-top: .95rem; text-align: left; }
+.first-example button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: .16rem .8rem;
+  align-items: center;
+  padding: .65rem .85rem;
+  border: 1px solid #bfd6c4;
+  border-radius: 9px;
+  background: #edf6ed;
+  color: #234d36;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+.first-example button:hover { background: #e3f0e4; }
+.first-example button:disabled { opacity: .72; cursor: wait; }
+.first-example button span:first-child { grid-column: 1; font-size: .78rem; }
+.first-example strong { grid-column: 1; grid-row: 2; font-size: .96rem; font-weight: 700; }
+.first-example-arrow { grid-column: 2; grid-row: 1 / 3; font-size: 1.2rem; }
+.first-example a, .restart-question { color: #285b42; font-size: .86rem; text-underline-offset: .18em; }
+.first-example a { padding: .45rem .1rem; }
+.restart-question { border: 0; background: transparent; cursor: pointer; padding: .35rem; }
+.workspace-tools { max-width: 760px; margin: .25rem auto 1.15rem; }
+.workspace-tools > summary { cursor: pointer; color: #2b5540; font-weight: 650; font-size: .9rem; padding: .55rem 0; }
+.tools-content { display: grid; gap: .65rem; margin: .4rem 0 1rem; }
+.simple-workspace #toolsDisclosure :is(#practiceLab, #caseWorkspace, #sourceLibraryDisclosure) { margin: 0 !important; width: 100%; }
+.manual-source { display: grid; align-items: start; justify-items: start; gap: .4rem; margin-bottom: 1rem; font-size: .9rem; color: #285340; }
+.manual-source select { min-height: 44px; color: #234531; background: #fff; border: 1px solid #b9cdc0; border-radius: 8px; padding: .4rem .6rem; font: inherit; max-width: 100%; }
+.simple-workspace .source-workbench { grid-template-areas: "answer pdf" "composer pdf" "upload upload" !important; }
+.simple-workspace .source-workbench:has(#ownPdfPanel:not(.hidden)) { grid-template-areas: "upload upload" "answer pdf" "composer pdf" !important; }
+.simple-workspace #answerTitle:empty,
+.simple-workspace .has-answer:has(#editorialAnswer:not(.hidden)) #answerLead,
+.simple-workspace .has-answer .result-head { display: none; }
+.simple-workspace #answerTitle { color: #693f2d; font-weight: 680; }
+.simple-workspace .answer-side > h2 { letter-spacing: -.036em !important; }
+.simple-workspace #editorialAnswer { margin: 0 !important; padding: 0 !important; background: transparent !important; border: 0 !important; }
+.simple-workspace #editorialAnswer :is(p, .dialog-claim p) { font-size: 1.02rem; line-height: 1.62; color: #234638; }
+.simple-workspace #editorialAnswer .editorial-link { color: #335e49; font-size: .82rem; }
+.simple-workspace .evidence-actions { align-items: center; }
+#citationPage { color: #436450; font-size: .75rem; }
+.quote-disclosure { margin: 0 .8rem .6rem; color: #315943; font-size: .85rem; }
+.quote-disclosure summary { cursor: pointer; padding: .3rem 0; }
+.simple-workspace #citationText { padding: .75rem .35rem; }
+.simple-workspace .answer-quality summary { cursor: pointer; color: #416652; font-size: .85rem; }
+.simple-workspace .answer-bottom { color: #516b5b; }
+.simple-workspace #askSection .workspace-header { display: flex; align-items: center; }
+.simple-workspace #askSection .workspace-header h2 { margin: 0; }
+.simple-workspace .boundary { max-width: 760px; margin: 1rem auto !important; }
+.simple-workspace .back-home { display: block; max-width: 760px; margin: .3rem auto 1.2rem; }
+@media (max-width: 700px) {
+  .simple-workspace .source-intro { padding: 35px 0 22px !important; }
+  .simple-workspace .hero-query-line { display: flex !important; column-gap: 0 !important; }
+  .simple-workspace .hero-query-line button { flex: 0 0 auto; min-width: 72px !important; width: auto; font-size: .88rem !important; }
+  .simple-workspace .hero-search-icon { margin-inline: .25rem; width: 17px; }
+  .simple-workspace .hero-query-line input { width: auto; padding-inline: .3rem !important; }
+  .first-example { align-items: flex-start; flex-direction: column; gap: .45rem; }
+  .first-example button { width: 100%; }
+  .simple-workspace .source-workbench { grid-template-areas: "answer" "composer" "pdf" "upload" !important; }
+  .simple-workspace .source-workbench:has(#ownPdfPanel:not(.hidden)) { grid-template-areas: "upload" "answer" "composer" "pdf" !important; }
+  .simple-workspace .source-workbench:has(#resultSection:not(.hidden)) #sourceSide:not(.verify-open) { display: none !important; }
+}

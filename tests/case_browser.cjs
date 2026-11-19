@@ -35,6 +35,7 @@ async function contains(locator, needle) {
     page.on("pageerror", error => errors.push(error.message));
     await ready(page);
     assert.equal(await page.locator("#caseWorkspace").evaluate(el => el.open), false);
+    if (!await page.locator("#toolsDisclosure").evaluate(el => el.open)) await page.locator("#toolsDisclosure > summary").click();
     await page.locator("#caseWorkspace > summary").click();
     await page.locator("#caseCreate").click();
     const id = await page.locator("#casePicker").inputValue();
@@ -75,6 +76,7 @@ async function contains(locator, needle) {
     assert.match(report, /SHA-256: [a-f0-9]{64}/);
 
     await ready(page);
+    if (!await page.locator("#toolsDisclosure").evaluate(el => el.open)) await page.locator("#toolsDisclosure > summary").click();
     await page.locator("#caseWorkspace > summary").click();
     await page.locator("#casePicker").selectOption(id);
     assert.equal(await page.locator("[data-case-field=owner]").inputValue(), "Medizintechnik");
@@ -106,6 +108,7 @@ async function contains(locator, needle) {
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     mobile.on("pageerror", error => errors.push(error.message));
     await ready(mobile);
+    if (!await mobile.locator("#toolsDisclosure").evaluate(el => el.open)) await mobile.locator("#toolsDisclosure > summary").click();
     await mobile.locator("#caseWorkspace > summary").click();
     await mobile.locator("#caseCreate").click();
     assert.ok(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 3));

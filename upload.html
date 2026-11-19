@@ -18,41 +18,160 @@
 <script defer src="./src/learning_loop.js"></script>
 <script type="module" src="./src/upload_app.mjs"></script>
 </head>
-<body>
+<body class="simple-workspace">
 <div class="site">
   <header class="topbar">
     <a href="./upload.html" class="brand" aria-label="MEDTECH COPILOT">
       <span class="brand-mark" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 40 40" fill="none"><path d="M7 8a9 9 0 0 1 9-5h3v16H3v-3a9 9 0 0 1 4-8Z" fill="#79C98B"/><path d="M24 3h4a9 9 0 0 1 9 9v7H21V6a3 3 0 0 1 3-3Z" fill="#00673B"/><path d="M3 22h16v15h-7a9 9 0 0 1-9-9v-6Z" fill="#9ADE9F"/><path d="M21 21h16v7a9 9 0 0 1-9 9h-7V21Z" fill="#0F8750"/></svg></span>
       <span class="brand-wordmark">MEDTECH <strong>COPILOT</strong></span>
     </a>
-    <nav aria-label="Hauptnavigation">
-      <a href="#sourceLibraryDisclosure">Quellen</a>
-      <a href="#practiceLab">Beispielfragen</a>
-      <a href="./" class="nav-demos">Weitere Demos <span aria-hidden="true">↗</span></a>
-    </nav>
   </header>
   <main>
 
     <section class="source-intro" aria-labelledby="mainTitle">
       <div class="intro-copy">
-        <h1 id="mainTitle">Stelle deine Frage.<span>Prüfe das Original.</span></h1>
-        <p>Fragen. Fundstelle finden. Im PDF selbst nachlesen.</p>
+        <h1 id="mainTitle">Was gilt in der Medizintechnik?</h1>
+        <p>Stell eine Frage und prüfe die Antwort direkt im Original-PDF.</p>
         <form id="heroQuestionForm" class="hero-question-form" autocomplete="off">
           <label class="visually-hidden" for="heroQuestionInput">Deine Fachfrage</label>
           <div class="hero-query-line">
             <svg class="hero-search-icon" width="23" height="23" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="7.2" stroke="currentColor" stroke-width="1.9"/><path d="m16.2 16.2 5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-            <input id="heroQuestionInput" type="search" maxlength="400" placeholder="Wann ist eine STK vorgeschrieben?" autocomplete="off" aria-describedby="heroQueryStatus" required>
-            <label class="visually-hidden" for="heroSourceSelect">Quelle für die Recherche auswählen</label>
-            <select id="heroSourceSelect" aria-label="Quelle für die Recherche auswählen">
-              <option value="auto">Quelle wählen</option>
-            </select>
-            <button id="heroAskButton" type="submit">Antwort finden <span aria-hidden="true">→</span></button>
+            <input id="heroQuestionInput" type="search" maxlength="400" placeholder="Deine Frage zu einem Gesetz oder Handbuch" autocomplete="off" aria-describedby="heroQueryStatus" required>
+            <button id="heroAskButton" type="submit">Fragen</button>
           </div>
         </form>
-        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite">Quelle bewusst wählen oder nach der Frage bestätigen.</p>
+        <p id="heroQueryStatus" class="hero-query-status" role="status" aria-live="polite"></p>
         <div id="heroRecommendations" class="hero-recommendations hidden" aria-label="Quelle für deine Frage bestätigen"></div>
+        <div class="first-example">
+          <button id="welcomeExample" type="button" disabled>
+            <span>Beispiel ausprobieren</span>
+            <strong>Wie oft ist eine STK fällig?</strong>
+            <span class="first-example-arrow" aria-hidden="true">→</span>
+          </button>
+          <a href="#practiceLab">Weitere Beispielfragen</a>
+        </div>
       </div>
     </section>
+    <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
+      <section id="workspaceWelcome" class="v3-welcome" aria-label="Antwortbereich">
+        <div class="v3-pane-top"><span><span class="v3-pane-dot"></span> Antwort</span><span class="v3-pane-meta">Bereit für deine Frage</span></div>
+        <div class="v3-welcome-content">
+          <div class="v3-welcome-symbol" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M20 2 24.8 15.2 38 20 24.8 24.8 20 38 15.2 24.8 2 20 15.2 15.2 20 2Z" fill="currentColor"/></svg></div>
+          <h2>Deine Antwort erscheint hier.</h2>
+          <p>Mit einem Klick zur belegten Passage und ihrer Originalseite.</p>
+        </div>
+        <div class="v3-welcome-foot"><span>FRAGE</span><span>FUNDSTELLE</span><span>ORIGINAL</span></div>
+      </section>
+    <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
+      <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
+      <div class="own-book-panel" id="ownBookPanel" aria-label="Cover für dein eigenes PDF">
+        <div class="own-book-art"><img id="ownCoverImage" src="./covers/own.svg" alt="Cover für dein eigenes PDF" width="340" height="482"></div>
+        <div class="own-book-copy">
+          <span class="eyebrow">DEIN BUCH · NUR LOKAL</span>
+          <strong id="ownCoverTitle">Dein PDF</strong>
+          <p id="ownCoverMeta">Sobald du ein PDF auswählst, zeigen wir hier eine Vorschau seiner ersten Seite. Das Bild bleibt in diesem Browser-Tab.</p>
+          <span class="own-book-hint">PDF auswählen ↓</span>
+        </div>
+      </div>
+      <div class="upload-grid">
+        <div class="dropzone" id="dropzone" role="group" aria-label="PDF-Datei auswählen">
+          <input id="pdfFile" type="file" accept="application/pdf,.pdf" aria-label="PDF-Datei hochladen" class="file-input">
+          <div class="drop-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M11 8h18l8 8v25H11V8Z" stroke="currentColor" stroke-width="2"/><path d="M29 8v8h8M24 32V20m-5 5 5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <strong>PDF hier ablegen</strong>
+          <p>Oder ein öffentliches, nicht vertrauliches Handbuch auswählen.</p>
+          <button id="choosePdf" class="choose-button" type="button">PDF auswählen <span aria-hidden="true">↗</span></button>
+          <span class="drop-caption">Kein Upload an einen Server. Text wird nur in diesem Tab verarbeitet.</span>
+          <a class="example-pdf" href="https://www.documents.philips.com/assets/Addendum/20250422/0be5036d5af74ece8a8fb2c70090cd18.pdf?feed=ifu_docs_feed" target="_blank" rel="noopener noreferrer">Kein PDF zur Hand? Öffentliches Philips-Beispiel öffnen ↗</a>
+        </div>
+        <aside class="upload-aside">
+          <span class="eyebrow">PRIVATSPHÄRE · KLAR ERKLÄRT</span>
+          <h3>Was passiert mit deinem PDF?</h3>
+          <div class="privacy-point"><span class="point-icon">01</span><p>Die Datei wird im Browser geöffnet. Der Inhalt wird nicht an unsere Server geschickt.</p></div>
+          <div class="privacy-point"><span class="point-icon">02</span><p>PDF.js wird von dieser Website ausgeliefert. Text und Fragen werden nicht gespeichert.</p></div>
+          <div class="privacy-point"><span class="point-icon">03</span><p>Schließt du den Tab oder entfernst das PDF, ist der temporäre Index weg.</p></div>
+          <p class="privacy-note">Der Webseitenaufruf selbst kann beim Hostinganbieter technische Zugriffslogs erzeugen. Keine Sprachaufnahme oder KI-API im Upload-Modus.</p>
+        </aside>
+      </div>
+      <div class="import-status" id="importStatus" role="status" aria-live="polite">
+        <span class="import-led"></span><span id="importMessage">Noch kein PDF ausgewählt.</span><span id="importPercent"></span>
+      </div>
+      <div class="loaded-bar hidden" id="loadedBar">
+        <div><span class="loaded-icon" aria-hidden="true">✓</span><span><strong id="loadedName"></strong><small id="loadedDetail"></small></span></div>
+        <button id="removePdf" type="button">Datei entfernen <span aria-hidden="true">×</span></button>
+      </div>
+    </section>
+    <section class="search-section hidden" id="askSection" aria-label="Frage an das Dokument">
+      <div class="workspace-header"><h2>Nachfragen</h2><button id="restartQuestion" type="button" class="restart-question">Neue Frage</button></div>
+      <form id="questionForm" class="question-form">
+        <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
+        <input id="questionInput" disabled autocomplete="off" placeholder="Was möchtest du dazu wissen?" maxlength="400">
+        <button type="submit" id="askButton" disabled>Fragen</button>
+      </form>
+      <details id="qualityDisclosure" class="v3-disclosure v3-quality-disclosure"><summary>Lokale Statistik</summary><div class="learning-panel" id="learningPanel">
+        <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
+        <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
+        <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
+        <p class="learning-privacy">Freiwillig · Nur Zähler in diesem Browser. Keine Fragen, Dokumente oder Kennungen werden gespeichert oder versendet. Keine besucherübergreifende Statistik.</p>
+        <div id="learningCounts" class="learning-counts" aria-live="polite"></div>
+        <div class="learning-actions"><button type="button" id="exportLearning">Zähler als JSON exportieren</button><button type="button" id="resetLearning">Lokale Zähler löschen</button></div>
+      </div></details>
+    </section>
+    <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
+      <div class="result-head"><span class="v3-result-label"><span class="v3-pane-dot"></span> Antwort</span><span class="answer-status" id="answerStatus"></span></div>
+      <div class="result-grid">
+        <div class="answer-side">
+          <h2 id="answeredQuestion" tabindex="-1"></h2>
+          <p id="answerTitle" class="answer-state"></p>
+          <p id="answerLead"></p>
+          <div id="editorialAnswer" class="editorial-answer hidden" aria-label="Redaktionelle Kurzorientierung"></div>
+          <div class="citation-card hidden" id="citationCard">
+            <div class="evidence-actions"><button class="verify-button" id="verifySource" type="button">Original-PDF ansehen</button><span id="citationPage"></span></div>
+            <details id="quoteDisclosure" class="quote-disclosure">
+              <summary>Textauszug anzeigen</summary>
+              <blockquote id="citationText"></blockquote>
+              <div class="citation-meta" id="citationMeta"></div>
+              <button class="jump-button" id="goToPage" type="button">Belegseite anzeigen</button>
+            </details>
+          </div>
+          <div id="additionalCitations" class="additional-citations"></div>
+          <div class="synthesis-area hidden" id="localSynthesis">
+            <button type="button" id="synthesizeAnswer">Mit lokaler KI vertiefen</button>
+            <p id="synthesisStatus" role="status"></p>
+          </div>
+          <details id="dialogHistory" class="dialog-history hidden">
+            <summary>Bisherige Fachfragen</summary>
+            <ol id="dialogTurns"></ol>
+            <button id="dialogReset" type="button">Neues Gespräch</button>
+          </details>
+          <div id="dialogFollowups" class="dialog-followups hidden" aria-label="Anschlussfragen"></div>
+          <a id="practiceReturn" class="practice-return hidden" href="#practiceLab">Zu den Beispielfragen</a>
+          <div class="case-pin-area"><button type="button" id="casePin" class="hidden">Geprüften Beleg im Fall festhalten</button><span id="casePinStatus" role="status"></span><button type="button" id="caseReturn" class="hidden">Zur Fallakte ↑</button></div>
+          <div class="answer-bottom" id="answerMode">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
+          <details class="answer-quality" id="answerQuality">
+            <summary>Antwort bewerten</summary>
+            <div class="answer-feedback"><span>Hat dir diese Fundstelle geholfen?</span><button type="button" id="answerHelpful">Ja, hilfreich</button><button type="button" id="answerUnhelpful">Nein, unpassend</button></div>
+            <span id="feedbackAcknowledgement" class="feedback-ack" role="status"></span>
+          </details>
+        </div>
+        <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
+          <div class="viewer-head"><strong>Original-PDF</strong><span id="viewerPageLabel">Noch keine Seite</span></div>
+          <div class="viewer-stage" id="viewerStage">
+            <div class="viewer-empty" id="viewerEmpty"><span class="v3-pdf-icon" aria-hidden="true">▣</span><strong>Original. Keine Behauptung.</strong><p>Wenn du eine Quelle auswählst, erscheint hier ihr PDF. Fundstellen werden markiert.</p><span class="v3-pdf-placeholder-line"></span><span class="v3-pdf-placeholder-line short"></span><span class="v3-pdf-placeholder-line"></span></div>
+            <div id="pdfPageFrame" class="pdf-page-frame"><canvas id="pageCanvas" class="hidden" aria-label="Gerenderte Original-PDF-Seite"></canvas><div id="pdfHighlights" class="pdf-highlights" aria-hidden="true"></div></div>
+          </div>
+          <div class="viewer-controls">
+            <button id="prevPage" type="button" disabled aria-label="Vorherige Seite">←</button>
+            <span id="viewerCounter">– / –</span>
+            <button id="nextPage" type="button" disabled aria-label="Nächste Seite">→</button>
+            <a id="openOriginal" class="open-original disabled" aria-disabled="true" tabindex="-1">PDF öffnen ↗</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+      </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
+    <details id="toolsDisclosure" class="workspace-tools">
+      <summary>Weitere Werkzeuge</summary>
+      <div class="tools-content">
     <details id="practiceLab" class="practice-lab" aria-labelledby="practiceHeading">
       <summary class="minimal-disclosure-summary"><span id="practiceHeading">Beispielfragen <small>10 Fragen pro Rolle oder Situation</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
       <div class="practice-expanded">
@@ -139,33 +258,19 @@
         </div>
       </div>
     </details>
-    <div class="source-workbench" id="sourceWorkbench"><div class="source-main">
-      <section id="workspaceWelcome" class="v3-welcome" aria-label="Antwortbereich">
-        <div class="v3-pane-top"><span><span class="v3-pane-dot"></span> Antwort</span><span class="v3-pane-meta">Bereit für deine Frage</span></div>
-        <div class="v3-welcome-content">
-          <div class="v3-welcome-symbol" aria-hidden="true"><svg width="34" height="34" viewBox="0 0 40 40" fill="none"><path d="M20 2 24.8 15.2 38 20 24.8 24.8 20 38 15.2 24.8 2 20 15.2 15.2 20 2Z" fill="currentColor"/></svg></div>
-          <h2>Deine Antwort erscheint hier.</h2>
-          <p>Mit einem Klick zur belegten Passage und ihrer Originalseite.</p>
-          <button type="button" id="welcomeExample" class="v3-try-example">STK-Beispiel starten <span aria-hidden="true">↗</span></button>
-        </div>
-        <div class="v3-welcome-foot"><span>FRAGE</span><span>FUNDSTELLE</span><span>ORIGINAL</span></div>
-      </section>
       <details id="sourceLibraryDisclosure" class="source-library-disclosure">
         <summary class="minimal-disclosure-summary"><span>Quellenbibliothek <small>Gesetze, Handbücher oder eigenes PDF</small></span><span class="minimal-disclosure-chevron" aria-hidden="true">⌄</span></summary>
       <section class="source-chooser" id="sourceChooser" aria-label="Quelle für diese Recherche auswählen">
-        <div class="chooser-head"><span class="eyebrow">QUELLEN</span><span class="source-help">Eine Quelle pro Frage. Keine Vermischung.</span></div>
-        <p class="source-library-intro">Deine Quellen <span>Originaldokumente ansehen und bewusst auswählen</span></p>
+        <div class="manual-source"><label for="heroSourceSelect">Quelle für die Recherche auswählen</label>
+            <select id="heroSourceSelect" aria-label="Quelle für die Recherche auswählen">
+              <option value="auto">Quelle wählen</option>
+            </select></div>
         <div class="source-tabs" role="group" aria-label="Quellenkategorie">
           <button type="button" data-source-group="medtech" aria-pressed="false">Handbücher</button>
           <button type="button" class="active" data-source-group="laws" aria-pressed="true">Deutsche Gesetze</button>
           <button type="button" data-source-group="own" aria-pressed="false">Mein PDF</button>
         </div>
         <div id="sourceCards" class="source-cards" aria-live="polite"><p>Beispielquellen werden geprüft …</p></div>
-        <div id="sourceAutoStatus" class="source-auto-status hidden" role="status" aria-live="polite">
-          <div class="auto-status-header"><span class="auto-status-star">✦</span><strong id="sourceAutoTitle">Quellen-Copilot</strong></div>
-          <p id="sourceAutoReason">Ich finde die passende Quelle für deine Frage.</p>
-          <div id="sourceAutoBooks" class="source-auto-books"></div>
-        </div>
         <div id="suggestedQuestions" class="suggested-questions hidden" aria-label="Beispielfragen zur ausgewählten Quelle"></div>
         <details id="faqDisclosure" class="v3-disclosure v3-faq-disclosure"><summary>Fragen &amp; Antworten zu den Gesetzen <span>Kuratiert, mit Gesetzeslinks <span aria-hidden="true">↗</span></span></summary><section id="faqPanel" class="faq-panel hidden" aria-label="Rechtsfragen und geprüfte Fundstellen">
           <div class="faq-head"><div><span class="eyebrow">KURATIERTE EINSTIEGSFRAGEN</span><h3>Nachschlagen statt raten.</h3></div>
@@ -181,116 +286,12 @@
         </div>
       </section>
       </details>
-    <section class="workspace hidden" id="ownPdfPanel" aria-label="Eigenes PDF lokal auswählen">
-      <div class="workspace-header"><div><span class="eyebrow">EIGENES PDF</span><h2>Eigenes Dokument auswählen</h2></div><span class="workspace-meta">PDF · bis 15 MB · bis 120 Seiten</span></div>
-      <div class="own-book-panel" id="ownBookPanel" aria-label="Cover für dein eigenes PDF">
-        <div class="own-book-art"><img id="ownCoverImage" src="./covers/own.svg" alt="Cover für dein eigenes PDF" width="340" height="482"></div>
-        <div class="own-book-copy">
-          <span class="eyebrow">DEIN BUCH · NUR LOKAL</span>
-          <strong id="ownCoverTitle">Dein PDF</strong>
-          <p id="ownCoverMeta">Sobald du ein PDF auswählst, zeigen wir hier eine Vorschau seiner ersten Seite. Das Bild bleibt in diesem Browser-Tab.</p>
-          <span class="own-book-hint">PDF auswählen ↓</span>
-        </div>
+        <a href="./" class="back-home">Weitere Demos</a>
       </div>
-      <div class="upload-grid">
-        <div class="dropzone" id="dropzone" role="group" aria-label="PDF-Datei auswählen">
-          <input id="pdfFile" type="file" accept="application/pdf,.pdf" aria-label="PDF-Datei hochladen" class="file-input">
-          <div class="drop-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M11 8h18l8 8v25H11V8Z" stroke="currentColor" stroke-width="2"/><path d="M29 8v8h8M24 32V20m-5 5 5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-          <strong>PDF hier ablegen</strong>
-          <p>Oder ein öffentliches, nicht vertrauliches Handbuch auswählen.</p>
-          <button id="choosePdf" class="choose-button" type="button">PDF auswählen <span aria-hidden="true">↗</span></button>
-          <span class="drop-caption">Kein Upload an einen Server. Text wird nur in diesem Tab verarbeitet.</span>
-          <a class="example-pdf" href="https://www.documents.philips.com/assets/Addendum/20250422/0be5036d5af74ece8a8fb2c70090cd18.pdf?feed=ifu_docs_feed" target="_blank" rel="noopener noreferrer">Kein PDF zur Hand? Öffentliches Philips-Beispiel öffnen ↗</a>
-        </div>
-        <aside class="upload-aside">
-          <span class="eyebrow">PRIVATSPHÄRE · KLAR ERKLÄRT</span>
-          <h3>Was passiert mit deinem PDF?</h3>
-          <div class="privacy-point"><span class="point-icon">01</span><p>Die Datei wird im Browser geöffnet. Der Inhalt wird nicht an unsere Server geschickt.</p></div>
-          <div class="privacy-point"><span class="point-icon">02</span><p>PDF.js wird von dieser Website ausgeliefert. Text und Fragen werden nicht gespeichert.</p></div>
-          <div class="privacy-point"><span class="point-icon">03</span><p>Schließt du den Tab oder entfernst das PDF, ist der temporäre Index weg.</p></div>
-          <p class="privacy-note">Der Webseitenaufruf selbst kann beim Hostinganbieter technische Zugriffslogs erzeugen. Keine Sprachaufnahme oder KI-API im Upload-Modus.</p>
-        </aside>
-      </div>
-      <div class="import-status" id="importStatus" role="status" aria-live="polite">
-        <span class="import-led"></span><span id="importMessage">Noch kein PDF ausgewählt.</span><span id="importPercent"></span>
-      </div>
-      <div class="loaded-bar hidden" id="loadedBar">
-        <div><span class="loaded-icon" aria-hidden="true">✓</span><span><strong id="loadedName"></strong><small id="loadedDetail"></small></span></div>
-        <button id="removePdf" type="button">Datei entfernen <span aria-hidden="true">×</span></button>
-      </div>
-    </section>
-    <section class="search-section hidden" id="askSection" aria-label="Frage an das Dokument">
-      <div class="workspace-header"><div><span class="eyebrow">WEITERFRAGEN</span><h2>Noch eine Frage zu dieser Quelle?</h2></div><span class="workspace-meta">Antwort nur bei belegbarer Textstelle</span></div>
-      <form id="questionForm" class="question-form">
-        <label for="questionInput" class="visually-hidden">Frage zur Quelle oder automatische Quellensuche</label>
-        <input id="questionInput" disabled autocomplete="off" placeholder="Erst Quelle auswählen, dann eine Frage stellen …" maxlength="400">
-        <button type="submit" id="askButton" disabled>Fragen <span aria-hidden="true">→</span></button>
-      </form>
-      <p class="search-hint">Nur die ausdrücklich gewählte Quelle wird durchsucht. Kein Mischen von Handbüchern oder Gesetzen. Keine Therapieempfehlung oder Gerätefreigabe.</p>
-      <details id="qualityDisclosure" class="v3-disclosure v3-quality-disclosure"><summary>Qualität &amp; lokale Statistik <span>Datensparsam · freiwillig <span aria-hidden="true">↗</span></span></summary><div class="learning-panel" id="learningPanel">
-        <div class="learning-head"><div><span class="eyebrow">QUALITY LOOP / PRIVACY FIRST</span><strong>Was ist eine gute Antwort?</strong>
-        <p>Richtige Quelle und Fassung, wörtlich belegbare Stelle, korrekte Reichweite, keine unbelegten Schlussfolgerungen und eine hilfreiche Antwort.</p></div>
-        <label class="learning-consent"><input type="checkbox" id="learningConsent"> Lokale Nutzungsstatistik aktivieren</label></div>
-        <p class="learning-privacy">Freiwillig · Nur Zähler in diesem Browser. Keine Fragen, Dokumente oder Kennungen werden gespeichert oder versendet. Keine besucherübergreifende Statistik.</p>
-        <div id="learningCounts" class="learning-counts" aria-live="polite"></div>
-        <div class="learning-actions"><button type="button" id="exportLearning">Zähler als JSON exportieren</button><button type="button" id="resetLearning">Lokale Zähler löschen</button></div>
-      </div></details>
-    </section>
-    <section class="result-section hidden" id="resultSection" aria-live="polite" aria-label="Suchergebnis und Originalseite">
-      <div class="result-head"><span class="v3-result-label"><span class="v3-pane-dot"></span> Antwort</span><span class="answer-status" id="answerStatus"></span></div>
-      <div class="result-grid">
-        <div class="answer-side">
-          <div class="v3-current-question"><span>DEINE FRAGE</span><strong id="answeredQuestion"></strong></div>
-          <h2 id="answerTitle">Fundstelle</h2>
-          <p id="answerLead"></p>
-          <div id="editorialAnswer" class="editorial-answer hidden" aria-label="Redaktionelle Kurzorientierung"></div>
-          <div class="citation-card hidden" id="citationCard">
-            <div class="citation-top"><span>BELEGTE PASSAGE</span><span id="citationPage"></span></div>
-            <blockquote id="citationText"></blockquote>
-            <div class="citation-meta" id="citationMeta"></div>
-            <div class="evidence-actions"><button class="verify-button" id="verifySource" type="button"><span aria-hidden="true">↗</span> Original prüfen</button><button class="jump-button" id="goToPage" type="button">Seite anzeigen <span aria-hidden="true">→</span></button></div>
-          </div>
-          <div id="additionalCitations" class="additional-citations"></div>
-          <div class="synthesis-area hidden" id="localSynthesis">
-            <button type="button" id="synthesizeAnswer">Mit lokaler KI vertiefen</button>
-            <p id="synthesisStatus" role="status"></p>
-          </div>
-          <details id="dialogHistory" class="dialog-history hidden">
-            <summary>Bisherige Fachfragen</summary>
-            <ol id="dialogTurns"></ol>
-            <button id="dialogReset" type="button">Neues Gespräch</button>
-          </details>
-          <div id="dialogFollowups" class="dialog-followups hidden" aria-label="Anschlussfragen"></div>
-          <a id="practiceReturn" class="practice-return hidden" href="#practiceLab">Zu den Beispielfragen</a>
-          <div class="case-pin-area"><button type="button" id="casePin" class="hidden">Geprüften Beleg im Fall festhalten</button><span id="casePinStatus" role="status"></span><button type="button" id="caseReturn" class="hidden">Zur Fallakte ↑</button></div>
-          <div class="answer-bottom" id="answerMode">Dies ist ein wortgetreuer Textauszug, keine generierte Erklärung. Relevanz und Gerätemodell müssen fachlich geprüft werden.</div>
-          <div class="answer-quality" id="answerQuality">
-            <span class="eyebrow">QUELLENQUALITÄT / FEEDBACK</span>
-            <p><strong>Automatisch geprüft:</strong> Auszug, PDF-Seite und Quellenbindung. <strong>Nicht automatisch geprüft:</strong> juristische Auslegung, vollständige Relevanz oder Aktualität.</p>
-            <div class="answer-feedback"><span>Hat dir diese Fundstelle geholfen?</span><button type="button" id="answerHelpful">Ja, hilfreich</button><button type="button" id="answerUnhelpful">Nein, unpassend</button></div>
-            <span id="feedbackAcknowledgement" class="feedback-ack" role="status"></span>
-          </div>
-        </div>
-        <aside class="viewer" id="viewer" aria-label="PDF-Seitenvorschau">
-          <div class="viewer-head"><strong>Original-PDF</strong><span id="viewerPageLabel">Noch keine Seite</span></div>
-          <div class="viewer-stage" id="viewerStage">
-            <div class="viewer-empty" id="viewerEmpty"><span class="v3-pdf-icon" aria-hidden="true">▣</span><strong>Original. Keine Behauptung.</strong><p>Wenn du eine Quelle auswählst, erscheint hier ihr PDF. Fundstellen werden markiert.</p><span class="v3-pdf-placeholder-line"></span><span class="v3-pdf-placeholder-line short"></span><span class="v3-pdf-placeholder-line"></span></div>
-            <div id="pdfPageFrame" class="pdf-page-frame"><canvas id="pageCanvas" class="hidden" aria-label="Gerenderte Original-PDF-Seite"></canvas><div id="pdfHighlights" class="pdf-highlights" aria-hidden="true"></div></div>
-          </div>
-          <div class="viewer-controls">
-            <button id="prevPage" type="button" disabled aria-label="Vorherige Seite">←</button>
-            <span id="viewerCounter">– / –</span>
-            <button id="nextPage" type="button" disabled aria-label="Nächste Seite">→</button>
-            <a id="openOriginal" class="open-original disabled" aria-disabled="true" tabindex="-1">PDF öffnen ↗</a>
-          </div>
-        </aside>
-      </div>
-    </section>
-      </div><aside class="source-side" id="sourceSide" aria-label="Originalquelle dauerhaft neben der Antwort"></aside></div>
-    <div class="boundary"><span aria-hidden="true">!</span><p><strong>Unabhängige Demonstration.</strong> Keine Klinik-Anbindung, keine Medizinberatung oder Gerätefreigabe. Keine internen oder personenbezogenen Klinikdokumente verwenden.</p></div>
-    <section class="limit-foot"><div><span class="eyebrow">TRANSPARENZ</span><p><strong>Kann:</strong> Textbasierte PDFs lokal indexieren, Passagen suchen, Fundstellen verlinken und offen sagen, wenn Evidenz fehlt.</p><p><strong>Kann nicht:</strong> gescannte Seiten ohne OCR lesen, Tabellen und Zahlen immer korrekt interpretieren oder Therapie- und Reparaturentscheidungen treffen.</p></div><a href="./" class="back-home">Die anderen Demos ansehen ↗</a></section>
+    </details>
+    <div class="boundary"><span aria-hidden="true">!</span><p>Demo zur Quellenrecherche. Dokumente bitte anonymisiert und ohne Klinikdaten verwenden.</p></div>
   </main>
-  <footer>MEDTECH COPILOT · FALLWERKSTATT <span>GitLaw-Quellenprinzip · kein Medizinprodukt.</span></footer>
+  <footer>MEDTECH COPILOT</footer>
 </div>
 </body>
 </html>

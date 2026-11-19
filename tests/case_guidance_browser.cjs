@@ -16,6 +16,7 @@ async function text(page, selector, snippet) {
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(url, { waitUntil: "networkidle" });
     await page.waitForFunction(() => document.querySelectorAll("#heroSourceSelect option").length === 9);
+    if (!await page.locator("#toolsDisclosure").evaluate(el => el.open)) await page.locator("#toolsDisclosure > summary").click();
     await page.locator("#caseWorkspace > summary").click();
     await page.locator("#caseExample").click();
     await text(page, "#casePriorityTitle", "Für die Benutzung durch Laien vorgesehen");
@@ -82,6 +83,7 @@ async function text(page, selector, snippet) {
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     mobile.on("pageerror", error => errors.push(error.message));
     await mobile.goto(url, { waitUntil: "networkidle" });
+    if (!await mobile.locator("#toolsDisclosure").evaluate(el => el.open)) await mobile.locator("#toolsDisclosure > summary").click();
     await mobile.locator("#caseWorkspace > summary").click();
     await mobile.locator("#caseExample").click();
     await mobile.locator("#casePriorityGo").click();
