@@ -49,7 +49,8 @@ async function ask(page,question,expected,pageNo){
  assert.equal(nav.status(),200);
  await page.waitForFunction(()=>!!window.MedtechUploadDemo,{timeout:12000});
  assert.match(await page.locator("h1").innerText(),/Stelle deine Frage\.\s*Prüfe das Original\./);
- assert.equal(await page.locator("#workspaceWelcome").isVisible(),true);
+ assert.equal(await page.locator("#workspaceWelcome").isVisible(),false,"No idle answer card on minimalist first paint");
+ assert.equal(await page.locator("#sourceSide").isVisible(),false,"No idle PDF card on first paint");
  assert.equal(await page.locator("#heroAskButton").isEnabled(),true,"New first-question entry must be interactive");
  assert.equal(await page.locator("#askButton").isDisabled(),true);
  assert.equal(await page.locator("script[src*='tinyfish']").count(),0);
