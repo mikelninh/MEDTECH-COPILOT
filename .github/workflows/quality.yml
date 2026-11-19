@@ -57,6 +57,8 @@ jobs:
         run: |
           node --check src/upload_app.mjs
           node --check src/learning_loop.js
+          node --check src/evidence_highlight.js
+          node tests/evidence_highlight.cjs
           node tests/legal_faq.cjs
           node tests/learning_loop.cjs
       - name: Document ingestion sample tests

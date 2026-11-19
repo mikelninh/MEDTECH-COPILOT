@@ -83,32 +83,74 @@ def orion_manual():
     book.close()
     return binary
 
-def fetch_government_law(slug,title):
-    """Download consolidated original PDF from BMJ/BfJ's public law portal.
+def validate_government_pdf(pdf,title,url):
+    if not pdf.startswith(b"%PDF-") or len(pdf)>15*1024*1024:
+        raise RuntimeError("Not a usable government PDF: "+url)
+    doc=fitz.open(stream=pdf,filetype="pdf")
+    if len(doc)<1 or len(doc)>120:raise RuntimeError("Unexpected legal PDF page count")
+    first=doc[0].get_text("text")
+    if title.lower() not in first.lower() or "gesetze-im-internet.de" not in first.lower():
+        raise RuntimeError("Government PDF identity/header mismatch: "+title)
+    amended=re.search(r"Stand:\\s*(.{8,180}?)\\n",first,re.IGNORECASE)
+    doc.close()
+    return (amended.group(1).strip() if amended else "Änderungsstand im Original prüfen")
 
-    Important: portal PDFs are government-hosted consolidated texts, NOT
-    promulgation in the Federal Law Gazette (Bundesgesetzblatt).
+def verified_prior_snapshot(slug,title,url):
+    """Fail closed: only reuse a <=7-day-old public PDF that already has a
+    SHA-256-pinned manifest from our successfully tested previous Pages release.
+    Never present a cached snapshot as a fresh government download.
+    """
+    base="https://mikelninh.github.io/MEDTECH-COPILOT/"
+    from urllib.parse import urlparse
+    def open_public(relative,limit):
+        req=urllib.request.Request(base+relative,headers={"User-Agent":"MEDTECH-COPILOT-verified-source-cache/1.2","Cache-Control":"no-cache"})
+        with urllib.request.urlopen(req,timeout=20) as response:
+            final=urlparse(response.geturl())
+            if final.scheme!="https" or final.hostname!="mikelninh.github.io":
+                raise RuntimeError("Verified backup redirected outside our published snapshot")
+            return response.read(limit+1)
+    data=open_public("data/source_catalog.json",500000)
+    if len(data)>500000:raise RuntimeError("Backup catalogue oversized")
+    catalog=json.loads(data.decode("utf-8"))
+    if catalog.get("schemaVersion")!=1:raise RuntimeError("Backup catalogue schema mismatch")
+    entries=[src for src in catalog.get("sources",[]) if src.get("title")==title and src.get("sourceKind")=="government-law-pdf" and src.get("originalUrl")==url]
+    if len(entries)!=1:raise RuntimeError("Pinned law PDF missing or duplicated in verified backup: "+title)
+    entry=entries[0]
+    stamp=entry.get("sourceSnapshotAt") or catalog.get("retrievedAt")
+    from datetime import date
+    age=(datetime.now(timezone.utc).date()-date.fromisoformat(stamp)).days
+    if age<0 or age>7:raise RuntimeError("Previously verified government PDF snapshot is stale ("+str(age)+" days): "+title)
+    if entry.get("path")!="./examples/"+title+".pdf" or not re.fullmatch("[a-f0-9]{64}",entry.get("sha256","")):
+        raise RuntimeError("Pinned backup path or checksum invalid: "+title)
+    pdf=open_public("examples/"+title+".pdf",15*1024*1024)
+    if sha(pdf)!=entry["sha256"]:raise RuntimeError("Previously verified PDF SHA-256 mismatch: "+title)
+    amendment=validate_government_pdf(pdf,title,url)
+    print("VERIFIED PREVIOUS SNAPSHOT",title,stamp,"sha",sha(pdf)[:15],flush=True)
+    return pdf,url,amendment,"verified-prior-snapshot",stamp
+
+def fetch_government_law(slug,title):
+    """Prefer a live consolidated legal PDF from the official government
+    portal, or fail closed against a recent previously verified snapshot.
+    Never treat a self-hosted snapshot as proof of current law.
     """
     if not re.fullmatch(r"[a-z0-9_]+",slug):raise RuntimeError("Invalid legal source slug")
     if not re.fullmatch(r"[A-Za-z0-9]+",title):raise RuntimeError("Invalid law abbreviation")
     url="https://www.gesetze-im-internet.de/"+slug+"/"+title+".pdf"
-    req=urllib.request.Request(url,headers={"User-Agent":"MEDTECH-COPILOT-source-integrity/1.1","Accept":"application/pdf"})
-    with urllib.request.urlopen(req,timeout=70) as response:
-        from urllib.parse import urlparse
-        final=urlparse(response.geturl())
-        if final.scheme!="https" or final.hostname not in {"www.gesetze-im-internet.de","gesetze-im-internet.de"}:
-            raise RuntimeError("Government law PDF redirected outside official domain: "+str(final.hostname))
-        pdf=response.read(15*1024*1024+1)
-    if not pdf.startswith(b"%PDF-") or len(pdf)>15*1024*1024:
-        raise RuntimeError("Not a usable government PDF: "+url)
-    doc=fitz.open(stream=pdf,filetype="pdf")
-    first=(doc[0].get_text("text") if len(doc)>0 else "")
-    if title.lower() not in first.lower() or "gesetze-im-internet.de" not in first.lower():
-        raise RuntimeError("Government PDF identity/header mismatch: "+title)
-    amended=re.search(r"Stand:\\s*(.{8,180}?)\\n",first,re.IGNORECASE)
-    stamp=(amended.group(1).strip() if amended else "Änderungsstand im Original prüfen")
-    doc.close()
-    return pdf,url,stamp
+    req=urllib.request.Request(url,headers={"User-Agent":"MEDTECH-COPILOT-source-integrity/1.2","Accept":"application/pdf"})
+    from urllib.parse import urlparse
+    from urllib.error import URLError
+    try:
+        with urllib.request.urlopen(req,timeout=18) as response:
+            final=urlparse(response.geturl())
+            if final.scheme!="https" or final.hostname not in {"www.gesetze-im-internet.de","gesetze-im-internet.de"}:
+                raise RuntimeError("Government law PDF redirected outside official domain: "+str(final.hostname))
+            pdf=response.read(15*1024*1024+1)
+    except (URLError,TimeoutError,ConnectionError) as exc:
+        print("Official portal temporarily unreachable for",title,":",type(exc).__name__,flush=True)
+        return verified_prior_snapshot(slug,title,url)
+    stamp=validate_government_pdf(pdf,title,url)
+    return pdf,url,stamp,"official-live",datetime.now(timezone.utc).date().isoformat()
+
 
 def pdf_pages(raw):
     if not raw.startswith(b"%PDF-") or len(raw)>15*1024*1024:raise RuntimeError("PDF too large or invalid")
@@ -124,7 +166,7 @@ def main():
     folder=Path(args.out_dir);folder.mkdir(parents=True,exist_ok=True)
     catalog={"schemaVersion":1,"retrievedAt":datetime.now(timezone.utc).date().isoformat(),
              "scope":"Legal PDFs are exact source snapshots from the BMJ/BfJ government legal portal, not the binding Federal Law Gazette. Always check current law and applicability in the official portal.","sources":[]}
-    def add(id,group,title,subtitle,filename,kind,original,pdf,questions,gitlaw=None,source_sha=None):
+    def add(id,group,title,subtitle,filename,kind,original,pdf,questions,gitlaw=None,source_sha=None,source_mode=None,snapshot_date=None):
         n=pdf_pages(pdf)
         (folder/filename).write_bytes(pdf)
         item={"id":id,"group":group,"title":title,"subtitle":subtitle,"filename":filename,
@@ -135,6 +177,8 @@ def main():
             item["sourceAuthority"]="Government-hosted consolidated text; check Federal Law Gazette for promulgation"
             item["fetchedFrom"]="www.gesetze-im-internet.de"
             item["lastAmendedStatement"]=source_sha or "Änderungsstand im Original prüfen"
+            item["retrievalMode"]=source_mode or "official-live"
+            item["sourceSnapshotAt"]=snapshot_date or catalog["retrievedAt"]
         catalog["sources"].append(item)
         print("VERIFIED",id,n,"pages; sha",sha(pdf)[:15],flush=True)
     add("lumen","medtech","LUMEN P200","Fiktives Trainingshandbuch","LUMEN-P200-demo.pdf",
@@ -144,10 +188,10 @@ def main():
         "fictional-training",None,orion_manual(),
         ["Was steht zum SpO2-Signal?","Was gehört zum Service-Ticket?"])
     for id,title,subtitle,slug,questions in LAWS:
-        pdf,url,amendment=fetch_government_law(slug,title)
+        pdf,url,amendment,source_mode,snapshot_date=fetch_government_law(slug,title)
         gitlaw="https://github.com/mikelninh/gitlaw/blob/main/laws/"+slug+".md"
         add(id,"laws",title,subtitle+" · Bundesportal-PDF",title+".pdf",
-            "government-law-pdf",url,pdf,questions,None,amendment)
+            "government-law-pdf",url,pdf,questions,None,amendment,source_mode,snapshot_date)
     target=Path(args.manifest);target.parent.mkdir(parents=True,exist_ok=True)
     target.write_text(json.dumps(catalog,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print("PASS SEVEN curated sample sources (5 government-hosted law PDFs, 2 fictional manuals)",flush=True)
