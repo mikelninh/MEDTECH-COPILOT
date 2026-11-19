@@ -24,7 +24,11 @@ async function question(page,q){
  desktop.on("pageerror",e=>errors.push(e.message));
  await desktop.goto(url,{waitUntil:"networkidle"});
  await desktop.waitForFunction(()=>!!window.MedtechUploadDemo);
- await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length>0);
+ await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ assert.equal(await desktop.locator("#heroQuestionInput").isVisible(),true,"Question-first search must be immediately visible");
+ assert.equal(await desktop.locator("#heroAskButton").isEnabled(),true);
+ await desktop.locator("[data-source-group='medtech']").click();
+ await desktop.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===2);
  assert.equal(await desktop.locator("[data-source-id='lumen']").count(),1);
  assert.equal(await desktop.locator("[data-source-id='orion']").count(),1);
  for(const img of await desktop.locator(".source-choice .source-cover").all()){
@@ -112,12 +116,35 @@ async function question(page,q){
  assert.match(await desktop.locator("#ownCoverTitle").innerText(),/fixture\.pdf/);
  assert.equal(await question(desktop,"Was misst das NanoPod Modul?"),"QUELLE GEFUNDEN");
  assert.match(await desktop.locator("#viewerSourceName").innerText(),/fixture/);
+
+ const start=await browser.newPage({viewport:{width:1440,height:900}});
+ start.on("pageerror",e=>errors.push("first-question: "+e.message));
+ await start.goto(url,{waitUntil:"networkidle"});
+ await start.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ await start.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
+ await start.locator("#heroAskButton").click();
+ assert.equal(await start.locator("#heroRecommendations").isVisible(),true,"Question must produce an explicit source confirmation");
+ assert.equal(await start.locator("#resultSection").isVisible(),false,"Question must not silently choose a law");
+ assert.equal(await start.locator("[data-recommend-source='mpbetreibv']").count(),1);
+ await start.locator("[data-recommend-source='mpbetreibv']").click();
+ await start.waitForFunction(()=>window.MedtechUploadDemo.status().sourceId==="mpbetreibv"&&
+    window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),
+    null,{timeout:90000});
+ assert.equal(await start.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
+ assert.match(await start.locator("#citationText").innerText(),/medizinproduktebuch/i);
+ assert.ok((await start.locator("#pdfHighlights .pdf-passage-hit").count())>0,"Original passage must be highlighted");
+ assert.equal(await start.locator("#editorialAnswer").isVisible(),false,"Unmatched free text must not invent a curated legal answer");
+ assert.ok(await start.locator("#sourceOfficialLink").getAttribute("href"));
+ await start.screenshot({path:"artifacts/v12-01-question-first-desktop.png",fullPage:true});
+ console.log("PASS V1.2: question-first, explicit source confirmation, PDF passage overlay and no invented summaries");
+
  console.log("PASS SOURCE E2E desktop: handbook, 5 government-portal legal PDFs, custom PDF, source isolation, side by side");
 
  const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
  mobile.on("pageerror",e=>errors.push("mobile "+e.message));
  await mobile.goto(url,{waitUntil:"networkidle"});
- await mobile.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length>0);
+ await mobile.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ await mobile.locator("[data-source-group='medtech']").click();
  await mobile.locator("[data-source-id='lumen']").click();
  await ready(mobile,"lumen");
  assert.equal(await mobile.locator("#viewer").isVisible(),true);
@@ -125,6 +152,27 @@ async function question(page,q){
  const overflow=await mobile.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
  assert.ok(overflow<=3,"Mobile source picker overflow: "+overflow);
  await mobile.screenshot({path:"artifacts/v10-04-mobile-source.png",fullPage:true});
+ const mobileFirst=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+ mobileFirst.on("pageerror",e=>errors.push("mobile-first: "+e.message));
+ await mobileFirst.goto(url,{waitUntil:"networkidle"});
+ await mobileFirst.waitForFunction(()=>document.querySelectorAll("[data-source-id]").length===5);
+ await mobileFirst.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
+ await mobileFirst.locator("#heroAskButton").click();
+ await mobileFirst.locator("[data-recommend-source='mpbetreibv']").click();
+ await mobileFirst.waitForFunction(()=>window.MedtechUploadDemo.status().loaded&&!document.getElementById("resultSection").classList.contains("hidden"),null,{timeout:90000});
+ assert.equal(await mobileFirst.locator("#resultSection").isVisible(),true);
+ const resultPosition=await mobileFirst.locator("#resultSection").boundingBox();
+ const viewerPosition=await mobileFirst.locator("#sourceSide").boundingBox();
+ assert.ok(viewerPosition.y>resultPosition.y,"Mobile answer must appear before long original PDF");
+ await mobileFirst.locator("#verifySource").click();
+ assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),true);
+ await mobileFirst.screenshot({path:"artifacts/v12-02-verify-mobile.png",fullPage:true});
+ await mobileFirst.locator("#verifyClose").click();
+ assert.equal(await mobileFirst.locator("#sourceSide").evaluate(el=>el.classList.contains("verify-open")),false);
+ const mobileFirstOverflow=await mobileFirst.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth);
+ assert.ok(mobileFirstOverflow<=3,"Question-first mobile overflow "+mobileFirstOverflow);
+ console.log("PASS V1.2 mobile: answer-first, explicit PDF fullscreen verification, escape and zero overflow");
+
  assert.deepEqual(errors,[]);
  console.log("PASS SOURCE E2E mobile: selected original always available, no overflow");
  await browser.close();
