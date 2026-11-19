@@ -72,3 +72,9 @@ Chromium browser tests run in GitHub Actions; screenshots are retained as workfl
 With hospital owner/IT/privacy approval: internal document inventory and governance → actual secure ingestion → ACL-aware hybrid retrieval → citations to verified source versions → independent expert validation → restricted pilot. See `docs/INTEGRATION.md` and `docs/RELEASE_GATES.md`.
 
 Built as a portfolio and collaboration conversation starter, not a deployable hospital product.
+
+## V3.3 — one-question minimal experience (19 Nov 2026)
+- First visit presents the main question field and two collapsed optional disclosures. No decorative empty answer or PDF panels.
+- A selected source progressively reveals the result and original PDF side by side; mobile uses the existing accessible full-screen verification.
+- The 19 curated, PDF-anchored FAQ quick choices remain behind the Examples disclosure. The published interface never claims these are measured top questions.
+- Release criteria: 19/19 pinned statutory FAQ proof checks, negative citation guards, desktop/mobile Chromium journeys, 28 simulated questions and privacy regression.
