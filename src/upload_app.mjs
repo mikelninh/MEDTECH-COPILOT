@@ -655,6 +655,10 @@ function ask(question){
  showResult(result);
  learning?.ask(state.source?.id||"other",state.lastQuestion,result.status);
  paintLearningCounts();
+ const title=state.source?.title||"der ausgewählten Quelle";
+ heroMessage(result.status==="evidence"?"Textstelle in "+title+" gefunden. Fundstelle und Original-PDF unten prüfen.":
+  result.status==="blocked"?"Diese Anfrage fällt unter die Sicherheitsgrenze. Keine riskanten Anleitungen.":"Keine ausreichend passende Textstelle in "+title+" gefunden.",
+  result.status==="evidence"?"success":"warning");
  return result;
 }
 
