@@ -132,7 +132,19 @@ async function question(page,q){
     null,{timeout:90000});
  assert.equal(await start.locator("#answerStatus").innerText(),"QUELLE GEFUNDEN");
  assert.match(await start.locator("#citationText").innerText(),/medizinproduktebuch/i);
- assert.ok((await start.locator("#pdfHighlights .pdf-passage-hit").count())>0,"Original passage must be highlighted");
+ try{
+  await start.waitForFunction(()=>window.MedtechUploadDemo?.status()?.renderedPage>0&&
+    document.querySelectorAll("#pdfHighlights .pdf-passage-hit").length>0,null,{timeout:16000});
+ }catch(error){
+  console.error("V12_HIGHLIGHT_DIAGNOSTIC",JSON.stringify({
+   status:await start.evaluate(()=>window.MedtechUploadDemo?.status()),
+   excerpt:(await start.locator("#citationText").innerText()).slice(0,200),
+   highlights:await start.locator("#pdfHighlights .pdf-passage-hit").count(),
+   canvasVisible:await start.locator("#pageCanvas").isVisible()
+  }));
+  await start.screenshot({path:"artifacts/v12-no-highlight.png",fullPage:true});
+  throw error;
+ }
  assert.equal(await start.locator("#editorialAnswer").isVisible(),false,"Unmatched free text must not invent a curated legal answer");
  assert.ok(await start.locator("#sourceOfficialLink").getAttribute("href"));
  await start.screenshot({path:"artifacts/v12-01-question-first-desktop.png",fullPage:true});
