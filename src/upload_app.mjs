@@ -5,6 +5,7 @@
 import * as pdfjsLib from "../vendor/pdf.mjs";
 import "./upload_core.js";
 import "./source_router.js";
+import "./evidence_highlight.js";
 
 // PDF.js 6.5 uses the proposed Map#getOrInsertComputed API.
 // Headless Chromium versions used in CI may not implement it yet.
@@ -46,6 +47,7 @@ if(typeof WeakMap.prototype.getOrInsert!=="function"){
 
 const Core=window.MedtechManualCore;
 const Router=window.MedtechSourceRouter;
+const Highlight=window.MedtechEvidenceHighlight;
 const Learning=window.MedtechLearningLoop;
 let learningStore=null;
 try{learningStore=window.localStorage}catch(_){}
@@ -60,7 +62,7 @@ const mk=(tag,cls,txt)=>{
  if(txt!==undefined)n.textContent=String(txt);
  return n;
 };
-const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,faqCatalog:null,group:"medtech",routing:false};
+const state={pdf:null,index:null,file:null,url:null,hash:null,page:1,render:null,renderedPage:0,renderVersion:0,busy:false,loadVersion:0,source:null,catalog:null,faqCatalog:null,group:"laws",routing:false,pendingQuestion:null,activeEvidence:null,lastQuestion:null};
 function showSource(source){
  state.source=source||null;
  const name=source?.title||"Bitte Quelle auswählen";
@@ -254,6 +256,7 @@ const status=(message,kind="neutral",percent="")=>{
  $("importStatus").className="import-status "+kind;
 };
 const controls=ready=>{
+ $("askSection").classList.toggle("hidden",!ready);
  $("askButton").disabled=!ready;
  $("questionInput").disabled=!ready;
  $("prevPage").disabled=!ready;
@@ -279,7 +282,8 @@ async function destroySource(){
   state.pdf=null;
  }
  if(state.url){URL.revokeObjectURL(state.url);state.url=null}
- state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;
+ state.index=null;state.file=null;state.hash=null;state.page=1;state.renderedPage=0;state.activeEvidence=null;
+ $("pdfHighlights").replaceChildren();closeVerify();
  showSource(null);
  resetOwnCover();
  controls(false);clearResults();
@@ -409,7 +413,16 @@ async function chooseFile(file,sourceMeta=null){
   $("viewerEmpty").classList.add("hidden");
   await renderPage(1);
   if(!sourceMeta)await updateOwnCover(version);
-  $("questionInput").focus({preventScroll:true});
+  if(state.pendingQuestion){
+   const pending=state.pendingQuestion;state.pendingQuestion=null;
+   $("questionInput").value=pending;
+   $("heroQuestionInput").value=pending;
+   $("heroRecommendations").classList.add("hidden");
+   ask(pending);
+  }else{
+   $("questionInput").focus({preventScroll:true});
+   $("heroQueryStatus").textContent="Quelle aktiv: "+(state.source?.title||file.name)+". Du kannst nun direkt fragen.";
+  }
  }catch(err){
   status("Nicht eingelesen: "+(err?.name==="PasswordException"?"PDF ist passwortgeschützt.":"")+String(err?.message||"Unbekannter PDF-Fehler").slice(0,155),"error");
   if(working){try{await working.destroy()}catch(_){}}
@@ -456,12 +469,32 @@ async function renderPage(pageNumber){
   canvas.height=Math.ceil(scaled.height*pixelRatio);
   canvas.style.width=Math.ceil(scaled.width)+"px";
   canvas.style.height=Math.ceil(scaled.height)+"px";
+  const frame=$("pdfPageFrame");
+  frame.style.width=Math.ceil(scaled.width)+"px";frame.style.height=Math.ceil(scaled.height)+"px";
+  $("pdfHighlights").replaceChildren();
   canvas.classList.remove("hidden");
   $("viewerEmpty").classList.add("hidden");
   state.render=page.render({canvas,viewport:scaled,transform:[pixelRatio,0,0,pixelRatio,0,0]});
   await state.render.promise;
   if(version===state.renderVersion){
    state.render=null;
+   state.renderedPage=target;
+   if(state.activeEvidence?.page===target&&Highlight){
+    try{
+     const textContent=await page.getTextContent();
+     if(version===state.renderVersion){
+      const hits=Highlight.rectangles(textContent.items,scaled,state.activeEvidence);
+      const layer=$("pdfHighlights");layer.replaceChildren();
+      for(const hit of hits){
+       const el=mk("div","pdf-passage-hit");
+       el.style.left=hit.x+"px";el.style.top=hit.y+"px";
+       el.style.width=hit.width+"px";el.style.height=hit.height+"px";
+       layer.append(el);
+      }
+      if(hits.length)stage.scrollTop=Math.max(0,hits[0].y-65);
+     }
+    }catch(e){console.warn("Non-blocking citation highlight unavailable:",e.message)}
+   }
    state.renderedPage=target;
   }
   page.cleanup();
