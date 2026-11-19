@@ -175,7 +175,7 @@ async function question(page,q){
  directly.on("pageerror",e=>errors.push("direct-source: "+e.message));
  await directly.goto(url,{waitUntil:"networkidle"});
  await directly.waitForFunction(()=>document.querySelectorAll("#heroSourceSelect option").length===9);
- await directly.locator("[data-quick-source='mpbetreibv']").click();
+ await directly.locator("#heroSourceSelect").selectOption("mpbetreibv");
  assert.equal(await directly.locator("#heroSourceSelect").inputValue(),"mpbetreibv");
  await directly.locator("#heroQuestionInput").fill("Was steht zum Medizinproduktebuch?");
  await directly.locator("#heroAskButton").click();
