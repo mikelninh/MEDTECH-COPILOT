@@ -69,7 +69,7 @@ function chunkPages(pages){
   if(!Number.isInteger(number)||number<1||number>MAX_PAGES)throw new Error("Ungültige PDF-Seitennummer.");
   if(typeof page.text!=="string")throw new Error("Seite ohne lesbaren Text.");
   const content=page.text.replace(/\s+/g," ").trim();
-  pageTexts.push({number,text:content});
+  pageTexts.push({number,text:page.text});
   chars+=content.length;if(chars>1200000)throw new Error("PDF-Text übersteigt das Limit.");
   const words=content.match(/\S+/g)||[];
   for(let start=0;start<words.length;start+=65){
