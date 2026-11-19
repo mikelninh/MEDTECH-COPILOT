@@ -78,7 +78,8 @@ export const labels = { intake: "Aufnahme", analysis: "Analyse", handoff: "Über
 export function handoff(item) {
   const notes = item.evidence.map((pin, i) => [
     `[${i + 1}] ${pin.source} · PDF-Seite ${pin.page}${pin.section ? " · " + pin.section : ""}`,
-    pin.url, pin.edition && `Stand: ${pin.edition}`, `SHA-256: ${pin.hash}`,
+    pin.url, pin.snapshotDate && `PDF-Abrufdatum: ${pin.snapshotDate}`,
+    pin.amendment && `Änderungsstand laut PDF: ${pin.amendment}`, `SHA-256: ${pin.hash}`,
     pin.excerpt, `Im Fall festgehalten: ${pin.date}`
   ].filter(Boolean).join("\n")).join("\n\n");
   const log = item.activity.map(entry => `- ${entry.date} · ${labels[entry.status]}${entry.note ? " · " + entry.note : ""}`).join("\n");

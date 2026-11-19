@@ -71,6 +71,7 @@ async function contains(locator, needle) {
     assert.match(report, /AED Eingangshalle/);
     assert.match(report, /Inbetriebnahmedatum fehlt/);
     assert.match(report, /§ 12 Abs\. 2 S\. 2–3/);
+    assert.match(report, /PDF-Abrufdatum: \d{4}-\d{2}-\d{2}/);
     assert.match(report, /SHA-256: [a-f0-9]{64}/);
 
     await ready(page);

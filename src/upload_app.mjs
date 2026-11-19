@@ -1042,7 +1042,7 @@ function setup(){
    const source=state.source;
    if(!ev || !source || source.sourceKind!=="government-law-pdf" || source.sha256!==state.hash || state.busy)return null;
    return {source:source.title, page:ev.page, section:ev.reference || ev.section || "", excerpt:ev.excerpt,
-    hash:state.hash, edition:source.sourceSnapshotAt || "", url:source.originalUrl};
+    hash:state.hash, snapshotDate:source.sourceSnapshotAt || "", amendment:source.lastAmendedStatement || "", url:source.originalUrl};
   }
  });
  void availableModel().then(ready=>{
