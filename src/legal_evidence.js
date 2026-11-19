@@ -39,8 +39,10 @@
   // Bound the passage by a *real heading*, not bare references like "§ 13 Absatz 1".
   function crossedNextSection(raw,startOffset){
    const fragment=String(raw||"").slice(startOffset);
-   const exact=nextHeading&&norm(fragment).indexOf(nextHeading);
-   if(exact>=0)return exact;
+   if(nextHeading){
+    const exact=norm(fragment).indexOf(nextHeading);
+    if(exact>=0)return exact;
+   }
    if(nextNumber===null)return -1;
    const match=fragment.match(new RegExp("(?:^|\\n)\\s*§\\s*"+nextNumber+"\\s*\\n?\\s*[A-ZÄÖÜ][a-zäöüß]{4,}","m"));
    return match?norm(fragment.slice(0,match.index)).length:-1;
